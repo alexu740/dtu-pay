@@ -114,7 +114,7 @@ public class SimpleDTUPaySteps {
 			bank.retireAccount(customerBankAccountNumber);
 		}
 		if(merchantBankAccountNumber != null) {
-			bank.retireAccount(merchantBankAccountNumber);//
+			bank.retireAccount(merchantBankAccountNumber);
 		}
 
 		dtupay.unregister(customerId, "customer");
