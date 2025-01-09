@@ -18,6 +18,8 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.core.type.TypeReference;
 
 public class SimpleDtuPay {
+    public static String URL = "fm-06.compute.dtu.dk";
+
     public String register(Customer cust, String bankAccountNumber) {
         try {
             RegistrationDto dto = new RegistrationDto();
@@ -59,7 +61,7 @@ public class SimpleDtuPay {
         payment.setAmount(amount);
 
         Client client = ClientBuilder.newClient();
-        WebTarget target = client.target("http://localhost:8080/payment");
+        WebTarget target = client.target("http://" + SimpleDtuPay.URL + ":8080/payment");
 
         try {
             ObjectMapper mapper = new ObjectMapper();
@@ -80,7 +82,7 @@ public class SimpleDtuPay {
 
     public Map<String, Payment> getListOfPayments() {
         try (Client client = ClientBuilder.newClient();){
-            WebTarget target = client.target("http://localhost:8080/payment");
+            WebTarget target = client.target("http://" + SimpleDtuPay.URL + ":8080/payment");
 
             Response response = target.request().get();
             String jsonResponse = response.readEntity(String.class);
@@ -96,7 +98,7 @@ public class SimpleDtuPay {
     }
 
     public boolean unregister(String id, String entity) {
-        String targetUrl = "http://localhost:8080/" + entity + "/unregister/" + id;
+        String targetUrl = "http://" + SimpleDtuPay.URL + ":8080/" + entity + "/unregister/" + id;
 
         try (Client client = ClientBuilder.newClient();
             Response response = client.target(targetUrl).request().delete()) {
@@ -112,7 +114,7 @@ public class SimpleDtuPay {
     }
 
     private String register(String payload, String entity) {
-        String targetUrl = "http://localhost:8080/" + entity;
+        String targetUrl = "http://" + SimpleDtuPay.URL + ":8080/" + entity;
 
         try (Client client = ClientBuilder.newClient();
             Response response = client.target(targetUrl).request().put(Entity.entity(payload, MediaType.APPLICATION_JSON))) {
