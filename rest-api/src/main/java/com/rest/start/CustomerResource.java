@@ -18,7 +18,7 @@ import com.rest.start.Model.Dto.RegistrationDto;
 import com.rest.start.Model.Customer;
 import com.rest.start.Model.DataStore;
 
-@Path("/customer")
+@Path("/customers")
 public class CustomerResource {
     @GET
     @Produces(MediaType.APPLICATION_JSON)
@@ -60,7 +60,7 @@ public class CustomerResource {
 
     @DELETE
     @Produces(MediaType.APPLICATION_JSON)
-    @Path("/unregister/{id}")
+    @Path("/{id}")
     public Response unregister(String id) {
         if (!DataStore.customers.containsKey(id)) {
             return Response.status(Response.Status.NOT_FOUND)

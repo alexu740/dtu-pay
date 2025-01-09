@@ -14,7 +14,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import jakarta.ws.rs.core.MediaType;
 import jakarta.ws.rs.core.Response;
 
-@Path("/payment")
+@Path("/payments")
 public class PaymentResource {
     @GET
     @Produces(MediaType.APPLICATION_JSON)

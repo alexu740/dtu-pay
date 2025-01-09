@@ -19,7 +19,7 @@ import com.rest.start.Model.Merchant;
 import com.rest.start.Model.Dto.RegistrationDto;
 import com.rest.start.Model.DataStore;
 
-@Path("/merchant")
+@Path("/merchants")
 public class MerchantResource {
     @GET
     @Produces(MediaType.APPLICATION_JSON)
@@ -61,7 +61,7 @@ public class MerchantResource {
 
     @DELETE
     @Produces(MediaType.APPLICATION_JSON)
-    @Path("/unregister/{id}")
+    @Path("/{id}")
     public Response unregister(String id) {
         if (!DataStore.merchants.containsKey(id)) {
             return Response.status(Response.Status.NOT_FOUND)

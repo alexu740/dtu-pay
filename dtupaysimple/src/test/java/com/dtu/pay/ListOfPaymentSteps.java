@@ -87,8 +87,8 @@ public class ListOfPaymentSteps {
 			bank.retireAccount(merchantBankAccountNumber);
 		}
 
-		dtupay.unregister(customerId, "customer");
-		dtupay.unregister(merchantId, "merchant");
+		dtupay.unregister(customerId, "customers");
+		dtupay.unregister(merchantId, "merchants");
 	}
 
 	public String registerBankAccount(String firstName, String lastName, String cpr, int intialBalance) throws BankServiceException_Exception {

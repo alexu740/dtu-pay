@@ -30,7 +30,7 @@ public class SimpleDtuPay {
 
             ObjectMapper mapper = new ObjectMapper();
             String payload = mapper.writeValueAsString(dto);
-            return register(payload, "customer");
+            return register(payload, "customers");
         } catch(Exception e) {
             e.printStackTrace();
             return "Could not create customer";
@@ -47,7 +47,7 @@ public class SimpleDtuPay {
 
             ObjectMapper mapper = new ObjectMapper();
             String payload = mapper.writeValueAsString(dto);
-            return register(dto, "merchant");
+            return register(dto, "merchants");
         } catch(Exception e) {
             e.printStackTrace();
             return "Could not create merchant";
@@ -61,7 +61,7 @@ public class SimpleDtuPay {
         payment.setAmount(amount);
 
         Client client = ClientBuilder.newClient();
-        WebTarget target = client.target("http://" + SimpleDtuPay.URL + ":8080/payment");
+        WebTarget target = client.target("http://" + SimpleDtuPay.URL + ":8080/payments");
 
         try {
             ObjectMapper mapper = new ObjectMapper();
@@ -82,7 +82,7 @@ public class SimpleDtuPay {
 
     public Map<String, Payment> getListOfPayments() {
         try (Client client = ClientBuilder.newClient();){
-            WebTarget target = client.target("http://" + SimpleDtuPay.URL + ":8080/payment");
+            WebTarget target = client.target("http://" + SimpleDtuPay.URL + ":8080/payments");
 
             Response response = target.request().get();
             String jsonResponse = response.readEntity(String.class);
@@ -98,7 +98,7 @@ public class SimpleDtuPay {
     }
 
     public boolean unregister(String id, String entity) {
-        String targetUrl = "http://" + SimpleDtuPay.URL + ":8080/" + entity + "/unregister/" + id;
+        String targetUrl = "http://" + SimpleDtuPay.URL + ":8080/" + entity + "/" + id;
 
         try (Client client = ClientBuilder.newClient();
             Response response = client.target(targetUrl).request().delete()) {
