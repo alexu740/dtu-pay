@@ -1,5 +1,5 @@
 package com.rest.start.Service;
-
+import dtu.ws.fastmoney.BankServiceException_Exception;
 import com.rest.start.Model.Merchant;
 
 import java.math.BigDecimal;
@@ -25,7 +25,7 @@ public class PaymentService {
         }
     }
 
-    private void callBank(Customer cust, Merchant merch, int amount) {
+    private void callBank(Customer cust, Merchant merch, int amount) throws BankServiceException_Exception {
         BankService bank = new BankServiceService().getBankServicePort();
         bank.transferMoneyFromTo(cust.getBankAccount(), merch.getBankAccount(), new BigDecimal(amount), "From " + cust.getCpr() + " to " + merch.getCpr());
     }
