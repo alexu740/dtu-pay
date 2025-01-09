@@ -8,7 +8,6 @@ import com.rest.start.Model.Customer;
 import com.rest.start.Model.DataStore;
 
 import dtu.ws.fastmoney.BankService;
-import dtu.ws.fastmoney.BankServiceException_Exception;
 import dtu.ws.fastmoney.BankServiceService;
 import dtu.ws.fastmoney.BankServiceService;
 
@@ -22,12 +21,11 @@ public class PaymentService {
             return true;
         }
         catch(Exception e) {
-            e.printStackTrace();
             return false;
         }
     }
 
-    private void callBank(Customer cust, Merchant merch, int amount) throws BankServiceException_Exception {
+    private void callBank(Customer cust, Merchant merch, int amount) {
         BankService bank = new BankServiceService().getBankServicePort();
         bank.transferMoneyFromTo(cust.getBankAccount(), merch.getBankAccount(), new BigDecimal(amount), "From " + cust.getCpr() + " to " + merch.getCpr());
     }

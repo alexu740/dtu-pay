@@ -45,9 +45,9 @@ public class SimpleDtuPay {
             dto.setCpr(merch.getCpr());
             dto.setBankAccount(bankAccountNumber);
 
-            ObjectMapper mapper = new ObjectMapper();
-            String payload = mapper.writeValueAsString(dto);
-            return register(payload, "merchant");
+            // ObjectMapper mapper = new ObjectMapper();
+            // String payload = mapper.writeValueAsString(dto);
+            return register(dto, "merchant");
         } catch(Exception e) {
             e.printStackTrace();
             return "Could not create merchant";
