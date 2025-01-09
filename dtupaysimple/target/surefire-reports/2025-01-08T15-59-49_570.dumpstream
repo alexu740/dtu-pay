@@ -1,6 +1,0 @@
-# Created at 2025-01-08T15:59:49.827
-Jan 08, 2025 3:59:49 PM org.jboss.logmanager.JBossLoggerFinder getLogger
-
-# Created at 2025-01-08T15:59:49.827
-ERROR: The LogManager accessed before the "java.util.logging.manager" system property was set to "org.jboss.logmanager.LogManager". Results may be unexpected.
-
