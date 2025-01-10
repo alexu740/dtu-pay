@@ -1,6 +1,7 @@
 package com.rest.start.Service;
 
-import dtu.ws.fastmoney.BankServiceException_Exception;
+import jakarta.inject.Inject;
+import jakarta.enterprise.context.ApplicationScoped;
 
 import java.math.BigDecimal;
 import java.util.Map;
@@ -16,24 +17,37 @@ import com.rest.start.Model.Dto.RegistrationDto;
 import dtu.ws.fastmoney.BankService;
 import dtu.ws.fastmoney.BankServiceService;
 import dtu.ws.fastmoney.BankServiceService;
+import dtu.ws.fastmoney.BankServiceException_Exception;
 
+@ApplicationScoped
 public class PaymentService {
+    private DataStore dataStore;
+
+    @Inject
+    public PaymentService(DataStore dataStore) {
+        this.dataStore = dataStore;
+    }
+
     public String processPayment(Payment payment) throws BankServiceException_Exception, IllegalArgumentException  {
         if(payment.getCustomer() == null || 
         payment.getMerchant() == null ||
-        !DataStore.customers.containsKey(payment.getCustomer()) || 
-        !DataStore.merchants.containsKey(payment.getMerchant())) {
+        !dataStore.getCustomers().containsKey(payment.getCustomer()) || 
+        !dataStore.getMerchants().containsKey(payment.getMerchant())) {
             throw new IllegalArgumentException("Validation failed");
         }
 
-        Customer cust = DataStore.customers.get(payment.getCustomer());
-        Merchant merch = DataStore.merchants.get(payment.getMerchant());
+        Customer cust = dataStore.getCustomers().get(payment.getCustomer());
+        Merchant merch = dataStore.getMerchants().get(payment.getMerchant());
 
         callBank(cust, merch, payment.getAmount());
 
         String id = UUID.randomUUID().toString();
-        DataStore.payments.put(id, payment);
+        dataStore.getPayments().put(id, payment);
         return id;
+    }
+
+    public Map<String, Payment> getAllPayments() {
+        return dataStore.getPayments();
     }
 
     public String registerCustomer(RegistrationDto dto) {
@@ -42,20 +56,16 @@ public class PaymentService {
         dto.getCpr(),
         dto.getBankAccount());
         String id = UUID.randomUUID().toString();
-        DataStore.customers.put(id, newCustomer);
+        dataStore.getCustomers().put(id, newCustomer);
         return id;
     }
 
     public Map<String, Customer> getAllCustomers() {
-        return DataStore.customers;
+        return dataStore.getCustomers();
     }
 
     public boolean deteleCustomer(String customerId) {
-        if(!DataStore.customers.containsKey(customerId)) {
-            return false;
-        }
-        DataStore.customers.remove(customerId);
-        return true;
+        return dataStore.getCustomers().remove(customerId) != null;
     }
 
     public String registerMerchant(RegistrationDto dto) {
@@ -64,20 +74,16 @@ public class PaymentService {
         dto.getCpr(),
         dto.getBankAccount());
         String id = UUID.randomUUID().toString();
-        DataStore.merchants.put(id, newMerchant);
+        dataStore.getMerchants().put(id, newMerchant);
         return id;
     }
 
     public Map<String, Merchant> getAllMerchants() {
-        return DataStore.merchants;
+        return dataStore.getMerchants();
     }
 
     public boolean deleteMerchant(String merchantId) {
-        if(!DataStore.merchants.containsKey(merchantId)) {
-            return false;
-        }
-        DataStore.customers.remove(merchantId);
-        return true;
+        return dataStore.getMerchants().remove(merchantId) != null;
     }
 
     private void callBank(Customer cust, Merchant merch, int amount) throws BankServiceException_Exception {

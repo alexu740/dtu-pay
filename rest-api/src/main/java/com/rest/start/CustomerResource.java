@@ -8,13 +8,20 @@ import jakarta.ws.rs.Produces;
 import jakarta.ws.rs.Consumes;
 import jakarta.ws.rs.core.MediaType;
 import jakarta.ws.rs.core.Response;
+import jakarta.inject.Inject;
+
 import com.rest.start.Model.Dto.RegistrationDto;
 import com.rest.start.Service.PaymentService;
 import com.rest.start.Model.Customer;
 
 @Path("/customers")
 public class CustomerResource {
-    PaymentService paymentService = new PaymentService();
+    PaymentService paymentService;
+
+    @Inject
+    public CustomerResource(PaymentService paymentService) {
+        this.paymentService = paymentService;
+    }
     
     @GET
     @Produces(MediaType.APPLICATION_JSON)
@@ -26,16 +33,14 @@ public class CustomerResource {
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
     public Response register(RegistrationDto registrationRequest) {
-        String customerId = paymentService.registerCustomer(registrationRequest);
-        return Response.ok(customerId).build();
+        return Response.ok(paymentService.registerCustomer(registrationRequest)).build();
     }
 
     @DELETE
     @Produces(MediaType.APPLICATION_JSON)
     @Path("{id}")
     public Response unregister(@PathParam("id") String id) {
-        boolean result = paymentService.deteleCustomer(id);
-        if (!result) {
+        if (!paymentService.deteleCustomer(id)) {
             return Response.status(Response.Status.NOT_FOUND)
                            .entity("customer not found")
                            .build();

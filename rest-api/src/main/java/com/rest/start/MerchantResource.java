@@ -8,6 +8,7 @@ import jakarta.ws.rs.Produces;
 import jakarta.ws.rs.Consumes;
 import jakarta.ws.rs.core.MediaType;
 import jakarta.ws.rs.core.Response;
+import jakarta.inject.Inject;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 
@@ -17,11 +18,15 @@ import java.util.UUID;
 import com.rest.start.Service.PaymentService;
 import com.rest.start.Model.Merchant;
 import com.rest.start.Model.Dto.RegistrationDto;
-import com.rest.start.Model.DataStore;
 
 @Path("/merchants")
 public class MerchantResource {
-    PaymentService paymentService = new PaymentService();
+    PaymentService paymentService;
+
+    @Inject
+    public MerchantResource(PaymentService paymentService) {
+        this.paymentService = paymentService;
+    }
 
     @GET
     @Produces(MediaType.APPLICATION_JSON)
@@ -33,16 +38,14 @@ public class MerchantResource {
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
     public Response register(RegistrationDto registrationRequest) {
-        String merchantId = paymentService.registerMerchant(registrationRequest);
-        return Response.ok(merchantId).build();
+        return Response.ok(paymentService.registerMerchant(registrationRequest)).build();
     }
 
     @DELETE
     @Produces(MediaType.APPLICATION_JSON)
     @Path("/{id}")
     public Response unregister(@PathParam("id") String id) {
-        boolean result = paymentService.deleteMerchant(id);
-        if (!result) {
+        if (!paymentService.deleteMerchant(id)) {
             return Response.status(Response.Status.NOT_FOUND)
                            .entity("merchant not found")
                            .build();
