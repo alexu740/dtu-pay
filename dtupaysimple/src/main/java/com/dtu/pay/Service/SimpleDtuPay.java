@@ -9,6 +9,7 @@ import jakarta.ws.rs.core.MediaType;
 
 import java.util.Map;
 
+import com.dtu.pay.Model.User;
 import com.dtu.pay.Model.Customer;
 import com.dtu.pay.Model.Merchant;
 import com.dtu.pay.Model.Payment;
@@ -21,56 +22,31 @@ public class SimpleDtuPay {
     //public static String URL = "fm-06.compute.dtu.dk";
     public static String URL = "localhost";
 
-    public String register(Customer cust, String bankAccountNumber) {
-        try {
-            RegistrationDto dto = new RegistrationDto();
-            dto.setFirstName(cust.getFirstName());
-            dto.setLastName(cust.getLastName());
-            dto.setCpr(cust.getCpr());
-            dto.setBankAccount(bankAccountNumber);
+    public String register(User usr, String bankAccountNumber) {
+        RegistrationDto dto = new RegistrationDto();
+        dto.setFirstName(usr.getFirstName());
+        dto.setLastName(usr.getLastName());
+        dto.setCpr(usr.getCpr());
+        dto.setBankAccount(bankAccountNumber);
+        if(usr instanceof Customer)
             return register(dto, "customers");
-        } catch(Exception e) {
-            e.printStackTrace();
-            return "Could not create customer";
-        }
-    }
-
-    public String register(Merchant merch, String bankAccountNumber) {
-        try {
-            RegistrationDto dto = new RegistrationDto();
-            dto.setFirstName(merch.getFirstName());
-            dto.setLastName(merch.getLastName());
-            dto.setCpr(merch.getCpr());
-            dto.setBankAccount(bankAccountNumber);
+        else
             return register(dto, "merchants");
-        } catch(Exception e) {
-            e.printStackTrace();
-            return "Could not create merchant";
-        }
     }
 
     public boolean pay(int amount, String customerId, String merchantId) {
         Client client = ClientBuilder.newClient();
         WebTarget target = client.target("http://" + SimpleDtuPay.URL + ":8080/payments");
-        try {
-            Payment payment = new Payment();
-            payment.setCustomer(customerId);
-            payment.setMerchant(merchantId);
-            payment.setAmount(amount);
-    
-            
+        Payment payment = new Payment();
+        payment.setCustomer(customerId);
+        payment.setMerchant(merchantId);
+        payment.setAmount(amount);
 
-            Response response = target.request().post(Entity.entity(payment, MediaType.APPLICATION_JSON));
+        Response response = target.request().post(Entity.entity(payment, MediaType.APPLICATION_JSON));
 
-            String pId = response.readEntity(String.class);
-            client.close();
-            return response.getStatus() == 200;
-        } catch (Exception e) {
-            e.printStackTrace();
-            return false;
-        } finally {
-            client.close();
-        }
+        String pId = response.readEntity(String.class);
+        client.close();
+        return response.getStatus() == 200;
     }
 
     public Map<String, Payment> getListOfPayments() {
@@ -90,35 +66,23 @@ public class SimpleDtuPay {
         }
     }
 
-    public boolean unregister(String id, String entity) {
+    public boolean unregister(User usr, String id) {
+        String entity = usr instanceof Customer ? "customers" : "merchants";
         String targetUrl = "http://" + SimpleDtuPay.URL + ":8080/" + entity + "/" + id;
-
-        try (Client client = ClientBuilder.newClient();
-            Response response = client.target(targetUrl).request().delete()) {
-            if (response.getStatus() == Response.Status.OK.getStatusCode()) {
-                return true;
-            } else {
-                return false;
-            }
-        } catch (Exception e) {
-            e.printStackTrace();
-            return false;
-        }
+        Client client = ClientBuilder.newClient();
+        Response response = client.target(targetUrl).request().delete();
+        return response.getStatus() == 200;
     }
 
     private String register(RegistrationDto payload, String entity) {
         String targetUrl = "http://" + SimpleDtuPay.URL + ":8080/" + entity;
+        Client client = ClientBuilder.newClient();
+        Response response = client.target(targetUrl).request().post(Entity.entity(payload, MediaType.APPLICATION_JSON));
 
-        try (Client client = ClientBuilder.newClient();
-            Response response = client.target(targetUrl).request().post(Entity.entity(payload, MediaType.APPLICATION_JSON))) {
-            if (response.getStatus() == Response.Status.OK.getStatusCode()) {
-                return response.readEntity(String.class);
-            } else {
-                return "Failed to update customer: HTTP " + response.getStatus();
-            }
-        } catch (Exception e) {
-            e.printStackTrace();
-            return "Error: " + e.getMessage();
+        if (response.getStatus() == Response.Status.OK.getStatusCode()) {
+            return response.readEntity(String.class);
+        } else {
+            return "Failed to update customer: HTTP " + response.getStatus();
         }
     }
 }

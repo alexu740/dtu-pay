@@ -9,6 +9,7 @@ import static org.junit.Assert.assertFalse;
 
 import java.math.BigDecimal;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 import static org.junit.Assert.assertEquals;
@@ -36,7 +37,7 @@ public class SimpleDTUPaySteps {
 	private boolean successful = false;
 
 	@Given("a customer with name {string}, last name {string}, and CPR {string}")
-	public void aCustomerWithName(String firstName, String lastName, String cpr) {
+	public void aCustomerWithName(String firstName, String lastName, String cpr)  throws BankServiceException_Exception {
 		customer = new Customer(firstName, lastName, cpr);
 	}
 
@@ -45,6 +46,7 @@ public class SimpleDTUPaySteps {
 		try {
 			customerBankAccountNumber = registerBankAccount(customer.getFirstName(), customer.getLastName(), customer.getCpr(), balance);
 		} catch(Exception e) {
+			e.printStackTrace();
 			assertTrue(false);
 		}
 	}
@@ -64,6 +66,7 @@ public class SimpleDTUPaySteps {
 		try {
 			merchantBankAccountNumber = registerBankAccount(merchant.getFirstName(), merchant.getLastName(), merchant.getCpr(), balance);
 		} catch(Exception e) {
+			e.printStackTrace();
 			assertTrue(false);
 		}
 	}
@@ -117,8 +120,8 @@ public class SimpleDTUPaySteps {
 			bank.retireAccount(merchantBankAccountNumber);
 		}
 
-		dtupay.unregister(customerId, "customers");
-		dtupay.unregister(merchantId, "merchants");
+		dtupay.unregister(customer, customerId);
+		dtupay.unregister(merchant, merchantId);
 	}
 
 	public String registerBankAccount(String firstName, String lastName, String cpr, int intialBalance) throws BankServiceException_Exception {
