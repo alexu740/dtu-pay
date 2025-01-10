@@ -43,9 +43,9 @@ public class SimpleDtuPay {
         payment.setAmount(amount);
 
         Response response = target.request().post(Entity.entity(payment, MediaType.APPLICATION_JSON));
+        client.close();
 
         String pId = response.readEntity(String.class);
-        client.close();
         return response.getStatus() == 200;
     }
 
