@@ -2,6 +2,9 @@ package com.dtu.pay.Model;
 
 public class Payment {
     private String customer;
+    private String merchant;
+    private int amount;
+    
     public String getCustomer() {
         return customer;
     }
@@ -14,8 +17,7 @@ public class Payment {
     public void setMerchant(String merchant) {
         this.merchant = merchant;
     }
-    private String merchant;
-    private int amount;
+
     public int getAmount() {
         return amount;
     }

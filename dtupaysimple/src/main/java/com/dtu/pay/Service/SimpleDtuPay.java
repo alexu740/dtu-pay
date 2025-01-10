@@ -18,7 +18,8 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.core.type.TypeReference;
 
 public class SimpleDtuPay {
-    public static String URL = "fm-06.compute.dtu.dk";
+    //public static String URL = "fm-06.compute.dtu.dk";
+    public static String URL = "localhost";
 
     public String register(Customer cust, String bankAccountNumber) {
         try {
@@ -27,10 +28,7 @@ public class SimpleDtuPay {
             dto.setLastName(cust.getLastName());
             dto.setCpr(cust.getCpr());
             dto.setBankAccount(bankAccountNumber);
-
-            ObjectMapper mapper = new ObjectMapper();
-            String payload = mapper.writeValueAsString(dto);
-            return register(payload, "customers");
+            return register(dto, "customers");
         } catch(Exception e) {
             e.printStackTrace();
             return "Could not create customer";
@@ -44,9 +42,6 @@ public class SimpleDtuPay {
             dto.setLastName(merch.getLastName());
             dto.setCpr(merch.getCpr());
             dto.setBankAccount(bankAccountNumber);
-
-            ObjectMapper mapper = new ObjectMapper();
-            String payload = mapper.writeValueAsString(dto);
             return register(dto, "merchants");
         } catch(Exception e) {
             e.printStackTrace();
@@ -55,20 +50,18 @@ public class SimpleDtuPay {
     }
 
     public boolean pay(int amount, String customerId, String merchantId) {
-        Payment payment = new Payment();
-        payment.setCustomer(customerId);
-        payment.setMerchant(merchantId);
-        payment.setAmount(amount);
-
         Client client = ClientBuilder.newClient();
         WebTarget target = client.target("http://" + SimpleDtuPay.URL + ":8080/payments");
-
         try {
-            ObjectMapper mapper = new ObjectMapper();
-            String paymentJson = mapper.writeValueAsString(payment);
+            Payment payment = new Payment();
+            payment.setCustomer(customerId);
+            payment.setMerchant(merchantId);
+            payment.setAmount(amount);
+    
+            
 
-            Response response = target.request()
-                                      .post(Entity.entity(paymentJson, MediaType.APPLICATION_JSON));
+            Response response = target.request().post(Entity.entity(payment, MediaType.APPLICATION_JSON));
+
             String pId = response.readEntity(String.class);
             client.close();
             return response.getStatus() == 200;
@@ -113,11 +106,11 @@ public class SimpleDtuPay {
         }
     }
 
-    private String register(String payload, String entity) {
+    private String register(RegistrationDto payload, String entity) {
         String targetUrl = "http://" + SimpleDtuPay.URL + ":8080/" + entity;
 
         try (Client client = ClientBuilder.newClient();
-            Response response = client.target(targetUrl).request().put(Entity.entity(payload, MediaType.APPLICATION_JSON))) {
+            Response response = client.target(targetUrl).request().post(Entity.entity(payload, MediaType.APPLICATION_JSON))) {
             if (response.getStatus() == Response.Status.OK.getStatusCode()) {
                 return response.readEntity(String.class);
             } else {

@@ -3,71 +3,43 @@ import jakarta.ws.rs.GET;
 import jakarta.ws.rs.DELETE;
 import jakarta.ws.rs.POST;
 import jakarta.ws.rs.Path;
+import jakarta.ws.rs.PathParam;
 import jakarta.ws.rs.Produces;
 import jakarta.ws.rs.Consumes;
 import jakarta.ws.rs.core.MediaType;
 import jakarta.ws.rs.core.Response;
-
-import com.fasterxml.jackson.databind.ObjectMapper;
-
-import java.util.UUID;
-
-import com.rest.start.Model.DataStore;
-import com.rest.start.Model.Merchant;
 import com.rest.start.Model.Dto.RegistrationDto;
+import com.rest.start.Service.PaymentService;
 import com.rest.start.Model.Customer;
-import com.rest.start.Model.DataStore;
 
 @Path("/customers")
 public class CustomerResource {
+    PaymentService paymentService = new PaymentService();
+    
     @GET
     @Produces(MediaType.APPLICATION_JSON)
     public Response listCustomers() {
-        try {
-            ObjectMapper mapper = new ObjectMapper();
-            String customerJson = mapper.writeValueAsString(DataStore.customers);
-            return Response.status(Response.Status.OK).entity(customerJson).build();
-        } catch(Exception e) {
-            e.printStackTrace();
-            return Response.status(Response.Status.BAD_REQUEST)
-            .entity("Unexpected error")
-            .build();
-        }
+        return Response.status(Response.Status.OK).entity(paymentService.getAllCustomers()).build();
     }
 
     @POST
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
-    public Response register(String payload) {
-        try {
-            ObjectMapper mapper = new ObjectMapper();
-            RegistrationDto registrationRequest = mapper.readValue(payload, RegistrationDto.class);
-    
-            Customer newCustomer = new Customer(registrationRequest.getFirstName(), 
-                                            registrationRequest.getLastName(),
-                                            registrationRequest.getCpr(),
-                                            registrationRequest.getBankAccount());
-            UUID id = UUID.randomUUID();
-            DataStore.customers.put(id.toString(), newCustomer);
-            return Response.ok(id.toString()).build();
-        } catch(Exception e) {
-            e.printStackTrace();
-            return Response.status(Response.Status.INTERNAL_SERVER_ERROR)
-            .entity("Unexpected error")
-            .build();
-        }
+    public Response register(RegistrationDto registrationRequest) {
+        String customerId = paymentService.registerCustomer(registrationRequest);
+        return Response.ok(customerId).build();
     }
 
     @DELETE
     @Produces(MediaType.APPLICATION_JSON)
-    @Path("/{id}")
-    public Response unregister(String id) {
-        if (!DataStore.customers.containsKey(id)) {
+    @Path("{id}")
+    public Response unregister(@PathParam("id") String id) {
+        boolean result = paymentService.deteleCustomer(id);
+        if (!result) {
             return Response.status(Response.Status.NOT_FOUND)
-                           .entity("not found")
+                           .entity("customer not found")
                            .build();
         }
-        DataStore.customers.remove(id);
-        return Response.ok(id + " deleted").build();
+        return Response.ok("customer deleted").build();
     }
 }
