@@ -3,6 +3,7 @@ package tokenservice.lib;
 import tokenservice.impl.TokenGenerator;
 import tokenservice.impl.Repository;
 import tokenservice.impl.Service;
+import tokenservice.adaptors.*;
 import messaging.implementations.RabbitMqQueue;
 
 public class Factory {
@@ -15,10 +16,15 @@ public class Factory {
         if (service != null) {
             return service;
         }
-        var mq = new RabbitMqQueue("dtupay");
+        var mq = new RabbitMqQueue();
         IRepository repo = new Repository();
         TokenGenerator tokenGenerator = new TokenGenerator();
-        service = new Service(mq, repo, tokenGenerator);
+        EventPublisher publisher = new RabbitMqPublisher(mq);
+        service = new Service(publisher, repo, tokenGenerator);
+        var facade = new RabbitMqFacade(mq, service);
+        
         return service;
     }
 }
+
+

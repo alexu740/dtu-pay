@@ -1,8 +1,8 @@
 package tokenservice.lib;
 
-import messaging.Event;
+import tokenservice.impl.CorrelationId;
 
 public interface IService {
-    void handleTokensRequested(Event ev);
+    void handleTokensRequested(String id, CorrelationId correlationId);
 
 }
