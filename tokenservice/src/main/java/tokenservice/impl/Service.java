@@ -1,6 +1,5 @@
 package tokenservice.impl;
 
-import dtupay.dto.*;
 import tokenservice.lib.IRepository;
 import tokenservice.lib.IService;
 import messaging.Event;
