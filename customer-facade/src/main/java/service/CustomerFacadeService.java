@@ -1,8 +1,8 @@
 package service;
 
-import messaging.Event;
+import boilerplate.Event;
 
-import messaging.MessageQueue;
+import boilerplate.MessageQueue;
 
 import java.util.Map;
 import java.util.UUID;
@@ -22,13 +22,12 @@ public class CustomerFacadeService {
 
     public String create(RegistrationDto request) {
         var correlationId = CorrelationId.randomId();
-		correlations.put(correlationId.get(),new CompletableFuture<String>());
-
-        publisher.emitCreateUserEvent("asd", correlationId);
+		correlations.put(correlationId.get(), new CompletableFuture<String>());
+        publisher.emitCreateUserEvent(request, correlationId);
         return correlations.get(correlationId.get()).join();
     }
 
-    public void completeRegistration(String eventPayload, CorrelationId correlationId) {
+    public void completeRegistration(String eventPayload, CorrelationId correlationId, bool isSuccessful) {
         System.out.println(correlationId.get());
         System.out.println(eventPayload);
 		correlations.get(correlationId.get()).complete(eventPayload);

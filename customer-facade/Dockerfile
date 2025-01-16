@@ -1,9 +1,9 @@
 FROM maven:3.9.9-eclipse-temurin-23-alpine AS build
 WORKDIR /app
-COPY ./pom.xml .
-COPY ./src ./src
+COPY customer-facade/pom.xml .
+COPY customer-facade/src ./src
 RUN mvn clean package -DskipTests
-RUN ls -la
+
 
 FROM openjdk:17-jdk-slim
 WORKDIR /app

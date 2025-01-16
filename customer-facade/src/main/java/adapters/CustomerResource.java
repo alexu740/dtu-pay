@@ -8,7 +8,7 @@ import jakarta.ws.rs.Produces;
 import jakarta.ws.rs.Consumes;
 import jakarta.ws.rs.core.MediaType;
 import jakarta.ws.rs.core.Response;
-import messaging.implementations.RabbitMqQueue;
+import boilerplate.implementations.RabbitMqQueue;
 import service.CustomerFacadeService;
 import jakarta.inject.Inject;
 
@@ -35,10 +35,10 @@ public class CustomerResource {
     }
 
     public Response getTokens() {
-
+        return Response.ok("customer deleted").build();
     }
 
     public Response getReports() {
-        
+        return Response.ok("customer deleted").build();
     }
 }

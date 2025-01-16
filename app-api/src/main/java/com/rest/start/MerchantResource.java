@@ -8,7 +8,6 @@ import jakarta.ws.rs.Produces;
 import jakarta.ws.rs.Consumes;
 import jakarta.ws.rs.core.MediaType;
 import jakarta.ws.rs.core.Response;
-import main.java.com.rest.start.Adapters.CustomerFacade;
 import jakarta.inject.Inject;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -17,13 +16,13 @@ import java.util.Map;
 import java.util.UUID;
 
 import com.rest.start.Service.PaymentService;
-import com.rest.start.facade.MerchantFacade;
 import com.rest.start.Model.Merchant;
 import com.rest.start.Model.Dto.RegistrationDto;
+import com.rest.start.Adapters.MerchantFacade;
 
 @Path("/merchants")
 public class MerchantResource {
-    CustomerFacade merchantHandler;
+    MerchantFacade merchantHandler;
 
     @Inject
     public MerchantResource(MerchantFacade merchantHandler) {

@@ -1,6 +1,6 @@
 package adapters;
 
-import messaging.implementations.RabbitMqQueue;
+import boilerplate.implementations.RabbitMqQueue;
 import service.CustomerFacadeService;
 
 public class CustomerRegistrationFactory {
@@ -22,7 +22,7 @@ public class CustomerRegistrationFactory {
 		// is called dependency injection.
 		// At the end, we can use the PaymentService in tests
 		// without sending actual messages to RabbitMq.
-		var mq = new RabbitMqQueue();
+		var mq = new RabbitMqQueue("rabbitMq");
 		var publisher = new RabbitMqEventPublisher(mq);
 		service = new CustomerFacadeService(publisher);
 		var facade = new RabbitMqFacade(mq, service);

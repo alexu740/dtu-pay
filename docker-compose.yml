@@ -1,4 +1,3 @@
-version: '3.9'
 services:
   rabbitMq:
     image: rabbitmq:3-management
@@ -12,7 +11,11 @@ services:
       - "8080:8080"
     restart: always
   customer-facade:
-    build: ./customer-facade
+    build:
+      context: .
+      dockerfile: customer-facade/Dockerfile
     ports:
       - "8088:8088"
     restart: always
+    depends_on:
+      - rabbitMq

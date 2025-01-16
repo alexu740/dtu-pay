@@ -12,8 +12,8 @@ import jakarta.inject.Inject;
 
 import com.rest.start.Model.Dto.RegistrationDto;
 import com.rest.start.Service.PaymentService;
-import com.rest.start.facade.CustomerFacade;
 import com.rest.start.Model.Customer;
+import com.rest.start.Adapters.CustomerFacade;
 
 @Path("/customers")
 public class CustomerResource {
