@@ -11,17 +11,17 @@ import micro.dto.AccountRegistrationRequest;
 import micro.service.AccountManagementService;
 
 public class RabbitMqFacade {
-    AccountManagementService service;
+  AccountManagementService service;
 
-    public RabbitMqFacade(MessageQueue queue, AccountManagementService service) {
-		  queue.addHandler("AccountRegistrationRequested", this::handleCustomerRegistration);
-      this.service = service;
-    }
+  public RabbitMqFacade(MessageQueue queue, AccountManagementService service) {
+    queue.addHandler("AccountRegistrationRequested", this::handleCustomerRegistration);
+    this.service = service;
+  }
 
-    private void handleCustomerRegistration(Event e) {
-		  var eventPayload = e.getArgument(0, AccountRegistrationRequest.class);
-      AccountCreationCommand command = new AccountCreationCommand(eventPayload);
-        
-      service.handleCreateAccount(command);
-	  }
+  private void handleCustomerRegistration(Event e) {
+    var eventPayload = e.getArgument(0, AccountRegistrationRequest.class);
+    AccountCreationCommand command = new AccountCreationCommand(eventPayload);
+      
+    service.handleCreateAccount(command);
+  }
 }

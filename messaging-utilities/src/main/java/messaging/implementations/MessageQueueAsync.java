@@ -11,8 +11,8 @@ import java.util.function.Consumer;
 import messaging.Message;
 import messaging.MessageQueue;
 
-public class MessageQueueAsync implements MessageQueue {
-
+public class MessageQueueAsync  /*implements MessageQueue */ {
+/*
 	private Map<Class<?>,List<Consumer<Message>>> subscribers = new HashMap<>();
 	private final BlockingQueue<Message> queue = new LinkedBlockingQueue<Message>();
 	private Thread notificationThread = null;
@@ -53,6 +53,6 @@ public class MessageQueueAsync implements MessageQueue {
 				.forEach(a -> a.accept(m));
 		}
 	}
-	
+	*/
 
 }

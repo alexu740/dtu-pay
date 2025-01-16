@@ -10,8 +10,8 @@ import java.util.function.Consumer;
 import messaging.Message;
 import messaging.MessageQueue;
 
-public class MessageQueueSync implements MessageQueue {
-
+public class MessageQueueSync /*implements MessageQueue */ {
+/*
 	private Map<Class<?>,List<Consumer<Message>>> subscribers = new ConcurrentHashMap<>();
 
 	private void notifySubscribers(Message m) {
@@ -31,4 +31,5 @@ public class MessageQueueSync implements MessageQueue {
 		}
 		subscribers.get(event).add(handler);
 	}
+		 */
 }
