@@ -6,8 +6,13 @@ services:
     ports:
      - "5672:5672"
      - "15672:15672"
-  dtu-pay-simple:
-    build: .
+  app-api:
+    build: ./app-api
     ports:
       - "8080:8080"
+    restart: always
+  customer-facade:
+    build: ./customer-facade
+    ports:
+      - "8088:8088"
     restart: always

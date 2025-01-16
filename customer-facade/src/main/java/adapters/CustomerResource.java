@@ -29,8 +29,16 @@ public class CustomerResource {
     @DELETE
     @Produces(MediaType.APPLICATION_JSON)
     @Path("{id}")
-    public Response unregister(@PathParam("id") String id) {
+    public Response deregister(@PathParam("id") String id) {
         //queue.publish(new Event("CustomerRegistrationRequested"))
         return Response.ok("customer deleted").build();
+    }
+
+    public Response getTokens() {
+
+    }
+
+    public Response getReports() {
+        
     }
 }

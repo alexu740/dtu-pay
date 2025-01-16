@@ -11,7 +11,7 @@ public class StartUp {
 
 	private void startUp() throws Exception {
 		System.out.println("STARTING the Account Management Service");
-		var mq = new RabbitMqQueue("dtupay");
+		var mq = new RabbitMqQueue();
 		var service = new AccountManagementService(null, null);
 		new RabbitMqFacade(mq, service);
 	}

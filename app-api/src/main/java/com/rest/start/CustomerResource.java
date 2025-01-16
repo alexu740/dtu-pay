@@ -12,39 +12,29 @@ import jakarta.inject.Inject;
 
 import com.rest.start.Model.Dto.RegistrationDto;
 import com.rest.start.Service.PaymentService;
+import com.rest.start.facade.CustomerFacade;
 import com.rest.start.Model.Customer;
 
 @Path("/customers")
 public class CustomerResource {
-    PaymentService paymentService;
+    CustomerFacade customerHandler;
 
     @Inject
-    public CustomerResource(PaymentService paymentService) {
-        this.paymentService = paymentService;
-    }
-    
-    @GET
-    @Produces(MediaType.APPLICATION_JSON)
-    public Response listCustomers() {
-        return Response.status(Response.Status.OK).entity(paymentService.getAllCustomers()).build();
+    public CustomerResource(CustomerFacade customerHandler) {
+        this.customerHandler = customerHandler;
     }
 
     @POST
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
     public Response register(RegistrationDto registrationRequest) {
-        return Response.ok(paymentService.registerCustomer(registrationRequest)).build();
+        return Response.ok(customerHandler.createCustomer(registrationRequest)).build();
     }
 
     @DELETE
     @Produces(MediaType.APPLICATION_JSON)
     @Path("{id}")
-    public Response unregister(@PathParam("id") String id) {
-        if (!paymentService.deteleCustomer(id)) {
-            return Response.status(Response.Status.NOT_FOUND)
-                           .entity("customer not found")
-                           .build();
-        }
-        return Response.ok("customer deleted").build();
+    public Response deregister(@PathParam("id") String id) {
+        return Response.ok(customerHandler.deleteCustomer(id)).build();
     }
 }
