@@ -10,10 +10,10 @@ import java.util.stream.Stream;
 
 import org.junit.Test;
 
-import messaging.MessageQueue;
-import messaging.implementations.MessageQueueAsync;
-import messaging.implementations.MessageQueueSync;
-import messaging.implementations.RabbitMqQueue;
+import boilerplate.MessageQueue;
+import boilerplate.implementations.MessageQueueAsync;
+import boilerplate.implementations.MessageQueueSync;
+import boilerplate.implementations.RabbitMqQueue;
 import usermanagement.domain.aggregate.Address;
 import usermanagement.domain.aggregate.Contact;
 import usermanagement.domain.aggregate.UserId;

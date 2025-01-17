@@ -13,4 +13,8 @@ public class AccountId implements Serializable{
 	public AccountId(UUID uuid) {
 		this.uuid = uuid;
 	}
+
+	public String getUuid() {
+		return uuid.toString();
+	}
 }

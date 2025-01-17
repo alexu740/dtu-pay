@@ -20,8 +20,11 @@ public class AccountManagementService {
 	}
 	
 	/* Command Operations */
-	public void handleCreateAccount(AccountCreationCommand command) {
-		
+	public void handleCreateAccount(AccountCreationCommand command, CorrelationId correlationId) {
+		System.out.println("Creating new account object");
+		Account account = Account.create(command.firstName, command.lastName, command.cpr, command.bankAccount, correlationId);
+		System.out.println("Created new account object");
+		this.repository.save(account);
 	}
 	/*
 	public AccountId createAccount(String firstname, String lastname) throws InterruptedException, ExecutionException {
