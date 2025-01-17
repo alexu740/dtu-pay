@@ -19,14 +19,14 @@ public class MerchantFacade {
 
     public String createMerchant(RegistrationDto dto) {
         Client client = ClientBuilder.newClient();
-        WebTarget target = client.target("http://localhost:8089/customers");
+        WebTarget target = client.target("http://merchant-facade:8089/merchants");
         Response response = target.request().post(Entity.entity(dto, MediaType.APPLICATION_JSON));
         return response.readEntity(String.class);
     }
 
     public String deleteMerchant(String id) {
         Client client = ClientBuilder.newClient();
-        WebTarget target = client.target("http://localhost:8089/customers/"+id);
+        WebTarget target = client.target("http://merchant-facade:8089/merchants/"+id);
         Response response = target.request().delete();
         return response.readEntity(String.class);
     }

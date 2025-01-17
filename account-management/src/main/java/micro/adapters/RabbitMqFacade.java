@@ -16,6 +16,8 @@ public class RabbitMqFacade {
   public RabbitMqFacade(MessageQueue queue, AccountManagementService service) {
     System.out.println("Starting facade");
     queue.addHandler("CustomerRegistrationRequested", this::handleCustomerRegistration);
+    queue.addHandler("MerchantRegistrationRequested", this::handleMerchantRegistration);
+    
     this.service = service;
   }
 
@@ -30,9 +32,10 @@ public class RabbitMqFacade {
     service.handleCreateAccount(command, correlationId);
   }
 
-  @Override
-  protected void finalize() throws Throwable {
-      System.out.println("RabbitMqFacade is being garbage collected");
-      super.finalize();
+  public void handleMerchantRegistration(Event e) {
+    var eventPayload = e.getArgument(0, RegistrationDto.class);
+    var correlationId = e.getArgument(1, CorrelationId.class);
+    AccountCreationCommand command = new AccountCreationCommand(eventPayload, false);
+    service.handleCreateAccount(command, correlationId);
   }
 }

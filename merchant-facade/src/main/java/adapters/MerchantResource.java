@@ -8,7 +8,7 @@ import jakarta.ws.rs.Produces;
 import jakarta.ws.rs.Consumes;
 import jakarta.ws.rs.core.MediaType;
 import jakarta.ws.rs.core.Response;
-import messaging.implementations.RabbitMqQueue;
+import boilerplate.implementations.RabbitMqQueue;
 import service.MerchantFacadeService;
 import jakarta.inject.Inject;
 

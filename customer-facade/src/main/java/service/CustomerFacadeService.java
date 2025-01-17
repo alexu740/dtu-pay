@@ -30,7 +30,10 @@ public class CustomerFacadeService {
     public void completeRegistration(String eventPayload, CorrelationId correlationId, boolean isSuccessful) {
         System.out.println(correlationId.get());
         System.out.println(eventPayload);
-		correlations.get(correlationId.get()).complete(eventPayload);
+        var promise = correlations.get(correlationId.get());
+        if(promise != null) {
+            promise.complete(eventPayload);
+        }
     }
     
     public void remove() {

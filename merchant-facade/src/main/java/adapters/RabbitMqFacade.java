@@ -1,7 +1,7 @@
 package adapters;
 
-import messaging.Event;
-import messaging.MessageQueue;
+import boilerplate.Event;
+import boilerplate.MessageQueue;
 import service.MerchantFacadeService;
 import service.CorrelationId;
 
@@ -9,7 +9,7 @@ public class RabbitMqFacade {
     MerchantFacadeService service;
 
     public RabbitMqFacade(MessageQueue queue, MerchantFacadeService service) {
-        queue.addHandler("TestEvent", this::handleMerchantRegistration);
+        queue.addHandler("AccountRegistered", this::handleMerchantRegistration);
         this.service = service;
     }
 
