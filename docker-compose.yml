@@ -23,4 +23,4 @@ services:
     build: ./account-management
     restart: always
     depends_on:
-      - rabbitMq
+     - rabbitMq

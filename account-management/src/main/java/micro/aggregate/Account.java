@@ -15,6 +15,7 @@ import java.util.stream.Stream;
 import boilerplate.Message;
 import micro.aggregate.AccountFinancialDetails;
 import micro.aggregate.AccountOwnerDetails;
+import micro.service.CorrelationId;
 import boilerplate.Event;
 
 
@@ -38,7 +39,7 @@ public class Account {
 
 	private Map<Class<? extends Serializable>, Consumer<Serializable>> handlers = new HashMap<>();
 
-	public static Account create(String firstName, String lastName, String cpr, String bankAccount, String correlationId) {
+	public static Account create(String firstName, String lastName, String cpr, String bankAccount, CorrelationId correlationId) {
 		var accountId = new AccountId(UUID.randomUUID());
 		var ownerDetails = new AccountOwnerDetails(firstName, lastName, cpr);
 		var financialDetails = new AccountFinancialDetails(bankAccount, null);
@@ -48,7 +49,7 @@ public class Account {
 		account.ownerDetails = ownerDetails;
 		account.financialDetails = financialDetails;
 
-		var event = new Event("AccountCreated", new Object[] { accountId.getUuid(), account, correlationId });
+		var event = new Event("AccountRegistered", new Object[] { accountId.getUuid(), correlationId });
 		account.appliedEvents.add(event);
 
 		return account;

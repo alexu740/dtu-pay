@@ -27,7 +27,7 @@ public class RabbitMqFacade {
     System.out.println(correlationId.get());
     AccountCreationCommand command = new AccountCreationCommand(eventPayload, true);
     System.out.println(correlationId);
-    service.handleCreateAccount(command, correlationId.get());
+    service.handleCreateAccount(command, correlationId);
   }
 
   @Override

@@ -20,7 +20,7 @@ public class AccountManagementService {
 	}
 	
 	/* Command Operations */
-	public void handleCreateAccount(AccountCreationCommand command, String correlationId) {
+	public void handleCreateAccount(AccountCreationCommand command, CorrelationId correlationId) {
 		System.out.println("Creating new account object");
 		Account account = Account.create(command.firstName, command.lastName, command.cpr, command.bankAccount, correlationId);
 		System.out.println("Created new account object");
