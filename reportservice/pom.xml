@@ -11,20 +11,22 @@
 
 	<properties>
 		<surefire-plugin.version>2.22.1</surefire-plugin.version>
-		<maven.compiler.target>21</maven.compiler.target>
-		<maven.compiler.source>21</maven.compiler.source>
+		<maven.compiler.target>17</maven.compiler.target>
+		<maven.compiler.source>17</maven.compiler.source>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 		<project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
 		<maven.compiler.parameters>true</maven.compiler.parameters>
 		<compiler-plugin.version>3.8.1</compiler-plugin.version>
 	</properties>
 	<dependencies>
+		<!-- Gson dependency -->
 		<dependency>
 			<groupId>com.google.code.gson</groupId>
 			<artifactId>gson</artifactId>
 			<version>2.8.6</version>
 		</dependency>
 
+		<!-- Cucumber dependencies -->
 		<dependency>
 			<groupId>io.cucumber</groupId>
 			<artifactId>cucumber-java</artifactId>
@@ -40,27 +42,18 @@
 			<artifactId>cucumber-picocontainer</artifactId>
 			<version>6.9.1</version>
 		</dependency>
-		<!-- This is JUnit 5 aka Jupiter -->
+		<dependency>
+			<groupId>io.cucumber</groupId>
+			<artifactId>cucumber-junit-platform-engine</artifactId>
+			<version>6.9.1</version>
+			<scope>test</scope>
+		</dependency>
+
+		<!-- JUnit dependencies -->
 		<dependency>
 			<groupId>org.junit.jupiter</groupId>
 			<artifactId>junit-jupiter-engine</artifactId>
 			<version>5.7.0</version>
-			<scope>test</scope>
-		</dependency>
-		<!-- This is needed to provide the @Cucumber annotation needed for Cucumber
-			scenarios to run with the JUnit 5 test runner. -->
-		<dependency>
-			<groupId>io.cucumber</groupId>
-			<artifactId>cucumber-junit-platform-engine</artifactId>
-			<version>6.9.1</version>
-			<scope>test</scope>
-		</dependency>
-		<!-- This is needed to provide the @Cucumber annotation needed for Cucumber
-			scenarios to run with the JUnit 5 test runner. -->
-		<dependency>
-			<groupId>io.cucumber</groupId>
-			<artifactId>cucumber-junit-platform-engine</artifactId>
-			<version>6.9.1</version>
 			<scope>test</scope>
 		</dependency>
 		<dependency>
@@ -69,52 +62,54 @@
 			<version>5.8.1</version>
 			<scope>test</scope>
 		</dependency>
-		<dependency>
-        <groupId>ch.qos.logback</groupId>
-        <artifactId>logback-classic</artifactId>
-        <version>1.2.3</version> <!-- Use the latest version -->
-    </dependency>
 
-		<!-- https://mvnrepository.com/artifact/org.mockito/mockito-core -->
+		<!-- Logback dependency -->
+		<dependency>
+			<groupId>ch.qos.logback</groupId>
+			<artifactId>logback-classic</artifactId>
+			<version>1.2.3</version>
+		</dependency>
+
+		<!-- Mockito dependency -->
 		<dependency>
 			<groupId>org.mockito</groupId>
 			<artifactId>mockito-core</artifactId>
 			<version>3.7.0</version>
 			<scope>test</scope>
 		</dependency>
-		<!-- https://mvnrepository.com/artifact/com.google.code.gson/gson -->
-		<dependency>
-			<groupId>com.google.code.gson</groupId>
-			<artifactId>gson</artifactId>
-			<version>2.8.6</version>
-		</dependency>
-		<dependency>
-			<groupId>dk.dtupay.messaging</groupId>
-			<artifactId>messaging-utilities</artifactId>
-			<version>3.4</version>
-		</dependency>
+
+		<!-- Lombok dependency -->
 		<dependency>
 			<groupId>org.projectlombok</groupId>
 			<artifactId>lombok</artifactId>
 			<version>1.18.30</version>
+			<scope>provided</scope>
 		</dependency>
+
+		<!-- RabbitMQ client dependency -->
+		<dependency>
+			<groupId>com.rabbitmq</groupId>
+			<artifactId>amqp-client</artifactId>
+			<version>5.10.0</version>
+		</dependency>
+
+		<!-- javax.ws.rs dependency -->
 		<dependency>
 			<groupId>javax.ws.rs</groupId>
 			<artifactId>javax.ws.rs-api</artifactId>
 			<version>2.1.1</version>
 			<scope>compile</scope>
 		</dependency>
-
-    </dependencies>
+	</dependencies>
 	<build>
 		<plugins>
 			<plugin>
 				<artifactId>maven-compiler-plugin</artifactId>
 				<version>${compiler-plugin.version}</version>
 				<configuration>
-               	 <source>21</source>
-               	 <target>21</target>
-            	</configuration>
+					<source>17</source>
+					<target>17</target>
+				</configuration>
 			</plugin>
 			<plugin>
 				<artifactId>maven-surefire-plugin</artifactId>

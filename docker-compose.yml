@@ -33,3 +33,8 @@ services:
     restart: always
     depends_on:
      - rabbitMq
+  repostservice:
+    build: ./reportservice
+    restart: always
+    depends_on:
+      - rabbitMq

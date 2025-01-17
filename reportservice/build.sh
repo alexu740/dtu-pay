@@ -1,4 +1,3 @@
 #!/bin/bash
-set -e
-mvn clean install
-docker-compose build reportservice
+mvn clean package
+# java -jar target/dtupay_accountmanagement-1.0.jar
