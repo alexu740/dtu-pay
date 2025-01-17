@@ -1,4 +1,4 @@
-package dtupay.dto;
+package reportservice.dto;
 
 import lombok.*;
 
