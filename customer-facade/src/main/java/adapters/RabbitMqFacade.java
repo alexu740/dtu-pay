@@ -14,13 +14,13 @@ public class RabbitMqFacade {
         this.service = service;
     }
 
-    private void handleAccountRegistred(Event e) {
+    public void handleAccountRegistred(Event e) {
         var eventPayload = e.getArgument(0, String.class);
         var correlationid = e.getArgument(1, CorrelationId.class);
         service.completeRegistration(eventPayload, correlationid, true);
     }
 
-    private void handleAccountRegistrationFailed(Event e) {
+    public void handleAccountRegistrationFailed(Event e) {
         var eventPayload = e.getArgument(0, String.class);
         var correlationid = e.getArgument(1, CorrelationId.class);
         service.completeRegistration(eventPayload, correlationid, false);

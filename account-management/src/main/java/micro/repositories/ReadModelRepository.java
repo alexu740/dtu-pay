@@ -6,8 +6,8 @@ import java.util.Map;
 import java.util.Set;
 import java.util.stream.Collectors;
 
-import messaging.Message;
-import messaging.MessageQueue;
+import boilerplate.Message;
+import boilerplate.MessageQueue;
 import micro.aggregate.AccountId;
 import micro.events.AccountCreated;
 

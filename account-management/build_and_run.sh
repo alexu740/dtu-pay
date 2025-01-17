@@ -1,2 +1,2 @@
 mvn clean package
-java -jar target/dtupay-accountmanagement-1.0.jar
+java -jar target/dtupay_accountmanagement-1.0.jar

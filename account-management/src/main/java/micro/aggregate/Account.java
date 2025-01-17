@@ -12,19 +12,21 @@ import java.util.function.Consumer;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
-import messaging.Message;
-import micro.events.AccountCreated;
-import micro.events.Event;
+import boilerplate.Message;
+import micro.aggregate.AccountFinancialDetails;
+import micro.aggregate.AccountOwnerDetails;
+import boilerplate.Event;
 
 
 public class Account {
 	private AccountId accountid;
+	private AccountOwnerDetails ownerDetails;
+	private AccountFinancialDetails financialDetails;
+
 	public AccountId getAccountid() {
 		return accountid;
 	}
 
-	private String firstname;
-	private String lastname;
 	//private Set<Contact> contacts = new HashSet<>();
 	//private Set<Address> addresses = new HashSet<>();
 	
@@ -36,12 +38,19 @@ public class Account {
 
 	private Map<Class<? extends Serializable>, Consumer<Serializable>> handlers = new HashMap<>();
 
-	public static Account create(String firstName, String lastName) {
+	public static Account create(String firstName, String lastName, String cpr, String bankAccount, String correlationId) {
 		var accountId = new AccountId(UUID.randomUUID());
-		AccountCreated event = new AccountCreated();
+		var ownerDetails = new AccountOwnerDetails(firstName, lastName, cpr);
+		var financialDetails = new AccountFinancialDetails(bankAccount, null);
+
 		var account = new Account();
 		account.accountid = accountId;
+		account.ownerDetails = ownerDetails;
+		account.financialDetails = financialDetails;
+
+		var event = new Event("AccountCreated", new Object[] { accountId.getUuid(), account, correlationId });
 		account.appliedEvents.add(event);
+
 		return account;
 	}
 
@@ -100,8 +109,8 @@ public class Account {
 		throw new Error("handler for event "+e+" missing");
 	}
 
-	private void apply(AccountCreated event) {
-		accountid = event.getAccountId();
+	private void apply(Event event) {
+		//accountid = event.getAccountId();
 		//firstname = event.getFirstName();
 		//lastname = event.getLastName();
 	}

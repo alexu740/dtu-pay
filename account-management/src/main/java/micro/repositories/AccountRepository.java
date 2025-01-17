@@ -1,6 +1,6 @@
 package micro.repositories;
 
-import messaging.MessageQueue;
+import boilerplate.MessageQueue;
 import micro.aggregate.Account;
 import micro.aggregate.AccountId;
 
@@ -17,7 +17,7 @@ public class AccountRepository {
 	}
 	
 	public void save(Account account) {
-		eventStore.addEvents(account.getAccountid(),account.getAppliedEvents());
+		eventStore.addEvents(account.getAccountid(), account.getAppliedEvents());
 		account.clearAppliedEvents();
 	}
 }
