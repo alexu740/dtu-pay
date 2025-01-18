@@ -1,4 +1,4 @@
-package boilerplate.implementations;
+package reportservice.boilerplate.implementations;
 
 import java.io.IOException;
 import java.util.concurrent.TimeoutException;
@@ -10,8 +10,8 @@ import com.rabbitmq.client.Connection;
 import com.rabbitmq.client.ConnectionFactory;
 import com.rabbitmq.client.DeliverCallback;
 
-import boilerplate.Event;
-import boilerplate.MessageQueue;
+import reportservice.boilerplate.Event;
+import reportservice.boilerplate.MessageQueue;
 
 public class RabbitMqQueue implements MessageQueue {
 

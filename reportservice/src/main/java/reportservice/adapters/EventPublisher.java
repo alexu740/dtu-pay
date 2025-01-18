@@ -1,7 +1,7 @@
-package adapters;
+package reportservice.adapters;
 
-import dto.Payment;
-import impl.CorrelationId;
+import reportservice.dto.Payment;
+import reportservice.impl.CorrelationId;
 
 public interface EventPublisher {
     public void emitCreateUserEvent();

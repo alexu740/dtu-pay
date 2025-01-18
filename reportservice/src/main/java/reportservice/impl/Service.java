@@ -5,14 +5,12 @@ import reportservice.lib.IService;
 
 import reportservice.adapters.EventPublisher;
 
-import boilerplate.implementations.RabbitMqQueue;
-import boilerplate.MessageQueue;
-import boilerplate.Event;
+import reportservice.boilerplate.implementations.RabbitMqQueue;
+import reportservice.boilerplate.MessageQueue;
+import reportservice.boilerplate.Event;
 
-import dto.Payment;
-import impl.CorrelationId;
-
-import reportservice.dto.*;
+import reportservice.dto.Payment;
+import reportservice.impl.CorrelationId;
 
 import java.util.List;
 
@@ -28,7 +26,8 @@ public class Service implements IService {
 	}
 
 	@Override
-	public void handlePaymentReceived(Payment payment,correlationId correlationId) {
+	public void handlePaymentReceived(Payment payment,CorrelationId correlationId) {
+		Event ev;
 		try {
 			repository.addTransaction(payment);
 			ev = new Event("payment.storage.succeeded", new Object[] { correlationId });
@@ -39,8 +38,8 @@ public class Service implements IService {
 		queue.publish(ev);
 	}
 
-	public void handlePaymentsReportRequested(Event ev) {
-		var correlationId = ev.getArgument(0, CorrelationId.class);
+	public void handlePaymentsReportRequested(CorrelationId correlationId) {
+		Event ev;
 		try {
 			List<Payment> transactions = repository.getTransactions();
 			ev = new Event("payments.report.succeeded", new Object[] { correlationId, transactions });
@@ -50,9 +49,8 @@ public class Service implements IService {
 		queue.publish(ev);
 	}
 
-	public void handleMerchantReportRequested(Event ev) {
-		var correlationId = ev.getArgument(0, CorrelationId.class);
-		var id = ev.getArgument(1, String.class);
+	public void handleMerchantReportRequested(CorrelationId correlationId,String id) {
+		Event ev;
 		try {
 			List<Payment> transactions = repository.getMerchantTransactions(id);
 			ev = new Event("payments.report.succeeded", new Object[] { correlationId, transactions });

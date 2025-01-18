@@ -1,17 +1,16 @@
-package adapters;
+package reportservice.adapters;
 
-import boilerplate.Event;
-import boilerplate.MessageQueue;
-import impl.Service;
-import impl.CorrelationId;
-import dto.Payment;
-import impl.CorrelationId;
+import reportservice.boilerplate.Event;
+import reportservice.boilerplate.MessageQueue;
+import reportservice.impl.Service;
+import reportservice.impl.CorrelationId;
+import reportservice.dto.Payment;
+import reportservice.impl.CorrelationId;
 
 public class RabbitMqFacade {
     Service service;
 
     public RabbitMqFacade(MessageQueue queue, Service service) {
-        queue.addHandler("customer.report.customer.requested", this::handleCustomerReportRequested);
         queue.addHandler("payments.report.merchant.requested", this::handleMerchantReportRequested);
         queue.addHandler("payment.storage.requested", this::handlePaymentReceived);
         queue.addHandler("payments.report.requested", this::handlePaymentsReportRequested);
@@ -24,19 +23,13 @@ public class RabbitMqFacade {
         service.handlePaymentReceived(payment, correlationId);
     }
 
-    private void handleMerchantRegistration(Event e) {
-        var eventPayload = e.getArgument(0, String.class);
-        var correlationid = e.getArgument(1, CorrelationId.class);
-        service.completeRegistration(eventPayload, correlationid);
+    private void handlePaymentsReportRequested(Event ev) {
+        var correlationId = ev.getArgument(0, CorrelationId.class);
+        service.handlePaymentsReportRequested(correlationId);
     }
-    private void handleMerchantRegistration(Event e) {
-        var eventPayload = e.getArgument(0, String.class);
-        var correlationid = e.getArgument(1, CorrelationId.class);
-        service.completeRegistration(eventPayload, correlationid);
-    }
-    private void handleMerchantRegistration(Event e) {
-        var eventPayload = e.getArgument(0, String.class);
-        var correlationid = e.getArgument(1, CorrelationId.class);
-        service.completeRegistration(eventPayload, correlationid);
+    private void handleMerchantReportRequested(Event ev) {
+        var correlationId = ev.getArgument(0, CorrelationId.class);
+        var id = ev.getArgument(1, String.class);
+        service.handleMerchantReportRequested(correlationId, id);
     }
 }

@@ -1,6 +1,8 @@
 package reportservice;
 
-import boilerplate.implementations.RabbitMqQueue;
+import reportservice.boilerplate.implementations.RabbitMqQueue;
+import reportservice.boilerplate.MessageQueue;
+import reportservice.boilerplate.Event;
 
 import reportservice.adapters.RabbitMqEventPublisher;
 import reportservice.adapters.RabbitMqFacade;
@@ -8,13 +10,13 @@ import reportservice.adapters.RabbitMqFacade;
 import reportservice.impl.Repository;
 import reportservice.impl.Service;
 
-import boilerplate.implementations.RabbitMqQueue;
-import boilerplate.MessageQueue;
-import boilerplate.Event;
-
-import reportservice.lib.Factory;
+import reportservice.lib.IRepository;
 
 public class StartUp {
+
+	private Service service;
+	private RabbitMqFacade facade;
+
 	public static void main(String[] args) throws Exception {
 		new StartUp().startUp();
 	}
@@ -33,6 +35,5 @@ public class StartUp {
 
 		Thread.currentThread().join();
 
-		return service;
 	}
 }

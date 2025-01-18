@@ -1,10 +1,10 @@
-package adapters;
+package reportservice.adapters;
 
-import adapters.EventPublisher;
-import boilerplate.Event;
-import boilerplate.MessageQueue;
-import dto.Payment;
-import impl.CorrelationId;
+import reportservice.adapters.EventPublisher;
+import reportservice.boilerplate.Event;
+import reportservice.boilerplate.MessageQueue;
+import reportservice.dto.Payment;
+import reportservice.impl.CorrelationId;
 
 public class RabbitMqEventPublisher implements EventPublisher {
     private MessageQueue queue;
