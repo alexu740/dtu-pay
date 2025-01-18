@@ -1,6 +1,8 @@
 package reportservice.lib;
 
-import messaging.Event;
+import boilerplate.implementations.RabbitMqQueue;
+import boilerplate.MessageQueue;
+import boilerplate.Event;
 
 public interface IService {
 

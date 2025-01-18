@@ -2,8 +2,10 @@ package reportservice.lib;
 
 import reportservice.impl.Repository;
 import reportservice.impl.Service;
-import messaging.implementations.RabbitMqQueue;
 
+import boilerplate.implementations.RabbitMqQueue;
+import boilerplate.MessageQueue;
+import boilerplate.Event;
 public class Factory {
 
 
@@ -26,7 +28,12 @@ public class Factory {
         // is called dependency injection.
         // At the end, we can use the PaymentService in tests
         // without sending actual messages to RabbitMq.
-        var mq = new RabbitMqQueue("");
+        System.out.println("STARTING the Account Management Service");
+        Thread.sleep(10000);
+        var mq = new RabbitMqQueue("rabbitMq");
+
+        Thread.currentThread().join();
+
         IRepository repo = new Repository();
 
         service = new Service(mq, repo);

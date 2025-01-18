@@ -1,6 +1,6 @@
 package reportservice.lib;
 
-import dtupay.dto.*;
+import reportservice.dto.*;
 
 import java.util.List;
 

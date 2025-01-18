@@ -9,5 +9,7 @@ public class StartUp {
 
 	private void startUp() throws Exception {
 		new Factory().getService();
+
+
 	}
 }

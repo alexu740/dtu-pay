@@ -2,8 +2,12 @@ package reportservice.impl;
 
 import reportservice.lib.IRepository;
 import reportservice.lib.IService;
-import messaging.Event;
-import messaging.MessageQueue;
+
+import boilerplate.implementations.RabbitMqQueue;
+import boilerplate.MessageQueue;
+import boilerplate.Event;
+
+import reportservice.dto.*;
 
 import java.util.List;
 
