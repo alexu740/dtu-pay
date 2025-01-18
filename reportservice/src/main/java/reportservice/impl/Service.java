@@ -3,9 +3,14 @@ package reportservice.impl;
 import reportservice.lib.IRepository;
 import reportservice.lib.IService;
 
+import reportservice.adapters.EventPublisher;
+
 import boilerplate.implementations.RabbitMqQueue;
 import boilerplate.MessageQueue;
 import boilerplate.Event;
+
+import dto.Payment;
+import impl.CorrelationId;
 
 import reportservice.dto.*;
 
@@ -14,27 +19,22 @@ import java.util.List;
 public class Service implements IService {
 	private final IRepository repository;
 	private final MessageQueue queue;
+	private EventPublisher publisher;
 
-	public Service(MessageQueue q, IRepository repo) {
+	public Service(MessageQueue q, IRepository repo,EventPublisher publisher) {
+		this.publisher = publisher;
 		this.queue = q;
 		this.repository = repo;
-		this.queue.addHandler("customer.report.customer.requested", this::handleCustomerReportRequested);
-		this.queue.addHandler("payments.report.merchant.requested", this::handleMerchantReportRequested);
-		this.queue.addHandler("payment.storage.requested", this::handlePaymentReceived);
-		this.queue.addHandler("payments.report.requested", this::handlePaymentsReportRequested);
 	}
 
 	@Override
-	public void handlePaymentReceived(Event ev) {
-		var payment = ev.getArgument(1, Payment.class);
-		var correlationId = ev.getArgument(0, CorrelationId.class);
+	public void handlePaymentReceived(Payment payment,correlationId correlationId) {
 		try {
 			repository.addTransaction(payment);
 			ev = new Event("payment.storage.succeeded", new Object[] { correlationId });
 		} catch (Exception e) {
 			ev = new Event("payment.storage.failed", new Object[] { correlationId, e });
 		}
-
 		// Publish the event
 		queue.publish(ev);
 	}
