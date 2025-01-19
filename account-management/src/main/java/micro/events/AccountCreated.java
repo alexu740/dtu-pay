@@ -4,6 +4,8 @@ import lombok.AllArgsConstructor;
 import lombok.EqualsAndHashCode;
 import lombok.Value;
 import micro.aggregate.AccountId;
+import micro.service.CorrelationId;
+import boilerplate.Event;
 
 @Value
 @AllArgsConstructor
@@ -11,11 +13,17 @@ import micro.aggregate.AccountId;
 public class AccountCreated extends Event {
 
 	private static final long serialVersionUID = -1599019626118724482L;
-	private AccountId accountId;
-    private String firstName;
-    private String lastName;
+	public AccountId accountId;
+    public String firstName;
+    public String lastName;
+    public String cpr;
+    public String bankAccount;
 
     public AccountId getAccountId() {
         return accountId;
+    }
+
+    public AccountCreated(AccountId accountId, CorrelationId correlationId) {
+        super("AccountRegistered", new Object[] { accountId.getUuid(), correlationId });
     }
 }

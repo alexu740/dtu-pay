@@ -4,6 +4,7 @@ import boilerplate.implementations.RabbitMqQueue;
 import boilerplate.MessageQueue;
 import boilerplate.Event;
 import micro.commands.AccountCreationCommand;
+import micro.commands.CommandFactory;
 import micro.dto.RegistrationDto;
 import boilerplate.Event;
 import micro.commands.AccountCreationCommand;
@@ -22,13 +23,11 @@ public class RabbitMqFacade {
   }
 
   public void handleCustomerRegistration(Event e) {
-    System.out.println("CustomerRegistrationRequested triggered");
     var eventPayload = e.getArgument(0, RegistrationDto.class);
-    System.out.println("CustomerRegistrationRequested arg" + eventPayload.bankAccount);
     var correlationId = e.getArgument(1, CorrelationId.class);
-    System.out.println(correlationId.get());
-    AccountCreationCommand command = new AccountCreationCommand(eventPayload, true);
-    System.out.println(correlationId);
+
+    AccountCreationCommand command = CommandFactory.createAccountCreationCommand(eventPayload, true);
+
     service.handleCreateAccount(command, correlationId);
   }
 

@@ -13,7 +13,7 @@ public class AccountFinancialDetails {
     private List<String> validTokens;
 
     public AccountFinancialDetails(String bankAccount, List<String> tokens) {
-		  this.bankAccount = bankAccount;
-      this.validTokens = tokens;
-	  }
+	    this.bankAccount = bankAccount;
+        this.validTokens = tokens;
+	}
 }

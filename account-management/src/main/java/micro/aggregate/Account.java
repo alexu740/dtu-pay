@@ -12,9 +12,7 @@ import java.util.function.Consumer;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
-import boilerplate.Message;
-import micro.aggregate.AccountFinancialDetails;
-import micro.aggregate.AccountOwnerDetails;
+import micro.events.AccountCreated;
 import micro.service.CorrelationId;
 import boilerplate.Event;
 
@@ -23,19 +21,7 @@ public class Account {
 	private AccountId accountid;
 	private AccountOwnerDetails ownerDetails;
 	private AccountFinancialDetails financialDetails;
-
-	public AccountId getAccountid() {
-		return accountid;
-	}
-
-	//private Set<Contact> contacts = new HashSet<>();
-	//private Set<Address> addresses = new HashSet<>();
-	
 	private List<Event> appliedEvents = new ArrayList<Event>();
-
-	public List<Event> getAppliedEvents() {
-		return appliedEvents;
-	}
 
 	private Map<Class<? extends Serializable>, Consumer<Serializable>> handlers = new HashMap<>();
 
@@ -49,7 +35,12 @@ public class Account {
 		account.ownerDetails = ownerDetails;
 		account.financialDetails = financialDetails;
 
-		var event = new Event("AccountRegistered", new Object[] { accountId.getUuid(), correlationId });
+		var event = new AccountCreated(accountId, correlationId);
+		event.firstName = firstName;
+		event.lastName = lastName;
+		event.cpr = cpr;
+		event.bankAccount = bankAccount;
+
 		account.appliedEvents.add(event);
 
 		return account;
@@ -65,55 +56,32 @@ public class Account {
 		registerEventHandlers();
 	}
 
-	private void registerEventHandlers() {
-		//handlers.put(AccountCreated.class, e -> apply((AccountCreated) e));
+	public AccountId getAccountid() {
+		return accountid;
 	}
 
-	/* Business Logic */
-	//public void update(Set<Contact> contacts, Set<Address> addresses) {
-		//removeOldAdresses(addresses);
-		//addNewContacts(contacts);
-		//applyEvents(appliedEvents.stream());
-	//}
+	public List<Event> getAppliedEvents() {
+		return appliedEvents;
+	}
 
-	//private void removeOldAdresses(Set<Address> addresses) {
-		//var events = getAddresses().stream().filter(a -> !addresses.contains(a))
-		//		.map(address -> (Event)new UserAddressRemoved(userid, address.getCity(), address.getState(),
-		//				address.getPostcode()))
-		//		.collect(Collectors.toList());
-		//appliedEvents.addAll(events);
-	//}
-
-	//private void addNewContacts(Set<Contact> contacts) {
-		//var events = contacts.stream().filter(c -> !getContacts().contains(c))
-		//		.map(contact -> (Event)new UserContactAdded(userid, contact.getType(), contact.getDetail()))
-		//		.collect(Collectors.toList());
-		//appliedEvents.addAll(events);
-	//}
-	
-	/* Event Handling */
+	private void registerEventHandlers() {
+		handlers.put(AccountCreated.class, e -> apply((AccountCreated) e));
+	}
 
 	private void applyEvents(Stream<Event> events) throws Error {
 		events.forEachOrdered(e -> {
-			this.applyEvent(e);
+			if (e instanceof AccountCreated)
+				this.apply((AccountCreated) e);
 		});
 		if (this.getAccountid() == null) {
 			throw new Error("user does not exist");
 		}
 	}
 
-	private void applyEvent(Event e) {
-		//handlers.getOrDefault(e.getClass(), this::missingHandler).accept(e);
-	}
-
-	private void missingHandler(Message e) {
-		throw new Error("handler for event "+e+" missing");
-	}
-
-	private void apply(Event event) {
-		//accountid = event.getAccountId();
-		//firstname = event.getFirstName();
-		//lastname = event.getLastName();
+	private void apply(AccountCreated event) {
+		this.accountid = event.accountId;
+		this.ownerDetails = new AccountOwnerDetails(event.firstName, event.lastName, event.cpr);
+		this.financialDetails = new AccountFinancialDetails(event.bankAccount, null);
 	}
 
 	public void clearAppliedEvents() {

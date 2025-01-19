@@ -16,7 +16,7 @@ public class CustomerFacadeService {
     private EventPublisher publisher;
     private Map<String, CompletableFuture<String>> correlations = new ConcurrentHashMap<>();
 
-    public CustomerFacadeService(EventPublisher publish er) {
+    public CustomerFacadeService(EventPublisher publisher) {
         this.publisher = publisher;
     }
 
