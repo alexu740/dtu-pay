@@ -27,7 +27,7 @@ public class EventStore {
 			store.put(event.getArgument(0, String.class), new ArrayList<Event>());
 		}
 		store.get(event.getArgument(0, String.class)).add(event);
-		System.out.println("Pushing event to queue" + eventBus);
+		System.out.println("Pushing event to queue");
 		eventBus.publish(event);
 	}
 	

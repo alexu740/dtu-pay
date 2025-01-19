@@ -12,6 +12,7 @@ import com.rabbitmq.client.DeliverCallback;
 
 import boilerplate.Event;
 import boilerplate.MessageQueue;
+import micro.events.AccountCreated;
 
 public class RabbitMqQueue implements MessageQueue {
 
@@ -66,8 +67,13 @@ public class RabbitMqQueue implements MessageQueue {
 			DeliverCallback deliverCallback = (consumerTag, delivery) -> {
 				String message = new String(delivery.getBody(), "UTF-8");
 
-				Event event = new Gson().fromJson(message, Event.class);
-
+				Event event;
+				if (topic.equals("AccountRegistered")) {
+					event = new Gson().fromJson(message, AccountCreated.class);
+				}
+				else {
+					event = new Gson().fromJson(message, Event.class);
+				}
 				handler.accept(event);
 			};
 			chan.basicConsume(queueName, true, deliverCallback, consumerTag -> {

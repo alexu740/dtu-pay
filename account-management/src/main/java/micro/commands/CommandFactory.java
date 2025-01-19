@@ -1,5 +1,6 @@
 package micro.commands;
 
+import boilerplate.Event;
 import micro.dto.RegistrationDto;
 
 public class CommandFactory {

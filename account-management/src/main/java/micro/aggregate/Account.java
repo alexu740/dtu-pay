@@ -16,32 +16,36 @@ import micro.events.AccountCreated;
 import micro.service.CorrelationId;
 import boilerplate.Event;
 
-
 public class Account {
 	private AccountId accountid;
 	private AccountOwnerDetails ownerDetails;
 	private AccountFinancialDetails financialDetails;
+
 	private List<Event> appliedEvents = new ArrayList<Event>();
 
-	private Map<Class<? extends Serializable>, Consumer<Serializable>> handlers = new HashMap<>();
-
-	public static Account create(String firstName, String lastName, String cpr, String bankAccount, CorrelationId correlationId) {
+    public static Account create(String firstName, String lastName, String cpr, String bankAccount, boolean isCustomerAccount, CorrelationId correlationId) {
 		var accountId = new AccountId(UUID.randomUUID());
 		var ownerDetails = new AccountOwnerDetails(firstName, lastName, cpr);
 		var financialDetails = new AccountFinancialDetails(bankAccount, null);
 
 		var account = new Account();
-		account.accountid = accountId;
-		account.ownerDetails = ownerDetails;
-		account.financialDetails = financialDetails;
+		if(isCustomerAccount) {
+			account = new CustomerAccount();
+		}
+		
+		account.setAccountid(accountId);
+		account.setOwnerDetails(ownerDetails);
+		account.setFinancialDetails(financialDetails);
 
 		var event = new AccountCreated(accountId, correlationId);
+		event.accountId = accountId;
 		event.firstName = firstName;
 		event.lastName = lastName;
 		event.cpr = cpr;
 		event.bankAccount = bankAccount;
+		event.isCustomerAccountType = isCustomerAccount;
 
-		account.appliedEvents.add(event);
+		account.getAppliedEvents().add(event);
 
 		return account;
 	}
@@ -50,22 +54,6 @@ public class Account {
 		Account account = new Account();
 		account.applyEvents(events);
 		return account;
-	}
-
-	public Account() {
-		registerEventHandlers();
-	}
-
-	public AccountId getAccountid() {
-		return accountid;
-	}
-
-	public List<Event> getAppliedEvents() {
-		return appliedEvents;
-	}
-
-	private void registerEventHandlers() {
-		handlers.put(AccountCreated.class, e -> apply((AccountCreated) e));
 	}
 
 	private void applyEvents(Stream<Event> events) throws Error {
@@ -86,5 +74,33 @@ public class Account {
 
 	public void clearAppliedEvents() {
 		appliedEvents.clear();
+	}
+
+	public List<Event> getAppliedEvents() {
+		return appliedEvents;
+	}
+
+	public void setAccountid(AccountId accountid) {
+		this.accountid = accountid;
+	}
+	
+	public AccountId getAccountid() {
+		return accountid;
+	}
+
+	public AccountOwnerDetails getOwnerDetails() {
+		return ownerDetails;
+	}
+
+	public void setOwnerDetails(AccountOwnerDetails ownerDetails) {
+		this.ownerDetails = ownerDetails;
+	}
+
+	public AccountFinancialDetails getFinancialDetails() {
+		return financialDetails;
+	}
+
+	public void setFinancialDetails(AccountFinancialDetails financialDetails) {
+		this.financialDetails = financialDetails;
 	}
 }

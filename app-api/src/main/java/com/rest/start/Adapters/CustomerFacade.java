@@ -18,6 +18,13 @@ public class CustomerFacade {
 
     }
 
+    public CustomerDto getCustomer(String id) {
+        Client client = ClientBuilder.newClient();
+        WebTarget target = client.target("http://customer-facade:8088/customers/" + id);
+        Response response = target.request().get();
+        return response.readEntity(CustomerDto.class);
+    }
+
     public String createCustomer(RegistrationDto dto) {
         Client client = ClientBuilder.newClient();
         WebTarget target = client.target("http://customer-facade:8088/customers");

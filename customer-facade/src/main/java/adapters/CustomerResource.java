@@ -26,6 +26,14 @@ public class CustomerResource {
         return Response.ok(result).build();
     }
 
+    @GET
+    @Produces(MediaType.APPLICATION_JSON)
+    @Path("{id}")
+    public Response getCustomer(@PathParam("id") String id) {
+        //queue.publish(new Event("CustomerRegistrationRequested"))
+        return Response.ok(service.get(id)).build();
+    }
+
     @DELETE
     @Produces(MediaType.APPLICATION_JSON)
     @Path("{id}")

@@ -2,6 +2,7 @@ package adapters;
 
 import boilerplate.Event;
 import boilerplate.MessageQueue;
+import dto.AccountTokensDto;
 import service.CustomerFacadeService;
 import service.CorrelationId;
 
@@ -11,6 +12,7 @@ public class RabbitMqFacade {
     public RabbitMqFacade(MessageQueue queue, CustomerFacadeService service) {
         queue.addHandler("AccountRegistered", this::handleAccountRegistred);
         queue.addHandler("AccountRegistrationFailed", this::handleAccountRegistrationFailed);
+        queue.addHandler("CustomerRetrieved", this::handleCustomerRetrieved);
         this.service = service;
     }
 
@@ -24,5 +26,11 @@ public class RabbitMqFacade {
         var eventPayload = e.getArgument(0, String.class);
         var correlationid = e.getArgument(1, CorrelationId.class);
         service.completeRegistration(eventPayload, correlationid, false);
+    }
+
+    public void handleCustomerRetrieved(Event e) { 
+        var eventPayload = e.getArgument(0, AccountTokensDto.class);
+        var correlationid = e.getArgument(1, CorrelationId.class);
+        service.completeAccountRetrievalRequest(eventPayload, correlationid, true);
     }
 }

@@ -33,7 +33,7 @@ public class CustomerSteps {
 
     @Given("a customer with name {string}")
 	public void aCustomerWithName(String firstName) {
-		customer = new Customer(firstName, "Last name", "010201-0201");
+		customer = new Customer(firstName, "Last name", "010201-0001");
 	}
 
     @When("the customer is registered")

@@ -1,20 +1,13 @@
-package com.rest.start.Model;
+package com.rest.start.Model.Dto;
 
 import java.util.List;
 
-public class Customer {
+public class CustomerDto {
     private String firstName;
     private String lastName;
     private String cpr;
     private String bankAccount;
     private List<String> tokens;
-
-    public Customer(String firstName, String lastName, String cpr, String bankAccount) {
-        this.firstName = firstName;
-        this.lastName = lastName;
-        this.cpr = cpr;
-        this.bankAccount = bankAccount;
-    }
  
     public String getFirstName() {
         return this.firstName;

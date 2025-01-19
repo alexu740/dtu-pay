@@ -5,6 +5,7 @@ import boilerplate.MessageQueue;
 import boilerplate.Event;
 import micro.commands.AccountCreationCommand;
 import micro.commands.CommandFactory;
+import micro.commands.QueryFactory;
 import micro.dto.RegistrationDto;
 import boilerplate.Event;
 import micro.commands.AccountCreationCommand;
@@ -17,6 +18,7 @@ public class RabbitMqFacade {
   public RabbitMqFacade(MessageQueue queue, AccountManagementService service) {
     System.out.println("Starting facade");
     queue.addHandler("CustomerRegistrationRequested", this::handleCustomerRegistration);
+    queue.addHandler("CustomerRetrievalRequested", this::handleGetCustomer);
     queue.addHandler("MerchantRegistrationRequested", this::handleMerchantRegistration);
     
     this.service = service;
@@ -29,6 +31,11 @@ public class RabbitMqFacade {
     AccountCreationCommand command = CommandFactory.createAccountCreationCommand(eventPayload, true);
 
     service.handleCreateAccount(command, correlationId);
+  }
+
+  public void handleGetCustomer(Event e) {
+    var correlationId = e.getArgument(1, CorrelationId.class);
+    service.handleGetAccount(QueryFactory.createAccountGetCommand(e, true), correlationId);
   }
 
   public void handleMerchantRegistration(Event e) {

@@ -1,31 +1,53 @@
 package micro.service;
 
 import java.util.Set;
+import java.util.UUID;
 import java.util.concurrent.ExecutionException;
 
+import micro.adapters.EventPublisher;
 import micro.aggregate.Account;
 import micro.aggregate.AccountId;
+import micro.aggregate.CustomerAccount;
 import micro.commands.AccountCreationCommand;
-import micro.repositories.ReadModelRepository;
+import micro.commands.AccountGetQuery;
+import micro.repositories.AccountReadModelRepository;
 import micro.repositories.AccountRepository;
 
 public class AccountManagementService {
 
 	private AccountRepository repository;
-	private ReadModelRepository readRepository;
-
-	public AccountManagementService(AccountRepository repository, ReadModelRepository readRepository) {
+	private AccountReadModelRepository readRepository;
+	private EventPublisher publisher;
+	public AccountManagementService(AccountRepository repository, AccountReadModelRepository readRepository, EventPublisher publisher) {
 		this.readRepository = readRepository;
 		this.repository = repository;
+		this.publisher = publisher;
 	}
 	
 	/* Command Operations */
 	public void handleCreateAccount(AccountCreationCommand command, CorrelationId correlationId) {
 		System.out.println("Creating new account object");
-		Account account = Account.create(command.firstName, command.lastName, command.cpr, command.bankAccount, correlationId);
+		Account account;
+		if(command.isCustomer) {
+			account = CustomerAccount.create(command.firstName, command.lastName, command.cpr, command.bankAccount, correlationId);
+		}
+		else {
+			account = Account.create(command.firstName, command.lastName, command.cpr, command.bankAccount, false,  correlationId);
+		}
 		System.out.println("Created new account object");
 		this.repository.save(account);
 	}
+
+	public void handleGetAccount(AccountGetQuery query, CorrelationId correlationId) {
+		System.out.println("Requesting tokens for account " + query.accountId);
+		if(query.isCustomerAccount) {
+			var acc = readRepository.getCustomerTokens(query);
+			publisher.emitAccountTokensRequestedEvent(acc, correlationId);
+		} else {
+			publisher.emitAccountTokensRequestRejectedEvent(correlationId);
+		}
+	}
+	
 	/*
 	public AccountId createAccount(String firstname, String lastname) throws InterruptedException, ExecutionException {
 		Account account = Account.create(firstname,lastname);
