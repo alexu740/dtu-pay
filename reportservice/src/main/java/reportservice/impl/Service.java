@@ -3,63 +3,67 @@ package reportservice.impl;
 import reportservice.lib.IRepository;
 import reportservice.lib.IService;
 
-import boilerplate.implementations.RabbitMqQueue;
-import boilerplate.MessageQueue;
-import boilerplate.Event;
+import reportservice.adapters.EventPublisher;
 
-import reportservice.dto.*;
+import reportservice.boilerplate.implementations.RabbitMqQueue;
+import reportservice.boilerplate.MessageQueue;
+import reportservice.boilerplate.Event;
+
+import reportservice.dto.Payment;
+import reportservice.impl.CorrelationId;
 
 import java.util.List;
 
 public class Service implements IService {
 	private final IRepository repository;
 	private final MessageQueue queue;
+	private EventPublisher publisher;
 
-	public Service(MessageQueue q, IRepository repo) {
+	public Service(MessageQueue q, IRepository repo,EventPublisher publisher) {
+		this.publisher = publisher;
 		this.queue = q;
 		this.repository = repo;
-		this.queue.addHandler("customer.report.customer.requested", this::handleCustomerReportRequested);
-		this.queue.addHandler("payments.report.merchant.requested", this::handleMerchantReportRequested);
-		this.queue.addHandler("payment.storage.requested", this::handlePaymentReceived);
-		this.queue.addHandler("payments.report.requested", this::handlePaymentsReportRequested);
 	}
 
 	@Override
-	public void handlePaymentReceived(Event ev) {
-		var payment = ev.getArgument(1, Payment.class);
-		var correlationId = ev.getArgument(0, CorrelationId.class);
+	public void handlePaymentReceived(Payment payment,CorrelationId correlationId) {
+		Event ev;
 		try {
 			repository.addTransaction(payment);
-			ev = new Event("payment.storage.succeeded", new Object[] { correlationId });
+			publisher.emitPaymentStorageSucceededEvent(correlationId);
+			// ev = new Event("payment.storage.succeeded", new Object[] { correlationId });
 		} catch (Exception e) {
-			ev = new Event("payment.storage.failed", new Object[] { correlationId, e });
+			publisher.emitPaymentStorageFailedEvent(correlationId,e);
+			//ev = new Event("payment.storage.failed", new Object[] { correlationId, e });
 		}
-
 		// Publish the event
-		queue.publish(ev);
+		//queue.publish(ev);
 	}
 
-	public void handlePaymentsReportRequested(Event ev) {
-		var correlationId = ev.getArgument(0, CorrelationId.class);
+	public void handlePaymentsReportRequested(CorrelationId correlationId) {
+		Event ev;
 		try {
 			List<Payment> transactions = repository.getTransactions();
-			ev = new Event("payments.report.succeeded", new Object[] { correlationId, transactions });
+			publisher.emitPaymentReportSucceededEvent(correlationId, transactions);
+			//ev = new Event("payments.report.succeeded", new Object[] {  });
 		} catch (Exception e) {
-			ev = new Event("payments.report.failed", new Object[] { correlationId, e });
+			publisher.emitPaymentReportFailedEvent(correlationId, e);
+			//ev = new Event("payments.report.failed", new Object[] { correlationId, e });
 		}
-		queue.publish(ev);
+		//queue.publish(ev);
 	}
 
-	public void handleMerchantReportRequested(Event ev) {
-		var correlationId = ev.getArgument(0, CorrelationId.class);
-		var id = ev.getArgument(1, String.class);
+	public void handleMerchantReportRequested(CorrelationId correlationId,String id) {
+		Event ev;
 		try {
 			List<Payment> transactions = repository.getMerchantTransactions(id);
-			ev = new Event("payments.report.succeeded", new Object[] { correlationId, transactions });
+			publisher.emitMerchantReportSucceededEvent(correlationId, transactions);
+			//ev = new Event("payments.report.succeeded", new Object[] { correlationId, transactions });
 		} catch (Exception e) {
-			ev = new Event("payments.report.failed", new Object[] { correlationId, e });
+			publisher.emitMerchantReportFailedEvent(correlationId, e);
+			//ev = new Event("payments.report.failed", new Object[] { correlationId, e });
 		}
-		queue.publish(ev);
+		//queue.publish(ev);
 	}
 
 	@Override

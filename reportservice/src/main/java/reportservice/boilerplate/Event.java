@@ -1,4 +1,4 @@
-package boilerplate;
+package reportservice.boilerplate;
 
 import java.io.Serializable;
 import java.util.ArrayList;
