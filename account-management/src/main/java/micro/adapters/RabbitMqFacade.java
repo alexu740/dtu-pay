@@ -4,6 +4,7 @@ import boilerplate.implementations.RabbitMqQueue;
 import boilerplate.MessageQueue;
 import boilerplate.Event;
 import micro.commands.AccountCreationCommand;
+import micro.commands.AccountTokenCreationCommand;
 import micro.commands.CommandFactory;
 import micro.commands.QueryFactory;
 import micro.dto.RegistrationDto;
@@ -20,6 +21,7 @@ public class RabbitMqFacade {
     queue.addHandler("CustomerRegistrationRequested", this::handleCustomerRegistration);
     queue.addHandler("CustomerRetrievalRequested", this::handleGetCustomer);
     queue.addHandler("MerchantRegistrationRequested", this::handleMerchantRegistration);
+    queue.addHandler("CustomerTokensRequested", this::handleCustomerTokensRequested);
     
     this.service = service;
   }
@@ -43,5 +45,11 @@ public class RabbitMqFacade {
     var correlationId = e.getArgument(1, CorrelationId.class);
     AccountCreationCommand command = new AccountCreationCommand(eventPayload, false);
     service.handleCreateAccount(command, correlationId);
+  }
+
+  public void handleCustomerTokensRequested(Event e) {
+    AccountTokenCreationCommand command = CommandFactory.createAccountTokenCreationCommand(e);
+    var correlationId = e.getArgument(2, CorrelationId.class);
+    service.handleCreateTokens(command, correlationId);
   }
 }

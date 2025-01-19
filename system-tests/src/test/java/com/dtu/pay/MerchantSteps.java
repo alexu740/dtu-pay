@@ -33,7 +33,7 @@ public class MerchantSteps {
 
     @Given("a merchant with name {string}")
 	public void aCustomerWithName(String firstName) {
-		merchant = new Merchant(firstName, "Last name", "010201-0001");
+		merchant = new Merchant(firstName, "Last name", "050201-0001");
 	}
 
     @When("the merchant is registered")

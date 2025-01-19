@@ -17,6 +17,7 @@ import java.util.Map;
 import java.util.UUID;
 
 import com.dtu.pay.Model.Customer;
+import com.dtu.pay.Model.Dto.CustomerTokensResponseDto;
 import com.dtu.pay.Service.MobileAppApiHelper;
 
 import dtu.ws.fastmoney.Account;
@@ -41,9 +42,10 @@ public class TokenSteps {
         accounts.add(bankaccount);
         var result = appApi.register(customer, bankaccount);
         userIds.put(firstName, result);
+        appApi.requestTokens(userIds.get(firstName), tokens);
 	}
 
-    @When("When requesting {int} new tokens for {string}")
+    @When("requesting {int} new tokens for {string}")
     public void requestingNewTokens(Integer numberOfTokens, String name) {
        var tokenResult = appApi.requestTokens(userIds.get(name), numberOfTokens);
        tokenRequest.put(name, tokenResult);
@@ -51,13 +53,13 @@ public class TokenSteps {
 
     @Then("the customer {string} has {int} tokens")
     public void theCustomerHasTokens(String name, Integer tokenNumber) {
-        Customer cust = appApi.getCustomer(userIds.get(name));
+        CustomerTokensResponseDto cust = appApi.getCustomer(userIds.get(name));
         assertEquals(cust.getTokens().size(), tokenNumber.intValue());
 	}
 
     @Then("the request for {string} is denied")
     public void theRequestIsDenied(String name) {
-        assertEquals(tokenRequest.get(name), "denied");
+        assertEquals(tokenRequest.get(name), "fail");
 	}
 
     public String registerBankAccount(String firstName, String lastName, String cpr, int intialBalance) throws BankServiceException_Exception {

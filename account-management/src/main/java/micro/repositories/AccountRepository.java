@@ -2,7 +2,7 @@ package micro.repositories;
 
 import boilerplate.MessageQueue;
 import micro.aggregate.Account;
-import micro.aggregate.AccountId;
+import micro.aggregate.CustomerAccount;
 
 public class AccountRepository {
 	
@@ -12,12 +12,12 @@ public class AccountRepository {
 		eventStore = new EventStore(bus);
 	}
 
-	public Account getById(AccountId userId) {
-		return Account.createFromEvents(eventStore.getEventsFor(userId));
+	public Account getById(String userId) {
+		return CustomerAccount.createFromEvents(eventStore.getEventsFor(userId));
 	}
 	
 	public void save(Account account) {
-		eventStore.addEvents(account.getAccountid(), account.getAppliedEvents());
+		eventStore.addEvents(account.getAccountid().getUuid().toString(), account.getAppliedEvents());
 		account.clearAppliedEvents();
 	}
 }

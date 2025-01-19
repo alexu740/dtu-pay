@@ -3,6 +3,7 @@ package com.dtu.pay;
 import io.cucumber.java.en.Given;
 import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
+import io.cucumber.java.en.And;
 
 import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.assertFalse;
@@ -15,6 +16,7 @@ import java.util.List;
 import java.util.UUID;
 
 import com.dtu.pay.Model.Customer;
+import com.dtu.pay.Model.Dto.CustomerTokensResponseDto;
 import com.dtu.pay.Service.MobileAppApiHelper;
 
 import dtu.ws.fastmoney.Account;
@@ -33,7 +35,7 @@ public class CustomerSteps {
 
     @Given("a customer with name {string}")
 	public void aCustomerWithName(String firstName) {
-		customer = new Customer(firstName, "Last name", "010201-0001");
+		customer = new Customer(firstName, "Last name", "050201-0001");
 	}
 
     @When("the customer is registered")
@@ -51,6 +53,12 @@ public class CustomerSteps {
         } catch (IllegalArgumentException e) {
             assertTrue(false);
         }
+	}
+    @And("the customer has no tokens")
+    public void theCustomerHasNoTokens() {
+        System.out.println(result);
+        CustomerTokensResponseDto cust = appApi.getCustomer(result);
+        assertEquals(cust.getTokens().size(), 0);
 	}
 
     public String registerBankAccount(String firstName, String lastName, String cpr, int intialBalance) throws BankServiceException_Exception {

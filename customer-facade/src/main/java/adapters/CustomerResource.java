@@ -34,6 +34,14 @@ public class CustomerResource {
         return Response.ok(service.get(id)).build();
     }
 
+    @POST
+    @Consumes(MediaType.APPLICATION_JSON)
+    @Produces(MediaType.APPLICATION_JSON)
+    @Path("{id}/tokens/{tokenNumber}")
+    public Response createTokens(@PathParam("id") String customerId, @PathParam("tokenNumber") String tokenNumber) {
+        return Response.ok(service.createTokens(customerId, tokenNumber)).build();
+    }
+
     @DELETE
     @Produces(MediaType.APPLICATION_JSON)
     @Path("{id}")

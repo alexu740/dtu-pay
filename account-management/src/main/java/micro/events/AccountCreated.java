@@ -9,29 +9,21 @@ import boilerplate.Event;
 
 
 @EqualsAndHashCode(callSuper = false)
-public class AccountCreated extends Event {
+public class AccountCreated extends DomainEvent {
 	private static final long serialVersionUID = -1599019626118724482L;
-	public AccountId accountId;
+
     public String firstName;
     public String lastName;
     public String cpr;
     public String bankAccount;
     public boolean isCustomerAccountType; 
 
-    public AccountId getAccountId() {
-        return accountId;
-    }
-
     public AccountCreated(AccountId accountId, CorrelationId correlationId) {
-        super("AccountRegistered", new Object[] { accountId.getUuid(), correlationId });
+        super("AccountRegistered", new Object[] { accountId.getUuid(), correlationId }, accountId);
     }
 
     public static long getSerialversionuid() {
         return serialVersionUID;
-    }
-
-    public void setAccountId(AccountId accountId) {
-        this.accountId = accountId;
     }
 
     public String getFirstName() {

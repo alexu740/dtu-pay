@@ -13,15 +13,15 @@ import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 import micro.events.AccountCreated;
+import micro.events.DomainEvent;
 import micro.service.CorrelationId;
-import boilerplate.Event;
 
 public class Account {
 	private AccountId accountid;
 	private AccountOwnerDetails ownerDetails;
 	private AccountFinancialDetails financialDetails;
 
-	private List<Event> appliedEvents = new ArrayList<Event>();
+	private List<DomainEvent> appliedEvents = new ArrayList<DomainEvent>();
 
     public static Account create(String firstName, String lastName, String cpr, String bankAccount, boolean isCustomerAccount, CorrelationId correlationId) {
 		var accountId = new AccountId(UUID.randomUUID());
@@ -38,7 +38,7 @@ public class Account {
 		account.setFinancialDetails(financialDetails);
 
 		var event = new AccountCreated(accountId, correlationId);
-		event.accountId = accountId;
+
 		event.firstName = firstName;
 		event.lastName = lastName;
 		event.cpr = cpr;
@@ -50,13 +50,13 @@ public class Account {
 		return account;
 	}
 
-	public static Account createFromEvents(Stream<Event> events) {
+	public static Account createFromEvents(Stream<DomainEvent> events) {
 		Account account = new Account();
 		account.applyEvents(events);
 		return account;
 	}
 
-	private void applyEvents(Stream<Event> events) throws Error {
+	protected void applyEvents(Stream<DomainEvent> events) throws Error {
 		events.forEachOrdered(e -> {
 			if (e instanceof AccountCreated)
 				this.apply((AccountCreated) e);
@@ -66,8 +66,8 @@ public class Account {
 		}
 	}
 
-	private void apply(AccountCreated event) {
-		this.accountid = event.accountId;
+	protected void apply(AccountCreated event) {
+		this.accountid = event.getAccountId();
 		this.ownerDetails = new AccountOwnerDetails(event.firstName, event.lastName, event.cpr);
 		this.financialDetails = new AccountFinancialDetails(event.bankAccount, null);
 	}
@@ -76,7 +76,7 @@ public class Account {
 		appliedEvents.clear();
 	}
 
-	public List<Event> getAppliedEvents() {
+	public List<DomainEvent> getAppliedEvents() {
 		return appliedEvents;
 	}
 

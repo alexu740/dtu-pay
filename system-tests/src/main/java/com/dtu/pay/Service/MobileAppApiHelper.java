@@ -13,6 +13,7 @@ import com.dtu.pay.Model.User;
 import com.dtu.pay.Model.Customer;
 import com.dtu.pay.Model.Merchant;
 import com.dtu.pay.Model.Payment;
+import com.dtu.pay.Model.Dto.CustomerTokensResponseDto;
 import com.dtu.pay.Model.Dto.RegistrationDto;
 import com.dtu.pay.Model.Dto.TokenRequestDto;
 import com.dtu.pay.Service.SimpleDtuPay;
@@ -44,14 +45,14 @@ public class MobileAppApiHelper {
         }
     }
 
-    public Customer getCustomer(String userId) {
+    public CustomerTokensResponseDto getCustomer(String userId) {
         String targetUrl = "http://" + "localhost" + ":8080/customers/" + userId;
         Client client = ClientBuilder.newClient();
         
         Response response = client.target(targetUrl).request().get();
 
         if (response.getStatus() == Response.Status.OK.getStatusCode()) {
-            return response.readEntity(Customer.class);
+            return response.readEntity(CustomerTokensResponseDto.class);
         } else {
             System.out.println("Failed to update customer: HTTP " + response.getStatus());
         }
@@ -59,7 +60,7 @@ public class MobileAppApiHelper {
     }
 
     public String requestTokens(String userId, Integer numberOfTokens) {
-        String targetUrl = "http://" + "localhost" + ":8080/tokens";
+        String targetUrl = "http://" + "localhost" + ":8080/customers/"+userId + "/tokens/" +numberOfTokens;
         Client client = ClientBuilder.newClient();
 
         var payload = new TokenRequestDto();

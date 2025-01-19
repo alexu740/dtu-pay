@@ -8,12 +8,10 @@ import java.util.stream.Stream;
 
 import lombok.NonNull;
 import boilerplate.MessageQueue;
-import micro.aggregate.AccountId;
-import boilerplate.Event;
+import micro.events.DomainEvent;
 
 public class EventStore {
-
-	private Map<String, List<Event>> store = new ConcurrentHashMap<>();
+	private Map<String, List<DomainEvent>> store = new ConcurrentHashMap<>();
 
 	private MessageQueue eventBus;
 
@@ -21,25 +19,25 @@ public class EventStore {
 		this.eventBus = bus;
 	}
 
-	public void addEvent(Event event) {
-		System.out.println("adding event");
-		if (!store.containsKey(event.getArgument(0, String.class))) {
-			store.put(event.getArgument(0, String.class), new ArrayList<Event>());
+	public void addEvent(DomainEvent event) {
+		System.out.println("Adding new event to store");
+		var accountId = event.getAccountId().getUuid().toString();
+		if (!store.containsKey(accountId)) {
+			store.put(accountId, new ArrayList<DomainEvent>());
 		}
-		store.get(event.getArgument(0, String.class)).add(event);
+		store.get(accountId).add(event);
 		System.out.println("Pushing event to queue");
 		eventBus.publish(event);
 	}
 	
-	public Stream<Event> getEventsFor(AccountId id) {
-		if (!store.containsKey(id.getUuid())) {
-			store.put(id.getUuid(), new ArrayList<Event>());
+	public Stream<DomainEvent> getEventsFor(String id) {
+		if (!store.containsKey(id)) {
+			store.put(id, new ArrayList<DomainEvent>());
 		}
-		return store.get(id.getUuid()).stream();
+		return store.get(id).stream();
 	}
 
-	public void addEvents(@NonNull AccountId accountid, List<Event> appliedEvents) {
+	public void addEvents(@NonNull String accountid, List<DomainEvent> appliedEvents) {
 		appliedEvents.stream().forEach(e -> addEvent(e));
 	}
-
 }

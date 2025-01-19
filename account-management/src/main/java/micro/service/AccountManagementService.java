@@ -10,6 +10,8 @@ import micro.aggregate.AccountId;
 import micro.aggregate.CustomerAccount;
 import micro.commands.AccountCreationCommand;
 import micro.commands.AccountGetQuery;
+import micro.commands.AccountTokenCreationCommand;
+import micro.exception.BusinessValidationException;
 import micro.repositories.AccountReadModelRepository;
 import micro.repositories.AccountRepository;
 
@@ -36,6 +38,18 @@ public class AccountManagementService {
 		}
 		System.out.println("Created new account object");
 		this.repository.save(account);
+	}
+
+	public void handleCreateTokens(AccountTokenCreationCommand command, CorrelationId correlationId) {
+		var account = this.repository.getById(command.getAccountId());
+		try {
+			if (!(account instanceof CustomerAccount))  throw new BusinessValidationException("Cannot add tokens for non-customer accounts!");
+			((CustomerAccount)account).createTokens(command.getNumberOfTokens());
+			this.repository.save(account);
+			publisher.emitTokensCreatedEvent(correlationId);
+		} catch(BusinessValidationException ex) {
+			publisher.emitTokensCreateFailedEvent(correlationId);
+		}
 	}
 
 	public void handleGetAccount(AccountGetQuery query, CorrelationId correlationId) {

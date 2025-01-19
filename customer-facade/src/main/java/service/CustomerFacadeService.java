@@ -35,6 +35,13 @@ public class CustomerFacadeService {
         publisher.emitCreateUserEvent(request, correlationId);
         return correlationsWithStringReturn.get(correlationId.get()).join();
     }
+    
+    public String createTokens(String customerId, String tokenNumber) {
+        var correlationId = CorrelationId.randomId();
+        correlationsWithStringReturn.put(correlationId.get(), new CompletableFuture<String>());
+        publisher.emitCreateTokensEvent(customerId, tokenNumber, correlationId);
+        return correlationsWithStringReturn.get(correlationId.get()).join();
+    }
 
     public void completeRegistration(String eventPayload, CorrelationId correlationId, boolean isSuccessful) {
         System.out.println(correlationId.get());
@@ -49,6 +56,13 @@ public class CustomerFacadeService {
         var promise = correlationsWithAccount.get(correlationId.get());
         if(promise != null) {
             promise.complete(eventPayload);
+        }
+    }
+
+    public void completeTokenCreationRequest(boolean successful, CorrelationId correlationId) {
+        var promise = correlationsWithStringReturn.get(correlationId.get());
+        if(promise != null) {
+            promise.complete(successful ? "success" : "fail");
         }
     }
     

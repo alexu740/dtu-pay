@@ -22,6 +22,11 @@ public class RabbitMqEventPublisher implements EventPublisher {
         queue.publish(event);
     }
 
+    public void emitCreateTokensEvent(String customerId, String tokenNumber, CorrelationId correlationId) {
+        Event event = new Event("CustomerTokensRequested", new Object[] { customerId, tokenNumber, correlationId });
+        queue.publish(event);
+    }
+
     public void emitUnregisterUserEvent() {
 
     }

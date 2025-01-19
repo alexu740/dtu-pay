@@ -15,6 +15,7 @@ import micro.aggregate.AccountId;
 import micro.aggregate.CustomerAccount;
 import micro.commands.AccountGetQuery;
 import micro.events.AccountCreated;
+import micro.events.TokenAdded;
 import micro.repositories.viewmodel.PaymentInstrumentViewModel;
 import micro.repositories.viewmodel.TokenViewModel;
 
@@ -27,6 +28,7 @@ public class AccountReadModelRepository {
 
 	public AccountReadModelRepository(MessageQueue eventQueue) {
 		eventQueue.addHandler("AccountRegistered", this::applyAccountRegistered);
+		eventQueue.addHandler("TokenAdded", this::applyTokenAdded);
 	}
 
 	public TokenViewModel getCustomerTokens(AccountGetQuery query) {
@@ -65,5 +67,14 @@ public class AccountReadModelRepository {
 		payvm.setBankAccount(event.bankAccount); 
 
 		paymentInstruments.put(accountId, payvm);
+	}
+
+	public void applyTokenAdded(Event e) {
+		var event = (TokenAdded) e;
+		var accountId = event.getAccountId().getUuid().toString();
+		var vm = tokens.get(accountId);
+		var userTokens = vm.getTokens();
+		userTokens.add(event.getNewToken());
+		vm.setTokens(userTokens);
 	}
 }

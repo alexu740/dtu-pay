@@ -19,4 +19,12 @@ public class RabbitMqEventPublisher implements EventPublisher {
     public void emitAccountTokensRequestRejectedEvent(CorrelationId correlationId) {
         queue.publish(new Event("CustomerRetrieved", new Object[] { correlationId }));
     }
+
+    public void emitTokensCreatedEvent(CorrelationId correlationId) {
+        queue.publish(new Event("TokensCreated", new Object[] { correlationId }));
+    }
+
+    public void emitTokensCreateFailedEvent(CorrelationId correlationId) {
+        queue.publish(new Event("TokensCreateFailed", new Object[] { correlationId }));
+    }
 }

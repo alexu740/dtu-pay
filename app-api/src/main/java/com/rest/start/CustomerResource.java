@@ -44,4 +44,12 @@ public class CustomerResource {
     public Response deregister(@PathParam("id") String id) {
         return Response.ok(customerHandler.deleteCustomer(id)).build();
     }
+
+    @POST
+    @Consumes(MediaType.APPLICATION_JSON)
+    @Produces(MediaType.APPLICATION_JSON)
+    @Path("{id}/tokens/{tokenNumber}")
+    public Response createTokens(@PathParam("id") String customerId, @PathParam("tokenNumber") String tokenNumber) {
+        return Response.ok(customerHandler.createTokens(customerId, tokenNumber)).build();
+    }
 }

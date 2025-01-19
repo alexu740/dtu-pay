@@ -38,4 +38,11 @@ public class CustomerFacade {
         Response response = target.request().delete();
         return response.readEntity(String.class);
     }
+
+    public String createTokens(String customerId, String tokenNumber) {
+        Client client = ClientBuilder.newClient();
+        WebTarget target = client.target("http://customer-facade:8088/customers/"+customerId+"/tokens/" + tokenNumber);
+        Response response = target.request().post(Entity.entity("", MediaType.APPLICATION_JSON));
+        return response.readEntity(String.class);
+    }
 }

@@ -13,6 +13,7 @@ import com.rabbitmq.client.DeliverCallback;
 import boilerplate.Event;
 import boilerplate.MessageQueue;
 import micro.events.AccountCreated;
+import micro.events.TokenAdded;
 
 public class RabbitMqQueue implements MessageQueue {
 
@@ -70,6 +71,9 @@ public class RabbitMqQueue implements MessageQueue {
 				Event event;
 				if (topic.equals("AccountRegistered")) {
 					event = new Gson().fromJson(message, AccountCreated.class);
+				} 
+				else if (topic.equals("TokenAdded")) {
+					event = new Gson().fromJson(message, TokenAdded.class);
 				}
 				else {
 					event = new Gson().fromJson(message, Event.class);

@@ -3,12 +3,21 @@ package com.rest.start.Model.Dto;
 import java.util.List;
 
 public class CustomerDto {
+    private String accountId;
     private String firstName;
     private String lastName;
     private String cpr;
     private String bankAccount;
     private List<String> tokens;
  
+    public String getAccountId() {
+        return accountId;
+    }
+
+    public void setAccountId(String accountId) {
+        this.accountId = accountId;
+    }
+    
     public String getFirstName() {
         return this.firstName;
     }
