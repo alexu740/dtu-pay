@@ -30,34 +30,40 @@ public class Service implements IService {
 		Event ev;
 		try {
 			repository.addTransaction(payment);
-			ev = new Event("payment.storage.succeeded", new Object[] { correlationId });
+			publisher.emitPaymentStorageSucceededEvent(correlationId);
+			// ev = new Event("payment.storage.succeeded", new Object[] { correlationId });
 		} catch (Exception e) {
-			ev = new Event("payment.storage.failed", new Object[] { correlationId, e });
+			publisher.emitPaymentStorageFailedEvent(correlationId,e);
+			//ev = new Event("payment.storage.failed", new Object[] { correlationId, e });
 		}
 		// Publish the event
-		queue.publish(ev);
+		//queue.publish(ev);
 	}
 
 	public void handlePaymentsReportRequested(CorrelationId correlationId) {
 		Event ev;
 		try {
 			List<Payment> transactions = repository.getTransactions();
-			ev = new Event("payments.report.succeeded", new Object[] { correlationId, transactions });
+			publisher.emitPaymentReportSucceededEvent(correlationId, transactions);
+			//ev = new Event("payments.report.succeeded", new Object[] {  });
 		} catch (Exception e) {
-			ev = new Event("payments.report.failed", new Object[] { correlationId, e });
+			publisher.emitPaymentReportFailedEvent(correlationId, e);
+			//ev = new Event("payments.report.failed", new Object[] { correlationId, e });
 		}
-		queue.publish(ev);
+		//queue.publish(ev);
 	}
 
 	public void handleMerchantReportRequested(CorrelationId correlationId,String id) {
 		Event ev;
 		try {
 			List<Payment> transactions = repository.getMerchantTransactions(id);
-			ev = new Event("payments.report.succeeded", new Object[] { correlationId, transactions });
+			publisher.emitMerchantReportSucceededEvent(correlationId, transactions);
+			//ev = new Event("payments.report.succeeded", new Object[] { correlationId, transactions });
 		} catch (Exception e) {
-			ev = new Event("payments.report.failed", new Object[] { correlationId, e });
+			publisher.emitMerchantReportFailedEvent(correlationId, e);
+			//ev = new Event("payments.report.failed", new Object[] { correlationId, e });
 		}
-		queue.publish(ev);
+		//queue.publish(ev);
 	}
 
 	@Override
