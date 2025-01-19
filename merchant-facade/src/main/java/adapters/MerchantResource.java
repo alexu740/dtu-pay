@@ -11,7 +11,7 @@ import jakarta.ws.rs.core.Response;
 import boilerplate.implementations.RabbitMqQueue;
 import service.MerchantFacadeService;
 import jakarta.inject.Inject;
-
+import dto.PaymentDto;
 import dto.RegistrationDto;
 
 @Path("/merchants")
@@ -31,6 +31,14 @@ public class MerchantResource {
     @Path("{id}")
     public Response unregister(@PathParam("id") String id) {
         //queue.publish(new Event("CustomerRegistrationRequested"))
+        return Response.ok("merchant deleted").build();
+    }
+
+    @POST
+    @Produces(MediaType.APPLICATION_JSON)
+    @Path("{id}/payments")
+    public Response payment(@PathParam("id") String id, PaymentDto dto) {
+        service.initialisePayment(dto);
         return Response.ok("merchant deleted").build();
     }
 }

@@ -33,6 +33,11 @@ services:
     restart: always
     depends_on:
      - rabbitMq
+  payment-management:
+    build: ./payment-management
+    restart: always
+    depends_on:
+     - rabbitMq
   repostservice:
     build: ./reportservice
     restart: always

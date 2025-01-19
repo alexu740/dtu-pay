@@ -30,4 +30,11 @@ public class MerchantFacade {
         Response response = target.request().delete();
         return response.readEntity(String.class);
     }
+
+    public String initializePayment(PaymentDto dto) {
+        Client client = ClientBuilder.newClient();
+        WebTarget target = client.target("http://merchant-facade:8089/merchants/" + dto.getMerchantId() + "/payments");
+        Response response = target.request().post(Entity.entity(dto, MediaType.APPLICATION_JSON));
+        return response.readEntity(String.class);
+    }
 }

@@ -10,6 +10,7 @@ import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ConcurrentHashMap;
 
 import adapters.EventPublisher;
+import dto.PaymentDto;
 import dto.RegistrationDto;
 
 public class MerchantFacadeService {
@@ -35,6 +36,14 @@ public class MerchantFacadeService {
         if(promise != null) {
             promise.complete(eventPayload);
         }
+    }
+
+    public String initialisePayment(PaymentDto dto) {
+        var correlationId = CorrelationId.randomId();
+		correlations.put(correlationId.get(),new CompletableFuture<String>());
+
+        publisher.emitInitialisePayment(dto, correlationId);
+        return correlations.get(correlationId.get()).join();
     }
     
     public void remove() {

@@ -14,6 +14,7 @@ import com.dtu.pay.Model.Customer;
 import com.dtu.pay.Model.Merchant;
 import com.dtu.pay.Model.Payment;
 import com.dtu.pay.Model.Dto.CustomerTokensResponseDto;
+import com.dtu.pay.Model.Dto.PaymentDto;
 import com.dtu.pay.Model.Dto.RegistrationDto;
 import com.dtu.pay.Model.Dto.TokenRequestDto;
 import com.dtu.pay.Service.SimpleDtuPay;
@@ -66,6 +67,25 @@ public class MobileAppApiHelper {
         var payload = new TokenRequestDto();
         payload.setUserId(userId);
         payload.setNumberOfTokens(numberOfTokens);
+
+        Response response = client.target(targetUrl).request().post(Entity.entity(payload, MediaType.APPLICATION_JSON));
+
+        if (response.getStatus() == Response.Status.OK.getStatusCode()) {
+            return response.readEntity(String.class);
+        } else {
+            return "Failed to update customer: HTTP " + response.getStatus();
+        }
+    }
+
+    public String pay(String customerId, String merchantId, String token, int amount) {
+        String targetUrl = "http://" + "localhost" + ":8080/payments";
+        Client client = ClientBuilder.newClient();
+
+        var payload = new PaymentDto();
+        payload.setAmount(amount);
+        payload.setCustomerId(customerId);
+        payload.setMerchantId(merchantId);
+        payload.setToken(token);
 
         Response response = client.target(targetUrl).request().post(Entity.entity(payload, MediaType.APPLICATION_JSON));
 
