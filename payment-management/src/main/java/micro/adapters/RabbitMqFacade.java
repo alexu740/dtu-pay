@@ -14,6 +14,8 @@ public class RabbitMqFacade {
   public RabbitMqFacade(MessageQueue queue, PaymentManagementService service) {
     System.out.println("Starting facade");
     queue.addHandler("PaymentRequested", this::handlePaymentRequested);
+    queue.addHandler("TokenValidated", this::handleTokenValidated);
+    
     
     this.service = service;
   }
@@ -25,5 +27,15 @@ public class RabbitMqFacade {
     InitializePaymentCommand command = CommandFactory.createInitializePaymentCommand(eventPayload);
 
     service.handlePaymentCommand(command, correlationId);
+  }
+
+  public void handleTokenValidated(Event e) {
+    var customerId = e.getArgument(0, String.class);
+    var token = e.getArgument(1, String.class);
+    var correlationId = e.getArgument(2, CorrelationId.class);
+    var transactionId = e.getArgument(3, String.class);
+    
+    
+    service.handleTokenValidated(customerId, token, correlationId, transactionId);
   }
 }

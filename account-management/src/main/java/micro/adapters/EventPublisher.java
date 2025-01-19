@@ -8,4 +8,5 @@ public interface EventPublisher {
     public void emitAccountTokensRequestRejectedEvent(CorrelationId correlationId);
     public void emitTokensCreatedEvent(CorrelationId correlationId);
     public void emitTokensCreateFailedEvent(CorrelationId correlationId);
+    public void emitCheckTokenPresent(String accountId, String token, boolean present, CorrelationId correlationId, String transactionId);
 }

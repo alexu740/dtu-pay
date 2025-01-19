@@ -43,7 +43,7 @@ public class Payment {
 		payment.setAmount(amount);
 		payment.setToken(token);
 
-		var event = new PaymentInitialised(transactionId, token, correlationId);
+		var event = new PaymentInitialised(customerId, transactionId, token, correlationId);
 
 		event.setCustomerId(customerId);
 		event.setMerchantId(merchantId);
@@ -77,6 +77,10 @@ public class Payment {
 		this.merchantId = event.getMerchantId();
 		this.amount = event.getAmount();
 		this.token = event.getToken();
+	}
+
+	public void update() {
+		
 	}
 
 	public void clearAppliedEvents() {

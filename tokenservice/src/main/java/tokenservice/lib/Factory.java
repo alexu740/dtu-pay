@@ -1,26 +1,24 @@
 package tokenservice.lib;
 
 import tokenservice.impl.TokenGenerator;
+import tokenservice.service.TokenService;
 import tokenservice.impl.Repository;
-import tokenservice.impl.Service;
-import tokenservice.adaptors.*;
-import messaging.implementations.RabbitMqQueue;
+import tokenservice.adapters.*;
+import boilerplate.MessageQueue;
+import boilerplate.implementations.RabbitMqQueue;
 
 public class Factory {
+    static TokenService service = null;
 
-
-    static IService service = null;
-
-
-    public synchronized IService getService() {
+    public synchronized TokenService getService() {
         if (service != null) {
             return service;
         }
-        var mq = new RabbitMqQueue();
+        MessageQueue mq = new RabbitMqQueue("rabbitMq");
         IRepository repo = new Repository();
         TokenGenerator tokenGenerator = new TokenGenerator();
-        EventPublisher publisher = new RabbitMqPublisher(mq);
-        service = new Service(publisher, repo, tokenGenerator);
+        EventPublisher publisher = new RabbitMqEventPublisher(mq);
+        service = new TokenService(publisher);
         var facade = new RabbitMqFacade(mq, service);
         
         return service;

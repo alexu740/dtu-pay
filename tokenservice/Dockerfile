@@ -1,5 +1,11 @@
-FROM eclipse-temurin:21 as jre-build
-COPY target/lib /usr/src/lib
-COPY target/tokenservice-1.0.0.jar /usr/src/
-WORKDIR /usr/src/
-CMD java -Xmx64m -jar tokenservice-1.0.0.jar
+FROM maven:3.9.9-eclipse-temurin-23-alpine AS build
+WORKDIR /app
+COPY pom.xml .
+COPY src ./src
+RUN mvn clean package -DskipTests
+
+
+FROM openjdk:17-jdk-slim
+WORKDIR /app
+COPY --from=build /app/target /app
+CMD ["java", "-jar", "tokenservice-1.0.0.jar"]

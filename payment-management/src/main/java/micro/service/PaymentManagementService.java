@@ -28,4 +28,11 @@ public class PaymentManagementService {
 		Payment payment = Payment.create(command.getCustomerId(), command.getMerchantId(), command.getToken(), command.getAmount(), correlationId);
 		this.repository.save(payment);
 	}
+
+	public void handleTokenValidated(String customerId, String validToken, CorrelationId correlationId, String transactionId) {
+		var payment = this.repository.getById(transactionId);
+		payment.update();
+		this.repository.save(payment);
+	}
+	
 }

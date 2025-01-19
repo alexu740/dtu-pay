@@ -77,4 +77,12 @@ public class AccountReadModelRepository {
 		userTokens.add(event.getNewToken());
 		vm.setTokens(userTokens);
 	}
+
+	public boolean tokenIsPresent(String customerId, String token) {
+		var custTokens = tokens.get(customerId);
+		if(custTokens != null) {
+			return custTokens.getTokens().contains(token);
+		}
+		return false;
+	}
 }

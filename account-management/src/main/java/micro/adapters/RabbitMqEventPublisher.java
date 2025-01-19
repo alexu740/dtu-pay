@@ -27,4 +27,8 @@ public class RabbitMqEventPublisher implements EventPublisher {
     public void emitTokensCreateFailedEvent(CorrelationId correlationId) {
         queue.publish(new Event("TokensCreateFailed", new Object[] { correlationId }));
     }
+
+    public void emitCheckTokenPresent(String accountId, String token, boolean present, CorrelationId correlationId, String transactionId) {
+        queue.publish(new Event("CustomerHasTokenChecked", new Object[] { accountId, token, present, correlationId, transactionId }));
+    }
 }

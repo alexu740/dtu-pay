@@ -61,6 +61,10 @@ public class AccountManagementService {
 			publisher.emitAccountTokensRequestRejectedEvent(correlationId);
 		}
 	}
+
+	public void handleCheckTokenPresent(String accountId, String token, CorrelationId correlationId, String transactionId) {
+		publisher.emitCheckTokenPresent(accountId, token, readRepository.tokenIsPresent(accountId, token), correlationId, transactionId);
+	}
 	
 	/*
 	public AccountId createAccount(String firstname, String lastname) throws InterruptedException, ExecutionException {

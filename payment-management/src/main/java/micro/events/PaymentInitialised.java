@@ -11,8 +11,8 @@ public class PaymentInitialised extends DomainEvent {
 	private int amount;
 	private String token;
 
-    public PaymentInitialised(String transactionId, String token, CorrelationId correlationId) {
-        super("PaymentInitialised", new Object[] { transactionId, token, correlationId }, transactionId);
+    public PaymentInitialised(String customerId, String transactionId, String token, CorrelationId correlationId) {
+        super("PaymentInitialised", new Object[] { customerId, token, correlationId, transactionId }, transactionId);
     }
 
     public String getCustomerId() {

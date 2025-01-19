@@ -8,6 +8,7 @@ public class StartUp {
 	}
 
 	private void startUp() throws Exception {
+		Thread.sleep(20000);
 		new Factory().getService();
 	}
 }

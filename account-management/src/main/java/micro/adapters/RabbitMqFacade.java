@@ -22,6 +22,7 @@ public class RabbitMqFacade {
     queue.addHandler("CustomerRetrievalRequested", this::handleGetCustomer);
     queue.addHandler("MerchantRegistrationRequested", this::handleMerchantRegistration);
     queue.addHandler("CustomerTokensRequested", this::handleCustomerTokensRequested);
+    queue.addHandler("CustomerTokensRequested", this::handleCustomerHasTokenCheckRequested);
     
     this.service = service;
   }
@@ -51,5 +52,14 @@ public class RabbitMqFacade {
     AccountTokenCreationCommand command = CommandFactory.createAccountTokenCreationCommand(e);
     var correlationId = e.getArgument(2, CorrelationId.class);
     service.handleCreateTokens(command, correlationId);
+  }
+
+  public void handleCustomerHasTokenCheckRequested(Event e) {
+    var customerId = e.getArgument(0, String.class);
+    var token = e.getArgument(1, String.class);
+    var correlationId = e.getArgument(2, CorrelationId.class);
+    var transactionId = e.getArgument(3, String.class);
+    
+    service.handleCheckTokenPresent(customerId, token, correlationId, transactionId);
   }
 }

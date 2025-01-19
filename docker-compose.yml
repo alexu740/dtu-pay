@@ -38,6 +38,11 @@ services:
     restart: always
     depends_on:
      - rabbitMq
+  token-service:
+    build: ./tokenservice
+    restart: always
+    depends_on:
+     - rabbitMq
   repostservice:
     build: ./reportservice
     restart: always
