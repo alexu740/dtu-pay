@@ -16,41 +16,26 @@ import micro.aggregate.CustomerAccount;
 import micro.commands.AccountGetQuery;
 import micro.events.AccountCreated;
 import micro.events.TokenAdded;
+import micro.events.TokenRemoved;
 import micro.repositories.viewmodel.PaymentInstrumentViewModel;
 import micro.repositories.viewmodel.TokenViewModel;
 
 public class AccountReadModelRepository {
 
 	private Map<String, TokenViewModel> tokens = new HashMap<>();
-	private Map<String, PaymentInstrumentViewModel> paymentInstruments = new HashMap<>();
-
-	//private Map<UserId, Set<Contact>> contacts = new HashMap<>();
+	private Map<String, String> paymentInstruments = new HashMap<>();
 
 	public AccountReadModelRepository(MessageQueue eventQueue) {
 		eventQueue.addHandler("AccountRegistered", this::applyAccountRegistered);
 		eventQueue.addHandler("TokenAdded", this::applyTokenAdded);
+		eventQueue.addHandler("TokenRemoved", this::applyTokenRemoved);
 	}
 
 	public TokenViewModel getCustomerTokens(AccountGetQuery query) {
 		System.out.println("Getting customer tokens " + tokens.get(query.accountId));
-		System.out.println("this" + this);
 		return tokens.get(query.accountId);
 	}
 
-	public PaymentInstrumentViewModel getCustomerPaymentInstruments() {
-		return null;
-	}
-/**
-	public Set<Address> getUserAddressesByRegion(UserId userId, String region) {
-		return addresses.getOrDefault(userId, new HashSet<Address>()).stream().filter(a -> region.equals(a.getState()))
-				.collect(Collectors.toSet());
-	}
-
-	public Set<Contact> getUserContactsByType(UserId userId, String type) {
-		return contacts.getOrDefault(userId, new HashSet<Contact>()).stream().filter(a -> type.equals(a.getType()))
-				.collect(Collectors.toSet());
-	}
-*/
 	public void applyAccountRegistered(Event e) {
 		var event = (AccountCreated) e;
 		var accountId = event.getAccountId().getUuid().toString();
@@ -62,11 +47,7 @@ public class AccountReadModelRepository {
 			tokens.put(accountId, tokenvm);
 		}
 
-		var payvm = new PaymentInstrumentViewModel();
-		payvm.setAccountId(accountId);
-		payvm.setBankAccount(event.bankAccount); 
-
-		paymentInstruments.put(accountId, payvm);
+		paymentInstruments.put(accountId, event.bankAccount);
 	}
 
 	public void applyTokenAdded(Event e) {
@@ -78,11 +59,29 @@ public class AccountReadModelRepository {
 		vm.setTokens(userTokens);
 	}
 
+	public void applyTokenRemoved(Event e) {
+		var event = (TokenRemoved) e;
+		var accountId = event.getAccountId().getUuid().toString();
+		var vm = tokens.get(accountId);
+		var userTokens = vm.getTokens();
+		userTokens.remove(event.getToken());
+		vm.setTokens(userTokens);
+	}
+
 	public boolean tokenIsPresent(String customerId, String token) {
 		var custTokens = tokens.get(customerId);
 		if(custTokens != null) {
 			return custTokens.getTokens().contains(token);
 		}
 		return false;
+	}
+
+	public PaymentInstrumentViewModel getPaymentInformation(String customerId, String merchantId) {
+		var vm = new PaymentInstrumentViewModel();
+		vm.setCustomerAccountId(customerId);
+		vm.setMerchantAccountId(merchantId);
+		vm.setCustomerBankAccount(paymentInstruments.get(customerId));
+		vm.setMerchantBankAccount(paymentInstruments.get(merchantId));
+		return vm;
 	}
 }

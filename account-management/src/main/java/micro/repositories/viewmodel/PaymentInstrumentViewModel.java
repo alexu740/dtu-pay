@@ -1,19 +1,33 @@
 package micro.repositories.viewmodel;
 
 public class PaymentInstrumentViewModel {
-    private String accountId;
-    private String bankAccount;
+    private String customerAccountId;
+    private String merchantAccountId;
+    private String customerBankAccount;
+    private String merchantBankAccount;
     
-    public String getAccountId() {
-        return accountId;
+    public String getCustomerAccountId() {
+        return customerAccountId;
     }
-    public void setAccountId(String accountId) {
-        this.accountId = accountId;
+    public void setCustomerAccountId(String customerAccountId) {
+        this.customerAccountId = customerAccountId;
     }
-    public String getBankAccount() {
-        return bankAccount;
+    public String getMerchantAccountId() {
+        return merchantAccountId;
     }
-    public void setBankAccount(String bankAccount) {
-        this.bankAccount = bankAccount;
+    public void setMerchantAccountId(String merchantAccountId) {
+        this.merchantAccountId = merchantAccountId;
     }
+    public String getCustomerBankAccount() {
+        return customerBankAccount;
+    }
+    public void setCustomerBankAccount(String customerBankAccount) {
+        this.customerBankAccount = customerBankAccount;
+    }
+    public String getMerchantBankAccount() {
+        return merchantBankAccount;
+    }
+    public void setMerchantBankAccount(String merchantBankAccount) {
+        this.merchantBankAccount = merchantBankAccount;
+    } 
 }

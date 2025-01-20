@@ -13,6 +13,8 @@ import com.rabbitmq.client.DeliverCallback;
 import boilerplate.Event;
 import boilerplate.MessageQueue;
 import micro.events.PaymentInitialised;
+import micro.events.PaymentResolved;
+import micro.events.PaymentTokenValidated;
 
 public class RabbitMqQueue implements MessageQueue {
 
@@ -70,6 +72,12 @@ public class RabbitMqQueue implements MessageQueue {
 				Event event;
 				if (topic.equals("PaymentInitialised")) {
 					event = new Gson().fromJson(message, PaymentInitialised.class);
+				} else 
+				if (topic.equals("PaymentTokenValidated")) {
+					event = new Gson().fromJson(message, PaymentTokenValidated.class);
+				} else 
+				if (topic.equals("PaymentResolved")) {
+					event = new Gson().fromJson(message, PaymentResolved.class);
 				}
 				else {
 					event = new Gson().fromJson(message, Event.class);

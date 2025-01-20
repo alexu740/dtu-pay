@@ -10,17 +10,17 @@ public class RabbitMqFacade {
 
   public RabbitMqFacade(MessageQueue queue, TokenService service) {
     System.out.println("Starting facade");
-    queue.addHandler("PaymentInitilised", this::handlePaymentInitilised);
+    queue.addHandler("PaymentInitialised", this::handlePaymentInitialised);
     queue.addHandler("CustomerHasTokenChecked", this::handleCustomerHasTokenChecked);
     
     this.service = service;
   }
 
-  public void handlePaymentInitilised(Event e) {
+  public void handlePaymentInitialised(Event e) {
     var customerId = e.getArgument(0, String.class);
     var token = e.getArgument(1, String.class);
     var correlationId = e.getArgument(2, CorrelationId.class);
-    var transactionId = e.getArgument(2, String.class);
+    var transactionId = e.getArgument(3, String.class);
 
     service.handlePaymentInitialised(customerId, token, correlationId, transactionId);
   }
@@ -29,9 +29,9 @@ public class RabbitMqFacade {
     var customerId = e.getArgument(0, String.class);
     var token = e.getArgument(1, String.class);
     var present = e.getArgument(2, Boolean.class);
-    var correlationId = e.getArgument(4, CorrelationId.class);
-    var transactionId = e.getArgument(5, String.class);
+    var correlationId = e.getArgument(3, CorrelationId.class);
+    var transactionId = e.getArgument(4, String.class);
 
     service.handleCustomerHasTokenChecked(customerId, token, present, correlationId, transactionId);
-  }  
+  }
 }

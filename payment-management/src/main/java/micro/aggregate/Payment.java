@@ -1,19 +1,16 @@
 package micro.aggregate;
 
-import java.io.Serializable;
 import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.HashSet;
 import java.util.List;
-import java.util.Map;
-import java.util.Set;
 import java.util.UUID;
-import java.util.function.Consumer;
-import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 import micro.events.PaymentInitialised;
+import micro.events.PaymentResolved;
+import micro.events.PaymentSucceeded;
+import micro.events.PaymentTokenValidated;
 import micro.events.DomainEvent;
+import micro.events.PaymentFailed;
 import micro.service.CorrelationId;
 
 public class Payment {
@@ -29,6 +26,9 @@ public class Payment {
 
 	private boolean tokenValidated;
 	private boolean allPaymentInformationResolved;
+
+	private boolean paymentSuccessful;
+	private String paymentNote;
 
 	private List<DomainEvent> appliedEvents = new ArrayList<DomainEvent>();
 
@@ -65,6 +65,14 @@ public class Payment {
 		events.forEachOrdered(e -> {
 			if (e instanceof PaymentInitialised)
 				this.apply((PaymentInitialised) e);
+			if (e instanceof PaymentTokenValidated)
+				this.apply((PaymentTokenValidated) e);
+			if (e instanceof PaymentResolved)
+				this.apply((PaymentResolved) e);
+			if (e instanceof PaymentSucceeded)
+				this.apply((PaymentSucceeded) e);
+			if (e instanceof PaymentFailed)
+				this.apply((PaymentFailed) e);
 		});
 		if (this.getTransactionId() == null) {
 			throw new Error("payment does not exist");
@@ -79,8 +87,55 @@ public class Payment {
 		this.token = event.getToken();
 	}
 
-	public void update() {
-		
+	protected void apply(PaymentTokenValidated event) {
+		this.tokenValidated = true; 
+	}
+
+	protected void apply(PaymentResolved event) {
+		this.customerBankAccount = event.getCustomerBankAccount();
+		this.merchantBankAccount = event.getMerchantBankAccount();
+		this.allPaymentInformationResolved = true;
+	}
+
+	protected void apply(PaymentSucceeded event) {
+		this.paymentSuccessful = true;
+	}
+
+	protected void apply(PaymentFailed event) {
+		this.paymentSuccessful = false;
+	}
+	
+	public void updatePaymentTokenValidated() {
+		var event = new PaymentTokenValidated(transactionId);
+		this.apply(event);
+		this.appliedEvents.add(event);
+	}
+
+	public void updateTokenInvalid(CorrelationId correlationId) {
+		var event = new PaymentFailed(this.getTransactionId(), correlationId);
+		this.apply(event);
+		this.appliedEvents.add(event);
+	}
+
+	public void update(String customerBank, String merchantBank, CorrelationId correlationId) {
+		if(customerBank == null || merchantBank == null) {
+			updateTokenInvalid(correlationId);
+		} else {
+			var event = new PaymentResolved(transactionId, customerBank, merchantBank, correlationId);
+			this.apply(event);
+			this.appliedEvents.add(event);
+		}
+	}
+
+	public void markAsCompleted(boolean successful, CorrelationId correlationId) {
+		if(successful) {
+			var event = new PaymentSucceeded(this.getTransactionId(), correlationId);
+			this.apply(event);
+			this.appliedEvents.add(event);
+		} 
+		else {
+			updateTokenInvalid(correlationId);
+		}
 	}
 
 	public void clearAppliedEvents() {
@@ -165,5 +220,25 @@ public class Payment {
 
 	public void setAppliedEvents(List<DomainEvent> appliedEvents) {
 		this.appliedEvents = appliedEvents;
+	}
+
+	public boolean isPaymentSuccessful() {
+		return paymentSuccessful;
+	}
+
+	public void setPaymentSuccessful(boolean paymentSuccessful) {
+		this.paymentSuccessful = paymentSuccessful;
+	}
+
+	public String getPaymentNote() {
+		return paymentNote;
+	}
+
+	public void setPaymentNote(String paymentNote) {
+		this.paymentNote = paymentNote;
+	}
+
+	public String generatePaymentNote() {
+		return "Payment " + this.transactionId;
 	}
 }

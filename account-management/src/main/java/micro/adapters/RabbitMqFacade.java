@@ -22,7 +22,9 @@ public class RabbitMqFacade {
     queue.addHandler("CustomerRetrievalRequested", this::handleGetCustomer);
     queue.addHandler("MerchantRegistrationRequested", this::handleMerchantRegistration);
     queue.addHandler("CustomerTokensRequested", this::handleCustomerTokensRequested);
-    queue.addHandler("CustomerTokensRequested", this::handleCustomerHasTokenCheckRequested);
+    queue.addHandler("CustomerHasTokenCheckRequested", this::handleCustomerHasTokenCheckRequested);
+    queue.addHandler("PaymentInformationResolutionRequested", this::handlePaymentInformationResolutionRequested);
+    queue.addHandler("TokenUsed", this::handleTokenUsed);
     
     this.service = service;
   }
@@ -61,5 +63,21 @@ public class RabbitMqFacade {
     var transactionId = e.getArgument(3, String.class);
     
     service.handleCheckTokenPresent(customerId, token, correlationId, transactionId);
+  }
+
+  public void handlePaymentInformationResolutionRequested(Event e) {
+    var transactionId = e.getArgument(0, String.class);
+    var customerId = e.getArgument(1, String.class);
+    var merchantId = e.getArgument(2, String.class);
+    var correlationId = e.getArgument(3, CorrelationId.class);
+
+    service.handlePaymentInformationResolutionQuery(transactionId, customerId, merchantId, correlationId);
+  }
+
+  public void handleTokenUsed(Event e) {
+    var customerId = e.getArgument(0, String.class);
+    var token = e.getArgument(1, String.class);
+
+    service.handleTokenUserCommand(customerId, token);
   }
 }

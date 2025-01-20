@@ -23,19 +23,28 @@ public class TokenService {
 	public void handlePaymentInitialised(String customerId, String token, CorrelationId correlationId, String transactionId) {
 		var tokenStatus = this.tokens.get(token);
 		if(tokenStatus != null) {
-			//emit token invalid event
+			publisher.emitTokenValidationFailed(transactionId, correlationId);
+			return;
 		}
 		this.tokens.put(token, "validating");
 		publisher.emitCustomerHasTokenCheckRequested(customerId, token, correlationId, transactionId);
 	}
 
 	public void handleCustomerHasTokenChecked(String customerId, String token, Boolean isPresent, CorrelationId correlationId, String transactionId) {
-		if(isPresent && tokens.get(token).equals("validating")) {
-			this.tokens.remove(token);
-			this.tokens.put(token, "validated");
-			publisher.emitTokenValidated(customerId, token, correlationId, transactionId);
+		if(tokens.get(token) != null && tokens.get(token).equals("validating")) {
+			if(isPresent) {
+				this.tokens.remove(token);
+				this.tokens.put(token, "validated");
+				publisher.emitTokenValidated(customerId, token, correlationId, transactionId);
+				publisher.emitTokenUsed(customerId, token);
+			}
+			else {
+				publisher.emitTokenValidationFailed(transactionId, correlationId);
+				tokens.remove(token);
+			}
+		} else {
+			System.out.print("Token " + token + " is not known. Ignoring the request.");
 		}
-		//emit TokenValidated event
 	}
 
 	public void handlePaymentInformationResolved() {
@@ -43,41 +52,4 @@ public class TokenService {
 		//this.tokens.remove(token);
 		//this.tokens.put(token, "used");
 	}
-/* 
-	@Override
-	public void handleTokensRequested(String id, CorrelationId correlationId) {
-
-		Stack<String> tks = new Stack<String>();
-		try {
-			tks = tokenGenerator.generateTokens();
-			System.out.println("tokens: " + tks);
-			repository.addTokens(id, tks);
-			publisher.emitTokenGenerated(correlationId);
-		} catch (Exception e) {
-			publisher.emitTokenGenerated(correlationId);
-		}
-	}
-
-	public void handleTokenIdRequested(Event ev) {
-		var correlationId = ev.getArgument(0, CorrelationId.class);
-		String token = ev.getArgument(1, String.class);
-		try {
-			String id = repository.getIdByToken(token);
-			ev = new Event("find.id.by.token.succeeded", new Object[] { correlationId, id });
-		} catch (Exception e) {
-			ev = new Event("find.id.by.token.failed", new Object[] { correlationId, e });
-		}
-
-	}
-
-	public void handleTokenUsed(Event ev) {
-		var correlationId = ev.getArgument(0, CorrelationId.class);
-		var token = ev.getArgument(1, String.class);
-		try {
-			repository.useToken(token);
-		} catch (Exception e) {
-			throw new RuntimeException(e);
-		}
-	}
-*/
 }

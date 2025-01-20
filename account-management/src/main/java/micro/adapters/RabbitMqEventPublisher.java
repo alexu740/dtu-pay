@@ -2,6 +2,7 @@ package micro.adapters;
 
 import boilerplate.Event;
 import boilerplate.MessageQueue;
+import micro.repositories.viewmodel.PaymentInstrumentViewModel;
 import micro.repositories.viewmodel.TokenViewModel;
 import micro.service.CorrelationId;
 
@@ -30,5 +31,9 @@ public class RabbitMqEventPublisher implements EventPublisher {
 
     public void emitCheckTokenPresent(String accountId, String token, boolean present, CorrelationId correlationId, String transactionId) {
         queue.publish(new Event("CustomerHasTokenChecked", new Object[] { accountId, token, present, correlationId, transactionId }));
+    }
+
+    public void emitPaymentInformationResolved(String transactionId, PaymentInstrumentViewModel vm, CorrelationId correlationId) {
+        queue.publish(new Event("PaymentInformationResolved", new Object[] { transactionId, vm.getCustomerBankAccount(), vm.getMerchantBankAccount(), correlationId }));
     }
 }

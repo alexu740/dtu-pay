@@ -14,6 +14,7 @@ import boilerplate.Event;
 import boilerplate.MessageQueue;
 import micro.events.AccountCreated;
 import micro.events.TokenAdded;
+import micro.events.TokenRemoved;
 
 public class RabbitMqQueue implements MessageQueue {
 
@@ -74,6 +75,9 @@ public class RabbitMqQueue implements MessageQueue {
 				} 
 				else if (topic.equals("TokenAdded")) {
 					event = new Gson().fromJson(message, TokenAdded.class);
+				}
+				else if (topic.equals("TokenRemoved")) {
+					event = new Gson().fromJson(message, TokenRemoved.class);
 				}
 				else {
 					event = new Gson().fromJson(message, Event.class);

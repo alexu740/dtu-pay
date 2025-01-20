@@ -18,4 +18,12 @@ public class RabbitMqEventPublisher implements EventPublisher {
     public void emitTokenValidated(String customerId, String token, CorrelationId correlationId, String transactionId) {
         queue.publish(new Event("TokenValidated", new Object[] { customerId, token, correlationId, transactionId}));
     }
+
+    public void emitTokenValidationFailed(String transactionId, CorrelationId correlationId) {
+        queue.publish(new Event("TokenValidationFailed", new Object[] { transactionId, correlationId}));
+    }
+
+    public void emitTokenUsed(String customerId, String token) {
+        queue.publish(new Event("TokenUsed", new Object[] { customerId, token}));
+    }
 }

@@ -10,6 +10,10 @@ public class RabbitMqFacade {
 
     public RabbitMqFacade(MessageQueue queue, MerchantFacadeService service) {
         queue.addHandler("AccountRegistered", this::handleMerchantRegistration);
+        queue.addHandler("PaymentSucceeded", this::handlePaymentSucceeded);
+        queue.addHandler("PaymentFailed", this::handlePaymentFailed);
+        
+        
         this.service = service;
     }
 
@@ -17,5 +21,15 @@ public class RabbitMqFacade {
         var eventPayload = e.getArgument(0, String.class);
         var correlationid = e.getArgument(1, CorrelationId.class);
         service.completeRegistration(eventPayload, correlationid);
+    }
+
+    private void handlePaymentSucceeded(Event e) {
+        var correlationid = e.getArgument(0, CorrelationId.class);
+        service.completePaymentTransaction(true, correlationid);
+    }
+
+    private void handlePaymentFailed(Event e) {
+        var correlationid = e.getArgument(0, CorrelationId.class);
+        service.completePaymentTransaction(false, correlationid);
     }
 }

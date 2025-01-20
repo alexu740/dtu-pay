@@ -6,10 +6,10 @@ import java.util.UUID;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
-import boilerplate.Event;
 import micro.events.AccountCreated;
 import micro.events.DomainEvent;
 import micro.events.TokenAdded;
+import micro.events.TokenRemoved;
 import micro.exception.BusinessValidationException;
 import micro.service.CorrelationId;
 
@@ -45,6 +45,13 @@ public class CustomerAccount extends Account {
 		}
 	}
 
+	public void removeToken(String token) {
+		if(tokens.contains(token)) {
+			this.getAppliedEvents().add(new TokenRemoved(getAccountid(), token));
+			tokens.remove(token);
+		}
+	}
+
 	public static Account createFromEvents(Stream<DomainEvent> events) {
 		List<DomainEvent> eventList = events.collect(Collectors.toList());
 
@@ -71,6 +78,8 @@ public class CustomerAccount extends Account {
 			}
 			if(e instanceof TokenAdded) 
 				this.apply((TokenAdded) e);
+			if(e instanceof TokenRemoved) 
+				this.apply((TokenRemoved) e);
 		});
 		if (this.getAccountid() == null) {
 			throw new Error("user does not exist");
@@ -80,6 +89,12 @@ public class CustomerAccount extends Account {
 	private void apply(TokenAdded e) {
 		var tokens = this.getTokens();
 		tokens.add(e.newToken);
+		this.setTokens(tokens);
+	}
+
+	private void apply(TokenRemoved e) {
+		var tokens = this.getTokens();
+		tokens.remove((e.getToken()));
 		this.setTokens(tokens);
 	}
 }

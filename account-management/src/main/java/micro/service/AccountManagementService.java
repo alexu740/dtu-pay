@@ -65,7 +65,19 @@ public class AccountManagementService {
 	public void handleCheckTokenPresent(String accountId, String token, CorrelationId correlationId, String transactionId) {
 		publisher.emitCheckTokenPresent(accountId, token, readRepository.tokenIsPresent(accountId, token), correlationId, transactionId);
 	}
+
+	public void handlePaymentInformationResolutionQuery(String transactionId, String customerId, String merchantId, CorrelationId correlationId) {
+		var vm = readRepository.getPaymentInformation(customerId, merchantId);
+		publisher.emitPaymentInformationResolved(transactionId, vm, correlationId);
+	} 
 	
+	public void handleTokenUserCommand(String customerId, String token) {
+		var account = this.repository.getById(customerId);
+		if ((account instanceof CustomerAccount)) {
+			((CustomerAccount)account).removeToken(token);
+			this.repository.save(account);
+		}
+	}
 	/*
 	public AccountId createAccount(String firstname, String lastname) throws InterruptedException, ExecutionException {
 		Account account = Account.create(firstname,lastname);

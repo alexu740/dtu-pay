@@ -45,6 +45,13 @@ public class MerchantFacadeService {
         publisher.emitInitialisePayment(dto, correlationId);
         return correlations.get(correlationId.get()).join();
     }
+
+    public void completePaymentTransaction(boolean success, CorrelationId correlationId) {
+        var promise = correlations.get(correlationId.get());
+        if(promise != null) {
+            promise.complete(success ? "successful" : "failed");
+        }
+    }
     
     public void remove() {
         //queue.publish(new Event("MerchantRegistrationRequested"))

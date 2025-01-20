@@ -38,7 +38,7 @@ public class MerchantResource {
     @Produces(MediaType.APPLICATION_JSON)
     @Path("{id}/payments")
     public Response payment(@PathParam("id") String id, PaymentDto dto) {
-        service.initialisePayment(dto);
-        return Response.ok("merchant deleted").build();
+        var result = service.initialisePayment(dto);
+        return Response.ok(result).build();
     }
 }
