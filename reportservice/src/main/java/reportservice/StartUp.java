@@ -20,7 +20,7 @@ public class StartUp {
 
 	private void startUp() throws Exception {
 
-		System.out.println("STARTING the Account Management Service");
+		System.out.println("STARTING the Report Service");
 		Thread.sleep(10000);
 		var mq = new RabbitMqQueue("rabbitMq");
 		Repository repo = new Repository();
