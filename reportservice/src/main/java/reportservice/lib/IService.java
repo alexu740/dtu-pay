@@ -1,18 +1,16 @@
 package reportservice.lib;
 
-import reportservice.boilerplate.implementations.RabbitMqQueue;
-import reportservice.boilerplate.MessageQueue;
-import reportservice.boilerplate.Event;
-
 import reportservice.dto.Payment;
-import reportservice.impl.CorrelationId;
+import reportservice.services.CorrelationId;
 
 public interface IService {
 
-    void handlePaymentReceived(Payment payment,CorrelationId correlationId);
+    void handlePaymentReceived(CorrelationId correlationId, Payment payment);
 
-    void handleCustomerReportRequested(Event ev);
+    void handlePaymentReportRequested(CorrelationId correlationId);
 
-    void handleMerchantReportRequested(CorrelationId correlationId,String id);
+    void handleMerchantReportRequested(CorrelationId correlationId,String merchantID);
+
+    void handleCustomerReportRequested(CorrelationId correlationId,String customerID);
 
 }

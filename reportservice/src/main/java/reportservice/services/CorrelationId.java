@@ -1,4 +1,4 @@
-package reportservice.impl;
+package reportservice.services;
 
 import java.util.UUID;
 

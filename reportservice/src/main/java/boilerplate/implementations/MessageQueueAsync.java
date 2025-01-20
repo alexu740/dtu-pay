@@ -1,4 +1,4 @@
-package reportservice.boilerplate.implementations;
+package boilerplate.implementations;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -8,8 +8,8 @@ import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.LinkedBlockingQueue;
 import java.util.function.Consumer;
 
-import reportservice.boilerplate.Message;
-import reportservice.boilerplate.MessageQueue;
+import boilerplate.Message;
+import boilerplate.MessageQueue;
 
 public class MessageQueueAsync  /*implements MessageQueue */ {
 /*
