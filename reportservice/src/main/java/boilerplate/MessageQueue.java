@@ -1,4 +1,4 @@
-package reportservice.boilerplate;
+package boilerplate;
 
 import java.util.function.Consumer;
 

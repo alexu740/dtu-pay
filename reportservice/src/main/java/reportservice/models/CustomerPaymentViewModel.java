@@ -1,17 +1,11 @@
-package reportservice.dto;
+package reportservice.models;
 
-public class Payment {
-    private String customerID;
+
+public class CustomerPaymentViewModel {
     private String customerToken;
     private String merchantID;
     private int amount;
-    
-    public String getCustomerID() {
-        return this.customerID;
-    }
-    public void setCustomerID(String customerID) {
-        this.customerToken = customerID;
-    }
+
     public String getCustomerToken() {
         return this.customerToken;
     }
@@ -31,3 +25,5 @@ public class Payment {
         this.amount = amount;
     }
 }
+
+

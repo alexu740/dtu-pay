@@ -1,4 +1,4 @@
-package reportservice.boilerplate.implementations;
+package boilerplate.implementations;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -7,8 +7,8 @@ import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.function.Consumer;
 
-import reportservice.boilerplate.Message;
-import reportservice.boilerplate.MessageQueue;
+import boilerplate.Message;
+import boilerplate.MessageQueue;
 
 public class MessageQueueSync /*implements MessageQueue */ {
 /*

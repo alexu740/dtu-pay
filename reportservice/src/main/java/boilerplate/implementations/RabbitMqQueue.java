@@ -1,4 +1,4 @@
-package reportservice.boilerplate.implementations;
+package boilerplate.implementations;
 
 import java.io.IOException;
 import java.util.concurrent.TimeoutException;
@@ -10,8 +10,8 @@ import com.rabbitmq.client.Connection;
 import com.rabbitmq.client.ConnectionFactory;
 import com.rabbitmq.client.DeliverCallback;
 
-import reportservice.boilerplate.Event;
-import reportservice.boilerplate.MessageQueue;
+import boilerplate.Event;
+import boilerplate.MessageQueue;
 
 public class RabbitMqQueue implements MessageQueue {
 
@@ -34,8 +34,8 @@ public class RabbitMqQueue implements MessageQueue {
 	@Override
 	public void publish(Event event) {
 		String message = new Gson().toJson(event);
-		System.out.println("[X]: " + message);
 		try {
+			System.out.println("[X]: " + message);
 			channel.basicPublish(EXCHANGE_NAME, event.getType(), null, message.getBytes("UTF-8"));
 		} catch (IOException e) {
 			throw new Error(e);
@@ -67,7 +67,6 @@ public class RabbitMqQueue implements MessageQueue {
 				String message = new String(delivery.getBody(), "UTF-8");
 
 				Event event = new Gson().fromJson(message, Event.class);
-
 				handler.accept(event);
 			};
 			chan.basicConsume(queueName, true, deliverCallback, consumerTag -> {
