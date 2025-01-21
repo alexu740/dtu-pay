@@ -1,35 +1,37 @@
 package boilerplate.implementations;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.function.Consumer;
 
-import boilerplate.Message;
+import boilerplate.Event;
 import boilerplate.MessageQueue;
 
-public class MessageQueueSync /*implements MessageQueue */ {
-/*
-	private Map<Class<?>,List<Consumer<Message>>> subscribers = new ConcurrentHashMap<>();
+public class MessageQueueSync implements MessageQueue  {
 
-	private void notifySubscribers(Message m) {
-		subscribers.getOrDefault(m.getClass(), new ArrayList<Consumer<Message>>())
+	private Map<String,List<Consumer<Event>>> subscribers;
+
+	public MessageQueueSync() {
+		subscribers = new ConcurrentHashMap<>();
+	}
+
+	private void notifySubscribers(Event m) {
+		subscribers.getOrDefault(m.getType(), new ArrayList<Consumer<Event>>())
 			.forEach(a -> a.accept(m));
 	}
 
 	@Override
-	public void publish(Message message) {
-		notifySubscribers(message);
+	public void publish(Event event) {
+		notifySubscribers(event);
 	}
 
 	@Override
-	public void addHandler(Class<? extends Message> event, Consumer<Message> handler) {
-		if (!subscribers.containsKey(event)) {
-			subscribers.put(event, new ArrayList<Consumer<Message>>());
+	public void addHandler(String topic, Consumer<Event> handler) {
+		if (!subscribers.containsKey(topic)) {
+			subscribers.put(topic, new ArrayList<Consumer<Event>>());
 		}
-		subscribers.get(event).add(handler);
+		subscribers.get(topic).add(handler);
 	}
-		 */
 }

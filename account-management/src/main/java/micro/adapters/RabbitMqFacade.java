@@ -21,6 +21,7 @@ public class RabbitMqFacade {
     queue.addHandler("CustomerRegistrationRequested", this::handleCustomerRegistration);
     queue.addHandler("CustomerRetrievalRequested", this::handleGetCustomer);
     queue.addHandler("CustomerDeregistrationRequested", this::handleCustomerDeregistration);
+    
     queue.addHandler("MerchantRegistrationRequested", this::handleMerchantRegistration);
     queue.addHandler("MerchantDeregistrationRequested", this::handleMerchantDeregistration);
 

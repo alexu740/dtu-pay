@@ -13,12 +13,12 @@ public class RabbitMqEventPublisher implements EventPublisher {
         this.queue = queue;
     }
 
-    public void emitAccountTokensRequestedEvent(TokenViewModel vm, CorrelationId correlationId) {
+    public void emitAccountCustomerRetrievedEvent(TokenViewModel vm, CorrelationId correlationId) {
         queue.publish(new Event("CustomerRetrieved", new Object[] { vm, correlationId }));
     }
 
-    public void emitAccountTokensRequestRejectedEvent(CorrelationId correlationId) {
-        queue.publish(new Event("CustomerRetrieved", new Object[] { correlationId }));
+    public void emitAccountMerchantRetrievedEvent(CorrelationId correlationId) {
+        queue.publish(new Event("MerchantRetrieved", new Object[] { correlationId }));
     }
 
     public void emitTokensCreatedEvent(CorrelationId correlationId) {

@@ -52,9 +52,9 @@ public class AccountManagementService {
 		System.out.println("Requesting tokens for account " + query.accountId);
 		if(query.isCustomerAccount) {
 			var acc = readRepository.getCustomerTokens(query);
-			publisher.emitAccountTokensRequestedEvent(acc, correlationId);
+			publisher.emitAccountCustomerRetrievedEvent(acc, correlationId);
 		} else {
-			publisher.emitAccountTokensRequestRejectedEvent(correlationId);
+			publisher.emitAccountMerchantRetrievedEvent(correlationId);
 		}
 	}
 
