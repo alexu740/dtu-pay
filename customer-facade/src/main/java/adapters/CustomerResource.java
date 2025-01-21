@@ -46,7 +46,7 @@ public class CustomerResource {
     @Produces(MediaType.APPLICATION_JSON)
     @Path("{id}")
     public Response deregister(@PathParam("id") String id) {
-        //queue.publish(new Event("CustomerRegistrationRequested"))
+        //queue.publish(new Event("CustomerRetirementRequested"))
         return Response.ok("customer deleted").build();
     }
 

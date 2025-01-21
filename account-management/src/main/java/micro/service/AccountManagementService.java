@@ -78,6 +78,19 @@ public class AccountManagementService {
 			this.repository.save(account);
 		}
 	}
+
+	public void handleRetireAccount(AccountCreationCommand command, CorrelationId correlationId) {
+		System.out.println("Retiring a account object");
+		Account account;
+		if(command.isCustomer) {
+			//account = CustomerAccount.retire(id, correlationId);
+		}
+		else {
+			//account = Account.retire(id,  correlationId);
+		}
+		System.out.println("Created new account object");
+		this.repository.save(account);
+	}
 	/*
 	public AccountId createAccount(String firstname, String lastname) throws InterruptedException, ExecutionException {
 		Account account = Account.create(firstname,lastname);
