@@ -19,7 +19,7 @@ public class RabbitMqFacade {
   public RabbitMqFacade(MessageQueue queue, AccountManagementService service) {
     System.out.println("Starting facade");
     queue.addHandler("CustomerRegistrationRequested", this::handleCustomerRegistration);
-    queue.addHandler("CustomerRetrievalRequested", this::handleGetCustomer);
+    queue.addHandler("CustomerRetrievalRequested", this::handleRetrieCustomer);
     queue.addHandler("MerchantRegistrationRequested", this::handleMerchantRegistration);
     queue.addHandler("CustomerTokensRequested", this::handleCustomerTokensRequested);
     queue.addHandler("CustomerHasTokenCheckRequested", this::handleCustomerHasTokenCheckRequested);
@@ -38,7 +38,7 @@ public class RabbitMqFacade {
     service.handleCreateAccount(command, correlationId);
   }
 
-  public void handleGetCustomer(Event e) {
+  public void handleRetrieCustomer(Event e) {
     var correlationId = e.getArgument(1, CorrelationId.class);
     service.handleGetAccount(QueryFactory.createAccountGetCommand(e, true), correlationId);
   }
