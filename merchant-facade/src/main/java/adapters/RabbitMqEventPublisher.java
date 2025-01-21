@@ -18,12 +18,18 @@ public class RabbitMqEventPublisher implements EventPublisher {
         queue.publish(event);
     }
 
+    public void emitUnregisterUserEvent(String merchantId, CorrelationId correlationId) {
+        Event event = new Event("MerchantDeregistrationRequested", new Object[] { merchantId, correlationId });
+        queue.publish(event);
+    }
+
     public void emitInitialisePayment(PaymentDto payload, CorrelationId correlationId) {
         Event event = new Event("PaymentRequested", new Object[] { payload, correlationId });
         queue.publish(event);
     }
 
-    public void emitUnregisterUserEvent() {
-
+    public void emitReportRequestEvent(String merchantId, CorrelationId correlationId) {
+        Event event = new Event("MerchantReportRequested", new Object[] { merchantId, correlationId });
+        queue.publish(event);
     }
 }

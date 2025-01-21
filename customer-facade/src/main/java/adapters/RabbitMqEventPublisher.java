@@ -27,7 +27,12 @@ public class RabbitMqEventPublisher implements EventPublisher {
         queue.publish(event);
     }
 
-    public void emitUnregisterUserEvent() {
-
+    public void emitUnregisterUserEvent(String customerId, CorrelationId correlationId) {
+        Event event = new Event("CustomerDeregistrationRequested", new Object[] { customerId, correlationId });
+        queue.publish(event);
+    }
+    public void emitReportRequestEvent(String customerId, CorrelationId correlationId) {
+        Event event = new Event("CustomerReportRequested", new Object[] { customerId, correlationId });
+        queue.publish(event);
     }
 }

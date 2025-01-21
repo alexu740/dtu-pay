@@ -12,9 +12,12 @@ public class RabbitMqFacade {
     public RabbitMqFacade(MessageQueue queue, CustomerFacadeService service) {
         queue.addHandler("AccountRegistered", this::handleAccountRegistred);
         queue.addHandler("AccountRegistrationFailed", this::handleAccountRegistrationFailed);
+        queue.addHandler("AccountDeregistered", this::handleAccountDeregistred);
         queue.addHandler("CustomerRetrieved", this::handleCustomerRetrieved);
         queue.addHandler("TokensCreated", this::handleTokensCreated);
         queue.addHandler("TokensCreateFailed", this::handleTokensCreated);
+        queue.addHandler("CustomerReportCreated", this::handleReportCreated);
+
 
         this.service = service;
     }
@@ -31,6 +34,9 @@ public class RabbitMqFacade {
         service.completeRegistration(eventPayload, correlationid, false);
     }
 
+    public void handleAccountDeregistred(Event e) {
+
+    }
     public void handleCustomerRetrieved(Event e) { 
         var eventPayload = e.getArgument(0, AccountTokensDto.class);
         var correlationid = e.getArgument(1, CorrelationId.class);
@@ -41,5 +47,9 @@ public class RabbitMqFacade {
         var successful = e.getType().equals("TokensCreated");
         var correlationid = e.getArgument(0, CorrelationId.class);
         service.completeTokenCreationRequest(successful, correlationid);
+    }
+
+    public void handleReportCreated(Event e) { 
+
     }
 }
