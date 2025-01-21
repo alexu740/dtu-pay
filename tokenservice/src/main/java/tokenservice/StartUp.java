@@ -1,14 +1,16 @@
 package tokenservice;
 
-import tokenservice.lib.Factory;
+import tokenservice.adapters.RabbitMqFacade;
+import tokenservice.startup.ApplicationFactory;
 
 public class StartUp {
+	RabbitMqFacade facade;
 	public static void main(String[] args) throws Exception {
 		new StartUp().startUp();
 	}
 
 	private void startUp() throws Exception {
-		Thread.sleep(20000);
-		new Factory().getService();
+		System.out.println("STARTING the token validation service");
+		facade = ApplicationFactory.createApplication();
 	}
 }

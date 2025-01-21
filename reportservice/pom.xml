@@ -100,6 +100,11 @@
 			<version>2.1.1</version>
 			<scope>compile</scope>
 		</dependency>
+		<dependency>
+			<groupId>dk.dtupay.messaging</groupId>
+			<artifactId>messaging-utilities</artifactId>
+			<version>3.4</version>
+		</dependency>
 	</dependencies>
 	<build>
 		<plugins>

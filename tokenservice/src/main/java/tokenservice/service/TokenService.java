@@ -1,13 +1,9 @@
 package tokenservice.service;
 
-import boilerplate.Event;
-
 import java.util.HashMap;
 import java.util.Map;
-import java.util.Stack;
 
 import tokenservice.adapters.EventPublisher;
-import tokenservice.impl.TokenGenerator;
 
 public class TokenService {
 	private EventPublisher publisher;

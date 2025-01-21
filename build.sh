@@ -1,31 +1,41 @@
-cd messaging-utilities
-mvn clean install
-cd ..
+set -e
 
-cd account-management
-mvn clean package
-cd ..
+declare -a dirs=(
+  "messaging-utilities"
+  "account-management"
+  "app-api"
+  "customer-facade"
+  "merchant-facade"
+  "payment-management"
+  "tokenservice"
+  "reportservice"
+)
 
-cd app-api
-mvn clean package
-cd ..
+total=${#dirs[@]}
 
-cd customer-facade
-mvn clean package
-cd ..
+show_progress() {
+  local current=$1
+  local total=$2
+  local width=50
+  local percent=$((current * 100 / total))
+  local progress=$((current * width / total))
+  
+  printf "\r["
+  for ((i=0; i<progress; i++)); do printf "#"; done
+  for ((i=progress; i<width; i++)); do printf " "; done
+  printf "] %d%% (%d/%d)" "$percent" "$current" "$total"
+}
 
-cd merchant-facade
-mvn clean package
-cd ..
+current=0
+for dir in "${dirs[@]}"; do
+  ((current++))
+  
+  show_progress "$current" "$total"
 
-cd payment-management
-mvn clean package
-cd ..
+  cd "$dir" || exit 1
+  mvn clean package || exit 1
+  cd .. || exit 1
+done
 
-cd tokenservice
-mvn clean package
-cd ..
-
-cd reportservice
-mvn clean package
-cd ..
+echo
+echo "All the services are built successfully"
