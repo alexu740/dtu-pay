@@ -20,7 +20,10 @@ public class RabbitMqFacade {
     System.out.println("Starting facade");
     queue.addHandler("CustomerRegistrationRequested", this::handleCustomerRegistration);
     queue.addHandler("CustomerRetrievalRequested", this::handleGetCustomer);
+    queue.addHandler("CustomerDeregistrationRequested", this::handleCustomerDeregistration);
     queue.addHandler("MerchantRegistrationRequested", this::handleMerchantRegistration);
+    queue.addHandler("MerchantDeregistrationRequested", this::handleMerchantDeregistration);
+
     queue.addHandler("CustomerTokensRequested", this::handleCustomerTokensRequested);
     queue.addHandler("CustomerHasTokenCheckRequested", this::handleCustomerHasTokenCheckRequested);
     queue.addHandler("PaymentInformationResolutionRequested", this::handlePaymentInformationResolutionRequested);
@@ -43,11 +46,25 @@ public class RabbitMqFacade {
     service.handleGetAccount(QueryFactory.createAccountGetCommand(e, true), correlationId);
   }
 
+  public void handleCustomerDeregistration(Event e) {
+    var customerId = e.getArgument(0, String.class);
+    var correlationId = e.getArgument(1, CorrelationId.class);
+    AccountCreationCommand command = new AccountDeletionCommand(customerId, true);
+    service.handleDeleteAccount(command, correlationId);
+  }
+
   public void handleMerchantRegistration(Event e) {
     var eventPayload = e.getArgument(0, RegistrationDto.class);
     var correlationId = e.getArgument(1, CorrelationId.class);
     AccountCreationCommand command = new AccountCreationCommand(eventPayload, false);
     service.handleCreateAccount(command, correlationId);
+  }
+
+  public void handleMerchantDeregistration(Event e) {
+    var merchantId = e.getArgument(0, String.class);
+    var correlationId = e.getArgument(1, CorrelationId.class);
+    AccountCreationCommand command = new AccountDeletionCommand(merchantId, false);
+    service.handleDeleteAccount(command, correlationId);
   }
 
   public void handleCustomerTokensRequested(Event e) {
