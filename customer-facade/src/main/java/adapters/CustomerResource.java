@@ -46,6 +46,7 @@ public class CustomerResource {
     @Path("{id}")
     public Response deregister(@PathParam("id") String id) {
         //queue.publish(new Event("CustomerRegistrationRequested"))
+        var result = service.deregister(id);
         return Response.ok("customer deleted").build();
     }
 
