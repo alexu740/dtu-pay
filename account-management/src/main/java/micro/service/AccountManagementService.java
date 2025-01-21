@@ -77,5 +77,7 @@ public class AccountManagementService {
 
 	public void handleDeleteAccount(AccountDeletionCommand command, CorrelationId correlationId) {
 
+
+
 	}
 }
