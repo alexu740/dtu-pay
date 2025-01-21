@@ -1,7 +1,6 @@
 package com.rest.start.Adapters;
 
 import com.rest.start.Model.Dto.*;
-import jakarta.inject.Inject;
 import jakarta.enterprise.context.ApplicationScoped;
 
 import jakarta.ws.rs.client.Client;

@@ -2,19 +2,12 @@ package micro.repositories;
 
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.HashSet;
 import java.util.Map;
-import java.util.Set;
-import java.util.UUID;
-import java.util.stream.Collectors;
 
 import boilerplate.Event;
-import boilerplate.Message;
 import boilerplate.MessageQueue;
-import micro.aggregate.AccountId;
-import micro.aggregate.CustomerAccount;
 import micro.commands.AccountGetQuery;
-import micro.events.AccountCreated;
+import micro.events.AccountRegistered;
 import micro.events.TokenAdded;
 import micro.events.TokenRemoved;
 import micro.repositories.viewmodel.PaymentInstrumentViewModel;
@@ -37,7 +30,7 @@ public class AccountReadModelRepository {
 	}
 
 	public void applyAccountRegistered(Event e) {
-		var event = (AccountCreated) e;
+		var event = (AccountRegistered) e;
 		var accountId = event.getAccountId().getUuid().toString();
 		System.out.println("Updating read model with event: AccountCreated for account " + accountId);
 		if(event.isCustomerAccountType()) {

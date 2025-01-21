@@ -1,15 +1,9 @@
 package micro.events;
 
-import lombok.AllArgsConstructor;
-import lombok.EqualsAndHashCode;
-import lombok.Value;
 import micro.aggregate.AccountId;
 import micro.service.CorrelationId;
-import boilerplate.Event;
 
-
-@EqualsAndHashCode(callSuper = false)
-public class AccountCreated extends DomainEvent {
+public class AccountRegistered extends DomainEvent {
 	private static final long serialVersionUID = -1599019626118724482L;
 
     public String firstName;
@@ -18,7 +12,7 @@ public class AccountCreated extends DomainEvent {
     public String bankAccount;
     public boolean isCustomerAccountType; 
 
-    public AccountCreated(AccountId accountId, CorrelationId correlationId) {
+    public AccountRegistered(AccountId accountId, CorrelationId correlationId) {
         super("AccountRegistered", new Object[] { accountId.getUuid(), correlationId }, accountId);
     }
 

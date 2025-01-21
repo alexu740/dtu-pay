@@ -101,6 +101,11 @@
 			<version>1.8.1</version>
 			<scope>test</scope>
 		</dependency>
+		<dependency>
+			<groupId>dk.dtupay.messaging</groupId>
+			<artifactId>messaging-utilities</artifactId>
+			<version>3.4</version>
+		</dependency>
 	</dependencies>
 
 	<build>

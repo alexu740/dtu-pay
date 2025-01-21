@@ -1,15 +1,15 @@
 package micro.adapters;
 
-import boilerplate.implementations.RabbitMqQueue;
 import boilerplate.MessageQueue;
 import boilerplate.Event;
+
 import micro.commands.AccountCreationCommand;
+import micro.commands.AccountDeletionCommand;
 import micro.commands.AccountTokenCreationCommand;
+
 import micro.commands.CommandFactory;
 import micro.commands.QueryFactory;
 import micro.dto.RegistrationDto;
-import boilerplate.Event;
-import micro.commands.AccountCreationCommand;
 import micro.service.AccountManagementService;
 import micro.service.CorrelationId;
 
@@ -49,7 +49,7 @@ public class RabbitMqFacade {
   public void handleCustomerDeregistration(Event e) {
     var customerId = e.getArgument(0, String.class);
     var correlationId = e.getArgument(1, CorrelationId.class);
-    AccountCreationCommand command = new AccountDeletionCommand(customerId, true);
+    AccountDeletionCommand command = new AccountDeletionCommand(customerId);
     service.handleDeleteAccount(command, correlationId);
   }
 
@@ -63,7 +63,7 @@ public class RabbitMqFacade {
   public void handleMerchantDeregistration(Event e) {
     var merchantId = e.getArgument(0, String.class);
     var correlationId = e.getArgument(1, CorrelationId.class);
-    AccountCreationCommand command = new AccountDeletionCommand(merchantId, false);
+    AccountDeletionCommand command = new AccountDeletionCommand(merchantId);
     service.handleDeleteAccount(command, correlationId);
   }
 

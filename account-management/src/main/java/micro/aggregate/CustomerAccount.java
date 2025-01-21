@@ -6,7 +6,7 @@ import java.util.UUID;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
-import micro.events.AccountCreated;
+import micro.events.AccountRegistered;
 import micro.events.DomainEvent;
 import micro.events.TokenAdded;
 import micro.events.TokenRemoved;
@@ -55,8 +55,8 @@ public class CustomerAccount extends Account {
 	public static Account createFromEvents(Stream<DomainEvent> events) {
 		List<DomainEvent> eventList = events.collect(Collectors.toList());
 
-		AccountCreated creatingEvent = (AccountCreated) eventList.stream()
-			.filter(e -> e instanceof AccountCreated)
+		AccountRegistered creatingEvent = (AccountRegistered) eventList.stream()
+			.filter(e -> e instanceof AccountRegistered)
 			.findFirst()
 			.orElseThrow(() -> new IllegalArgumentException("AccountCreated event not found"));
 		
@@ -72,9 +72,9 @@ public class CustomerAccount extends Account {
 	@Override
 	protected void applyEvents(Stream<DomainEvent> events) throws Error {
 		events.forEachOrdered(e -> {
-			if (e instanceof AccountCreated) {
-				super.apply((AccountCreated) e);
-				this.apply((AccountCreated) e);
+			if (e instanceof AccountRegistered) {
+				super.apply((AccountRegistered) e);
+				this.apply((AccountRegistered) e);
 			}
 			if(e instanceof TokenAdded) 
 				this.apply((TokenAdded) e);

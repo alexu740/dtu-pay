@@ -1,4 +1,4 @@
-package messaging.implementations;
+package boilerplate.implementations;
 
 import java.io.IOException;
 import java.util.concurrent.TimeoutException;
@@ -10,17 +10,17 @@ import com.rabbitmq.client.Connection;
 import com.rabbitmq.client.ConnectionFactory;
 import com.rabbitmq.client.DeliverCallback;
 
-import messaging.Event;
-import messaging.MessageQueue;
+import boilerplate.Event;
+import boilerplate.MessageQueue;
 
 public class RabbitMqQueue implements MessageQueue {
 
-	private static final String DEFAULT_HOSTNAME = "localhost";
-	private static final String EXCHANGE_NAME = "eventsExchange";
-	private static final String QUEUE_TYPE = "topic";
+	protected static final String DEFAULT_HOSTNAME = "localhost";
+	protected static final String EXCHANGE_NAME = "eventsExchange";
+	protected static final String QUEUE_TYPE = "topic";
 
-	private Channel channel;
-	private String hostname;
+	protected Channel channel;
+	protected String hostname;
 
 	public RabbitMqQueue() {
 		this(DEFAULT_HOSTNAME);
@@ -42,7 +42,7 @@ public class RabbitMqQueue implements MessageQueue {
 		}
 	}
 
-	private Channel setUpChannel() {
+	protected Channel setUpChannel() {
 		Channel chan;
 		try {
 			ConnectionFactory factory = new ConnectionFactory();
@@ -76,5 +76,4 @@ public class RabbitMqQueue implements MessageQueue {
 			throw new Error(e1);
 		}
 	}
-
 }

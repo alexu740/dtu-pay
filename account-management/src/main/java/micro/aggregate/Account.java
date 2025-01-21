@@ -12,7 +12,7 @@ import java.util.function.Consumer;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
-import micro.events.AccountCreated;
+import micro.events.AccountRegistered;
 import micro.events.DomainEvent;
 import micro.service.CorrelationId;
 
@@ -37,7 +37,7 @@ public class Account {
 		account.setOwnerDetails(ownerDetails);
 		account.setFinancialDetails(financialDetails);
 
-		var event = new AccountCreated(accountId, correlationId);
+		var event = new AccountRegistered(accountId, correlationId);
 
 		event.firstName = firstName;
 		event.lastName = lastName;
@@ -58,15 +58,15 @@ public class Account {
 
 	protected void applyEvents(Stream<DomainEvent> events) throws Error {
 		events.forEachOrdered(e -> {
-			if (e instanceof AccountCreated)
-				this.apply((AccountCreated) e);
+			if (e instanceof AccountRegistered)
+				this.apply((AccountRegistered) e);
 		});
 		if (this.getAccountid() == null) {
 			throw new Error("user does not exist");
 		}
 	}
 
-	protected void apply(AccountCreated event) {
+	protected void apply(AccountRegistered event) {
 		this.accountid = event.getAccountId();
 		this.ownerDetails = new AccountOwnerDetails(event.firstName, event.lastName, event.cpr);
 		this.financialDetails = new AccountFinancialDetails(event.bankAccount, null);

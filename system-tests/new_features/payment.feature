@@ -1,11 +1,11 @@
 Feature: Payment feature
 
 Scenario: Successful Payment
-    Given a customer with name "Susan", last name "Baldwin", and CPR "030154-4400"  
+    Given a customer with name "Susan", last name "Baldwin", and CPR "030154-9678"  
     And the customer is registered with the bank with an initial balance of 1000 kr
     And the customer is registered with DTU Pay using their bank account
     And the customer has a valid token
-    And a merchant with name "Daniel", last name "Oliver", and CPR "131161-3046"
+    And a merchant with name "Daniel", last name "Oliver", and CPR "131161-8272"
     And the merchant is registered with the bank with an initial balance of 1000 kr
     And the merchant is registered with DTU Pay using their bank account
     When the merchant initiates a payment for 10 kr by the customer
