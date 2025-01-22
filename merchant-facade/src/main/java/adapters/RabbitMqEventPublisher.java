@@ -28,9 +28,8 @@ public class RabbitMqEventPublisher implements EventPublisher {
         queue.publish(event);
     }
 
-    public void emitReportRequestEvent(String merchantId, CorrelationId correlationId) {
+    public void emitMerchantReportRequested(String merchantId, CorrelationId correlationId) {
         Event event = new Event("MerchantReportRequested", new Object[] { merchantId, correlationId });
         queue.publish(event);
     }
-
 }

@@ -12,18 +12,23 @@ services:
       - "8080:8080"
     restart: always
   customer-facade:
-    build:
-      context: ./customer-facade
+    build: ./customer-facade
     ports:
       - "8088:8088"
     restart: always
     depends_on:
       - rabbitMq
   merchant-facade:
-    build:
-      context: ./merchant-facade
+    build: merchant-facade
     ports:
       - "8089:8089"
+    restart: always
+    depends_on:
+      - rabbitMq
+  manager-facade:
+    build: manager-facade
+    ports:
+      - "8090:8090"
     restart: always
     depends_on:
       - rabbitMq

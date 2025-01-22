@@ -1,9 +1,13 @@
 package adapters;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import boilerplate.Event;
 import boilerplate.MessageQueue;
 import service.MerchantFacadeService;
 import service.CorrelationId;
+import dto.Report;
 
 public class RabbitMqFacade {
     MerchantFacadeService service;
@@ -13,7 +17,7 @@ public class RabbitMqFacade {
         queue.addHandler("AccountDeregistered", this::handleAccountDeregistred);
         queue.addHandler("PaymentSucceeded", this::handlePaymentSucceeded);
         queue.addHandler("PaymentFailed", this::handlePaymentFailed);
-        queue.addHandler("MerchantReportCreated", this::handleReportCreated);
+        queue.addHandler("MerchantReportSent", this::handleMerchantReportSent);
 
         this.service = service;
     }
@@ -31,7 +35,7 @@ public class RabbitMqFacade {
     }
 
     private void handlePaymentSucceeded(Event e) {
-        var correlationid = e.getArgument(0, CorrelationId.class);
+        var correlationid = e.getArgument(1, CorrelationId.class);
         service.completePaymentTransaction(true, correlationid);
     }
 
@@ -40,7 +44,9 @@ public class RabbitMqFacade {
         service.completePaymentTransaction(false, correlationid);
     }
 
-    public void handleReportCreated(Event e) { 
-
+    public void handleMerchantReportSent(Event e) { 
+        var report = e.getArgument(0, List.class);
+        var correlationid = e.getArgument(1, CorrelationId.class);
+        service.completeReportRequest(report, correlationid);
     }
 }

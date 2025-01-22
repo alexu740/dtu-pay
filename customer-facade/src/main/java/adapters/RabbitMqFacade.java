@@ -1,5 +1,7 @@
 package adapters;
 
+import java.util.List;
+
 import boilerplate.Event;
 import boilerplate.MessageQueue;
 import dto.AccountTokensDto;
@@ -16,7 +18,7 @@ public class RabbitMqFacade {
         queue.addHandler("CustomerRetrieved", this::handleCustomerRetrieved);
         queue.addHandler("TokensCreated", this::handleTokensCreated);
         queue.addHandler("TokensCreateFailed", this::handleTokensCreated);
-        queue.addHandler("CustomerReportCreated", this::handleReportCreated);
+        queue.addHandler("CustomerReportSent", this::handleCustomerReportSent);
 
 
         this.service = service;
@@ -52,7 +54,9 @@ public class RabbitMqFacade {
         service.completeTokenCreationRequest(successful, correlationid);
     }
 
-    public void handleReportCreated(Event e) { 
-
+    public void handleCustomerReportSent(Event e) { 
+        var report = e.getArgument(0, List.class);
+        var correlationid = e.getArgument(1, CorrelationId.class);
+        service.completeReportRequest(report, correlationid);
     }
 }

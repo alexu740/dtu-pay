@@ -4,6 +4,7 @@ import boilerplate.Event;
 
 import boilerplate.MessageQueue;
 
+import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 import java.util.concurrent.CompletableFuture;
@@ -12,10 +13,13 @@ import java.util.concurrent.ConcurrentHashMap;
 import adapters.EventPublisher;
 import dto.PaymentDto;
 import dto.RegistrationDto;
+import dto.Report;
 
 public class MerchantFacadeService {
     private EventPublisher publisher;
     private Map<String, CompletableFuture<String>> correlations = new ConcurrentHashMap<>();
+    private Map<String, CompletableFuture<List<Report>>> reportCorrelations = new ConcurrentHashMap<>();
+    
 
     public MerchantFacadeService(EventPublisher publisher) {
         this.publisher = publisher;
@@ -70,8 +74,18 @@ public class MerchantFacadeService {
             promise.complete(eventPayload);
         }
     }
-    
-    public void remove() {
-        //queue.publish(new Event("MerchantRegistrationRequested"))
+
+    public List<Report> getReport(String id) {
+        var correlationId = CorrelationId.randomId();
+		reportCorrelations.put(correlationId.get(), new CompletableFuture<List<Report>>());
+        publisher.emitMerchantReportRequested(id, correlationId);
+        return reportCorrelations.get(correlationId.get()).join();
+    }
+
+    public void completeReportRequest(List<Report> report, CorrelationId correlationId) {
+        var promise = reportCorrelations.get(correlationId.get());
+        if(promise != null) {
+            promise.complete(report);
+        }
     }
 }

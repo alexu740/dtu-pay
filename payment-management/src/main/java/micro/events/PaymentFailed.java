@@ -1,5 +1,6 @@
 package micro.events;
 
+import micro.dto.PaymentDto;
 import micro.service.CorrelationId;
 
 public class PaymentFailed extends DomainEvent {

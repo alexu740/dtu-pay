@@ -8,9 +8,7 @@ import jakarta.ws.rs.Produces;
 import jakarta.ws.rs.Consumes;
 import jakarta.ws.rs.core.MediaType;
 import jakarta.ws.rs.core.Response;
-import boilerplate.implementations.RabbitMqQueue;
 import service.CustomerFacadeService;
-import jakarta.inject.Inject;
 
 import dto.RegistrationDto;
 
@@ -40,6 +38,14 @@ public class CustomerResource {
     public Response createTokens(@PathParam("id") String customerId, @PathParam("tokenNumber") String tokenNumber) {
         return Response.ok(service.createTokens(customerId, tokenNumber)).build();
     }
+    
+    @GET
+    @Produces(MediaType.APPLICATION_JSON)
+    @Path("{id}/reports")
+    public Response payment(@PathParam("id") String id) {
+        var result = service.getReport(id);
+        return Response.ok(result).build();
+    }
 
     @DELETE
     @Produces(MediaType.APPLICATION_JSON)
@@ -51,10 +57,6 @@ public class CustomerResource {
     }
 
     public Response getTokens() {
-        return Response.ok("customer deleted").build();
-    }
-
-    public Response getReports() {
         return Response.ok("customer deleted").build();
     }
 }

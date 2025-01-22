@@ -1,6 +1,7 @@
 package com.rest.start;
 
 import jakarta.ws.rs.DELETE;
+import jakarta.ws.rs.GET;
 import jakarta.ws.rs.POST;
 import jakarta.ws.rs.Path;
 import jakarta.ws.rs.PathParam;
@@ -34,5 +35,12 @@ public class MerchantResource {
     @Path("/{id}")
     public Response unregister(@PathParam("id") String id) {
         return Response.ok(merchantHandler.deleteMerchant(id)).build();
+    }
+
+    @GET
+    @Produces(MediaType.APPLICATION_JSON)
+    @Path("{id}/reports")
+    public Response getCustomerReports(@PathParam("id") String id) {
+        return Response.ok(merchantHandler.getReports(id)).build();
     }
 }

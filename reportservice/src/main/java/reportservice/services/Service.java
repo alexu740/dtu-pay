@@ -1,63 +1,37 @@
 package reportservice.services;
 
-import reportservice.lib.IRepository;
-import reportservice.lib.IService;
 import reportservice.adapters.EventPublisher;
-
-import reportservice.commands.PaymentCommandHandler;
 import reportservice.dto.Payment;
-import reportservice.queries.PaymentQueryHandler;
-import reportservice.repositories.Repository;
-import reportservice.models.CustomerPaymentViewModel;
-import reportservice.models.MerchantPaymentViewModel;
+import reportservice.repositories.ReadModelRepository;
+import reportservice.repositories.ReportRepository;
 
-import java.util.List;
-
-public class Service implements IService {
-    private final PaymentCommandHandler commandHandler;
-    private final PaymentQueryHandler queryHandler;
+public class Service {
     private final EventPublisher publisher;
+    private ReportRepository writeRepo;
+    ReadModelRepository readRepo; 
 
-    public Service(Repository repo, EventPublisher publisher) {
+    public Service(ReportRepository writeRepo, ReadModelRepository readRepo, EventPublisher publisher) {
+        this.writeRepo = writeRepo;
+        this.readRepo = readRepo;
         this.publisher = publisher;
-        this.commandHandler = new PaymentCommandHandler(repo);
-        this.queryHandler = new PaymentQueryHandler(repo);
     }
 
-    @Override
-    public void handlePaymentReceived(CorrelationId correlationId, Payment payment) {
-        try {
-            commandHandler.addPayment(payment);
-            publisher.emitPaymentStorageSucceededEvent(correlationId);
-        } catch (Exception e) {
-            publisher.emitPaymentStorageFailedEvent(correlationId, e);
-        }
+    public void handlePaymentReceived(Payment payment) {
+        this.writeRepo.save(payment);
     }
 
     public void handlePaymentReportRequested(CorrelationId correlationId) {
-        try {
-            List<Payment> payments = queryHandler.getAllPayments(); 
-            publisher.emitPaymentReportSucceededEvent(correlationId, payments);
-        } catch (Exception e) {
-            publisher.emitPaymentReportFailedEvent(correlationId, e);
-        }
+        var managerReport = readRepo.getManagerReport();
+        publisher.emitManagerReportGenerated(managerReport, correlationId);
     }
 
     public void handleMerchantReportRequested(CorrelationId correlationId, String merchantID) {
-        try {
-            List<MerchantPaymentViewModel> payments = queryHandler.getMerchantPayments(merchantID);
-            publisher.emitMerchantReportSucceededEvent(correlationId, payments);
-        } catch (Exception e) {
-            publisher.emitMerchantReportFailedEvent(correlationId, e);
-        }
+        var report = readRepo.getPaymentsByMerchantID(merchantID);
+        publisher.emitMerchantReportGenerated(report, correlationId);
     }
 
     public void handleCustomerReportRequested(CorrelationId correlationId, String customerID) {
-        try {
-            List<CustomerPaymentViewModel> payments = queryHandler.getCustomerPayments(customerID);
-            publisher.emitCustomerReportSucceededEvent(correlationId, payments);
-        } catch (Exception e) {
-            publisher.emitCustomerReportFailedEvent(correlationId, e);
-        }
+        var report = readRepo.getPaymentsByCustomerID(customerID);
+        publisher.emitCustomerReportGenerated(report, correlationId);
     }
 }

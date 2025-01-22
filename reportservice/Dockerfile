@@ -1,4 +1,4 @@
 FROM openjdk:17-jdk-slim
+COPY target/ /app
 WORKDIR /app
-COPY target /app
 CMD ["java", "-jar", "reportservice-1.0.0.jar"]

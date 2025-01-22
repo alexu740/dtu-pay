@@ -2,30 +2,33 @@ package com.rest.start;
 
 import jakarta.inject.Inject;
 import jakarta.ws.rs.POST;
+import jakarta.ws.rs.GET;
 import jakarta.ws.rs.Path;
 import jakarta.ws.rs.Produces;
 import jakarta.ws.rs.Consumes;
 import jakarta.ws.rs.core.MediaType;
 import jakarta.ws.rs.core.Response;
 
+import com.rest.start.Adapters.ManagerFacade;
 import com.rest.start.Adapters.MerchantFacade;
 import com.rest.start.Model.Dto.PaymentDto;
 
 @Path("/payments")
 public class PaymentResource {
     MerchantFacade merchantFacade;
+    ManagerFacade managerFacade;
 
     @Inject
-    public PaymentResource(MerchantFacade merchantFacade) {
+    public PaymentResource(MerchantFacade merchantFacade, ManagerFacade managerFacade) {
         this.merchantFacade = merchantFacade;
+        this.managerFacade = managerFacade;
     }
 
-    /*
     @GET
     @Produces(MediaType.APPLICATION_JSON)
     public Response listPayments(String paymentString) {
-        return Response.status(Response.Status.OK).entity(payService.getAllPayments()).build();
-    } */
+        return Response.status(Response.Status.OK).entity(managerFacade.getManagerReport()).build();
+    } 
 
     @POST
     @Consumes(MediaType.APPLICATION_JSON)

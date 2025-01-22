@@ -1,11 +1,14 @@
 package com.rest.start.Adapters;
 
+import java.util.List;
+
 import com.rest.start.Model.Dto.*;
 import jakarta.enterprise.context.ApplicationScoped;
 
 import jakarta.ws.rs.client.Client;
 import jakarta.ws.rs.client.ClientBuilder;
 import jakarta.ws.rs.core.Response;
+import com.rest.start.Model.valueobjects.CustomerReport;
 import jakarta.ws.rs.client.Entity;
 import jakarta.ws.rs.client.WebTarget;
 import jakarta.ws.rs.core.MediaType;
@@ -43,5 +46,12 @@ public class CustomerFacade {
         WebTarget target = client.target("http://customer-facade:8088/customers/"+customerId+"/tokens/" + tokenNumber);
         Response response = target.request().post(Entity.entity("", MediaType.APPLICATION_JSON));
         return response.readEntity(String.class);
+    }
+
+    public List<CustomerReport> getReports(String customerId) {
+        Client client = ClientBuilder.newClient();
+        WebTarget target = client.target("http://customer-facade:8088/customers/"+customerId+"/reports/");
+        Response response = target.request().get();
+        return response.readEntity(List.class);
     }
 }

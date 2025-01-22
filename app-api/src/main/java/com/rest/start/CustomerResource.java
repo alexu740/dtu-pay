@@ -29,6 +29,13 @@ public class CustomerResource {
         return Response.ok(customerHandler.getCustomer(id)).build();
     }
 
+    @GET
+    @Produces(MediaType.APPLICATION_JSON)
+    @Path("{id}/reports")
+    public Response getCustomerReports(@PathParam("id") String id) {
+        return Response.ok(customerHandler.getReports(id)).build();
+    }
+
     @POST
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)

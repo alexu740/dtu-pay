@@ -9,6 +9,7 @@ import micro.events.PaymentInitialised;
 import micro.events.PaymentResolved;
 import micro.events.PaymentSucceeded;
 import micro.events.PaymentTokenValidated;
+import micro.dto.PaymentDto;
 import micro.events.DomainEvent;
 import micro.events.PaymentFailed;
 import micro.service.CorrelationId;
@@ -128,8 +129,15 @@ public class Payment {
 	}
 
 	public void markAsCompleted(boolean successful, CorrelationId correlationId) {
+		PaymentDto dto = new PaymentDto();
+		dto.setPaymentId(transactionId);
+		dto.setAmount(amount);
+		dto.setCustomerId(customerId);
+		dto.setMerchantId(merchantId);
+		dto.setToken(token);
+
 		if(successful) {
-			var event = new PaymentSucceeded(this.getTransactionId(), correlationId);
+			var event = new PaymentSucceeded(this.getTransactionId(), dto, correlationId);
 			this.apply(event);
 			this.appliedEvents.add(event);
 		} 

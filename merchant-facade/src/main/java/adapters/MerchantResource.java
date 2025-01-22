@@ -41,4 +41,12 @@ public class MerchantResource {
         var result = service.initialisePayment(dto);
         return Response.ok(result).build();
     }
+
+    @GET
+    @Produces(MediaType.APPLICATION_JSON)
+    @Path("{id}/reports")
+    public Response payment(@PathParam("id") String id) {
+        var result = service.getReport(id);
+        return Response.ok(result).build();
+    }
 }

@@ -1,8 +1,8 @@
 package reportservice.adapters;
 
-import reportservice.dto.Payment;
-import reportservice.models.CustomerPaymentViewModel;
-import reportservice.models.MerchantPaymentViewModel;
+import reportservice.repositories.valueobjects.CustomerReport;
+import reportservice.repositories.valueobjects.ManagerReport;
+import reportservice.repositories.valueobjects.MerchantReport;
 import reportservice.services.CorrelationId;
 
 import java.util.List;
@@ -16,45 +16,21 @@ public class RabbitMqEventPublisher implements EventPublisher {
         this.queue = queue;
     }
 
-    public void emitPaymentStorageSucceededEvent(CorrelationId correlationId) {
-        Event ev = new Event("payment.storage.succeeded", new Object[] { correlationId });
-        queue.publish(ev);
+    @Override
+    public void emitManagerReportGenerated(List<ManagerReport> report, CorrelationId correlationId) {
+        Event ev = new Event("ManagerReportSent", new Object[] { report, correlationId });
+        this.queue.publish(ev);
     }
 
-    public void emitPaymentStorageFailedEvent(CorrelationId correlationId,Exception e) {
-        Event ev = new Event("payment.storage.failed", new Object[] { correlationId,e });
-        queue.publish(ev);
+    @Override
+    public void emitMerchantReportGenerated(List<MerchantReport> report, CorrelationId correlationId) {
+        Event ev = new Event("MerchantReportSent", new Object[] { report, correlationId });
+        this.queue.publish(ev);
+    } 
+
+    @Override
+    public void emitCustomerReportGenerated(List<CustomerReport> report, CorrelationId correlationId) {
+        Event ev = new Event("CustomerReportSent", new Object[] { report, correlationId });
+        this.queue.publish(ev);
     }
-
-    public void emitPaymentReportSucceededEvent(CorrelationId correlationId,List<Payment> payments) {
-        Event  ev = new Event("payments.report.succeeded", new Object[] { correlationId, payments });
-        queue.publish(ev);
-    }
-
-    public void emitPaymentReportFailedEvent(CorrelationId correlationId,Exception e) {
-        Event ev = new Event("payments.report.failed", new Object[] { correlationId,e });
-        queue.publish(ev);
-    }
-    public void emitMerchantReportSucceededEvent(CorrelationId correlationId,List<MerchantPaymentViewModel> payments) {
-        Event  ev = new Event("payments.report.succeeded", new Object[] { correlationId, payments });
-        queue.publish(ev);
-    }
-    public void emitMerchantReportFailedEvent(CorrelationId correlationId,Exception e) {
-        Event  ev = new Event("payments.report.failed", new Object[] { correlationId, e });
-        queue.publish(ev);
-    }
-    public void emitCustomerReportSucceededEvent(CorrelationId correlationId,List<CustomerPaymentViewModel> payments) {
-        Event  ev = new Event("payments.report.succeeded", new Object[] { correlationId, payments });
-        queue.publish(ev);
-    }
-    public void emitCustomerReportFailedEvent(CorrelationId correlationId,Exception e) {
-        Event  ev = new Event("payments.report.failed", new Object[] { correlationId, e });
-        queue.publish(ev);
-    }
-
-
-
-
-
-
 }

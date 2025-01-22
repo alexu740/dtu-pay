@@ -16,9 +16,11 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.UUID;
+import java.util.stream.Collectors;
 
 import com.dtu.pay.Model.Customer;
 import com.dtu.pay.Model.Merchant;
+import com.dtu.pay.Model.Dto.CustomerReport;
 import com.dtu.pay.Model.Dto.CustomerTokensResponseDto;
 import com.dtu.pay.Service.MobileAppApiHelper;
 
@@ -166,6 +168,40 @@ public class PaymentSteps {
 			assertTrue(false);
 		}
 	}
+
+    @And("the payment is in the customer report, containing the used token, the amount of {int} kr and the merchant reference")
+    public void theCustomerReportIsGenerated(Integer amount) {
+        var report = appApi.getCustomerReport(userIds.get(customer.getFirstName()));
+        assertEquals(report.size(), 1);
+        
+        var reportTransaction = report.get(0);
+        assertEquals(reportTransaction.getAmount(), amount.intValue());
+        assertEquals(reportTransaction.getMerchantId(), userIds.get(merchant.getFirstName()));
+        assertEquals(reportTransaction.getUsedToken(), tokens.get(customer.getFirstName()));
+    }
+
+    @And("the payment is in the merchant report, containing the used token and the amount of {int} kr")
+    public void theMerchantReportIsGenerated(Integer amount) {
+        var report = appApi.getMerchantReport(userIds.get(merchant.getFirstName()));
+        assertEquals(report.size(), 1);
+        var reportTransaction = report.get(0);
+
+        assertEquals(reportTransaction.getAmount(), amount.intValue());
+        assertEquals(reportTransaction.getUsedToken(), tokens.get(customer.getFirstName()));
+    }
+
+    @And("the payment is in the manager report, containing the used token and the amount of {int} kr, as well as the customer and merchant references")
+    public void theManagerReportIsGenerated(Integer amount) {
+        var reports = appApi.getManagerReport();
+        var reportTransaction = reports.stream()
+                .filter(report -> (report.getAmount() == amount) 
+                                && (report.getCustomerId().equals(userIds.get(customer.getFirstName())))
+                                && (report.getMerchantId().equals(userIds.get(merchant.getFirstName())))
+                                && (report.getTokenUsed().equals(tokens.get(customer.getFirstName())))
+                                )
+                .collect(Collectors.toList());
+        assertEquals(1, reportTransaction.size());
+    }
 
     public String registerBankAccount(String firstName, String lastName, String cpr, int intialBalance) throws BankServiceException_Exception {
 		User user = new User();

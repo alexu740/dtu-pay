@@ -1,28 +1,35 @@
 package reportservice.dto;
 
 public class Payment {
-    private String customerID;
-    private String customerToken;
-    private String merchantID;
+    private String paymentId;
+    private String customerId;
+    private String token;
+    private String merchantId;
     private int amount;
     
-    public String getCustomerID() {
-        return this.customerID;
+    public String getPaymentId() {
+        return paymentId;
     }
-    public void setCustomerID(String customerID) {
-        this.customerToken = customerID;
+    public void setPaymentId(String paymentId) {
+        this.paymentId = paymentId;
+    }
+    public String getCustomerId() {
+        return this.customerId;
+    }
+    public void setCustomerId(String customerId) {
+        this.token = customerId;
     }
     public String getCustomerToken() {
-        return this.customerToken;
+        return this.token;
     }
     public void setCustomerToken(String customerToken) {
-        this.customerToken = customerToken;
+        this.token = customerToken;
     }
-    public String getMerchantID() {
-        return this.merchantID;
+    public String getMerchantId() {
+        return this.merchantId;
     }
-    public void setMerchantID(String merchantID) {
-        this.merchantID = merchantID;
+    public void setMerchantId(String merchantId) {
+        this.merchantId = merchantId;
     }
     public int getAmount() {
         return this.amount;

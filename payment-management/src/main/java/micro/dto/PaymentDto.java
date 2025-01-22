@@ -1,10 +1,18 @@
 package micro.dto;
 
 public class PaymentDto {
+    private String paymentId;
     private String customerId;
     private String merchantId;
     private String token;
     private int amount;
+
+    public String getPaymentId() {
+        return paymentId;
+    }
+    public void setPaymentId(String paymentId) {
+        this.paymentId = paymentId;
+    }
     public String getCustomerId() {
         return customerId;
     }

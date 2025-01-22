@@ -4,7 +4,9 @@ set -e
 
 docker compose down
 docker image prune --force
+docker compose build
 
 docker compose up -d rabbitMq
 sleep 20
-docker compose up app-api customer-facade merchant-facade account-management payment-management token-service repostservice
+
+docker compose up app-api customer-facade merchant-facade manager-facade account-management payment-management token-service repostservice

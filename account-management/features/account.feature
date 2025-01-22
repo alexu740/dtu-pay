@@ -16,4 +16,3 @@ Scenario: Customer Retrieval
     Given a "CustomerRetrievalRequested" query event is received
     Then a AccountGetQuery query is sent in case the requested account is of customer type and an event of type "CustomerRetrieved" is raised
 
-    

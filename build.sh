@@ -22,6 +22,7 @@ declare -a dirs=(
   "app-api"
   "customer-facade"
   "merchant-facade"
+  "manager-facade"
   "payment-management"
   "tokenservice"
   "reportservice"
