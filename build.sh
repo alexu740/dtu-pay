@@ -1,4 +1,16 @@
-set -e
+#!/bin/bash
+
+set -e 
+
+error_handler() {
+  local exit_code=$?  # Capture the exit code of the last command
+  echo -e "\nError: An error occurred during the build process."
+  echo "Exit code: $exit_code"
+  echo "Last command: $BASH_COMMAND"
+  exit 1
+}
+
+trap 'error_handler' ERR
 
 cd "messaging-utilities"
 mvn clean install
@@ -32,7 +44,7 @@ show_progress() {
 
 current=0
 for dir in "${dirs[@]}"; do
-  ((current++))
+  current=$((current + 1))
   
   show_progress "$current" "$total"
 
