@@ -52,6 +52,24 @@ public class MerchantFacadeService {
             promise.complete(success ? "successful" : "failed");
         }
     }
+
+    public String deregister(String id) {
+
+        var correlationId = CorrelationId.randomId();
+        correlationsWithStringReturn.put(correlationId.get(), new CompletableFuture<String>());
+        publisher.emitUnregisterUserEvent(id, correlationId);
+
+        return correlationsWithStringReturn.get(correlationId.get()).join();
+    }
+
+    public void completeDeregisteration(String eventPayload, CorrelationId correlationId, boolean isSuccessful) {
+        System.out.println(correlationId.get());
+        System.out.println(eventPayload);
+        var promise = correlationsWithStringReturn.get(correlationId.get());
+        if(promise != null) {
+            promise.complete(eventPayload);
+        }
+    }
     
     public void remove() {
         //queue.publish(new Event("MerchantRegistrationRequested"))

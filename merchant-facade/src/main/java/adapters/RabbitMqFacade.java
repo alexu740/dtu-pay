@@ -25,7 +25,9 @@ public class RabbitMqFacade {
     }
     
     public void handleAccountDeregistred(Event e) {
-
+        var eventPayload = e.getArgument(0, String.class);
+        var correlationid = e.getArgument(1, CorrelationId.class);
+        service.completeDeregisteration(eventPayload, correlationid, true);
     }
 
     private void handlePaymentSucceeded(Event e) {

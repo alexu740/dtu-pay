@@ -32,4 +32,9 @@ public class RabbitMqEventPublisher implements EventPublisher {
         Event event = new Event("MerchantReportRequested", new Object[] { merchantId, correlationId });
         queue.publish(event);
     }
+
+    public void emitUnregisterUserEvent(String customerId, CorrelationId correlationId) {
+        Event event = new Event("handleMerchantDeregistration", new Object[] { customerId, correlationId });
+        queue.publish(event);
+    }
 }
