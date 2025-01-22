@@ -6,14 +6,14 @@ services:
      - "5672:5672"
      - "15672:15672"
   app-api:
-    build: ./app-api
+    build: 
+      context: ./app-api
     ports:
       - "8080:8080"
     restart: always
   customer-facade:
     build:
-      context: .
-      dockerfile: customer-facade/Dockerfile
+      context: ./customer-facade
     ports:
       - "8088:8088"
     restart: always
@@ -21,30 +21,33 @@ services:
       - rabbitMq
   merchant-facade:
     build:
-      context: .
-      dockerfile: merchant-facade/Dockerfile
+      context: ./merchant-facade
     ports:
       - "8089:8089"
     restart: always
     depends_on:
       - rabbitMq
   account-management:
-    build: ./account-management
+    build:
+      context: ./account-management
     restart: always
     depends_on:
      - rabbitMq
   payment-management:
-    build: ./payment-management
+    build:
+      context: ./payment-management
     restart: always
     depends_on:
      - rabbitMq
   token-service:
-    build: ./tokenservice
+    build:
+      context: ./tokenservice
     restart: always
     depends_on:
      - rabbitMq
   repostservice:
-    build: ./reportservice
+    build:
+      context: ./reportservice
     restart: always
     depends_on:
       - rabbitMq
