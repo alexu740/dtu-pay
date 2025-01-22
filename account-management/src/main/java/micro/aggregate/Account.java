@@ -13,8 +13,10 @@ import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 import micro.events.AccountRegistered;
+import micro.events.AccountDeregistered;
 import micro.events.DomainEvent;
 import micro.service.CorrelationId;
+import micro.aggregate.AccountId;
 
 public class Account {
 	private AccountId accountid;
@@ -70,6 +72,16 @@ public class Account {
 		this.accountid = event.getAccountId();
 		this.ownerDetails = new AccountOwnerDetails(event.firstName, event.lastName, event.cpr);
 		this.financialDetails = new AccountFinancialDetails(event.bankAccount, null);
+	}
+
+	public static AccountDeregistered delete(String accountIdIn, CorrelationId correlationId) {
+
+		UUID uuid = UUID.fromString(accountIdIn);
+		AccountId accountId = new AccountId(uuid);
+
+		var event = new AccountDeregistered(accountId, correlationId);
+
+		return event;
 	}
 
 	public void clearAppliedEvents() {

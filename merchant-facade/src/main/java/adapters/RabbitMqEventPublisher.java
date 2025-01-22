@@ -32,4 +32,5 @@ public class RabbitMqEventPublisher implements EventPublisher {
         Event event = new Event("MerchantReportRequested", new Object[] { merchantId, correlationId });
         queue.publish(event);
     }
+
 }

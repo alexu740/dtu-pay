@@ -10,6 +10,7 @@ import micro.commands.AccountTokenCreationCommand;
 import micro.exception.BusinessValidationException;
 import micro.repositories.AccountReadModelRepository;
 import micro.repositories.AccountRepository;
+import micro.events.AccountDeregistered;
 
 public class AccountManagementService {
 	private AccountRepository repository;
@@ -76,6 +77,10 @@ public class AccountManagementService {
 	}
 
 	public void handleDeleteAccount(AccountDeletionCommand command, CorrelationId correlationId) {
+
+		System.out.println("Deleting new account object");
+		AccountDeregistered event = CustomerAccount.delete(command.getAccountId(), correlationId);
+		this.repository.delete(event);
 
 	}
 }

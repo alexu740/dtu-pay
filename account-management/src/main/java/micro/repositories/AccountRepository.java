@@ -3,6 +3,7 @@ package micro.repositories;
 import boilerplate.MessageQueue;
 import micro.aggregate.Account;
 import micro.aggregate.CustomerAccount;
+import micro.events.AccountDeregistered;
 
 public class AccountRepository {
 	
@@ -19,5 +20,9 @@ public class AccountRepository {
 	public void save(Account account) {
 		eventStore.addEvents(account.getAccountid().getUuid().toString(), account.getAppliedEvents());
 		account.clearAppliedEvents();
+	}
+
+	public void delete(AccountDeregistered ev) {
+		eventStore.addEvent(ev);
 	}
 }
