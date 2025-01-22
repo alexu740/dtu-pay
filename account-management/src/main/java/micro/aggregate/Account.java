@@ -74,14 +74,9 @@ public class Account {
 		this.financialDetails = new AccountFinancialDetails(event.bankAccount, null);
 	}
 
-	public static AccountDeregistered delete(String accountIdIn, CorrelationId correlationId) {
-
-		UUID uuid = UUID.fromString(accountIdIn);
-		AccountId accountId = new AccountId(uuid);
-
-		var event = new AccountDeregistered(accountId, correlationId);
-
-		return event;
+	public void delete(CorrelationId correlationId) {
+		var event = new AccountDeregistered(this.getAccountid(), correlationId);
+		appliedEvents.add(event);
 	}
 
 	public void clearAppliedEvents() {

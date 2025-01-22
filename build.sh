@@ -1,7 +1,11 @@
 set -e
 
+cd "messaging-utilities"
+mvn clean install
+mvn clean package
+cd ..
+
 declare -a dirs=(
-  "messaging-utilities"
   "account-management"
   "app-api"
   "customer-facade"
