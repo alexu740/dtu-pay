@@ -77,7 +77,9 @@ public class AccountManagementService {
 
 	public void handleDeleteAccount(AccountDeletionCommand command, CorrelationId correlationId) {
 
-
+		System.out.println("Deleting new account object");
+		AccountDeregistered event = CustomerAccount.delete(command.getAccountId(), correlationId);
+		this.repository.save(event);
 
 	}
 }

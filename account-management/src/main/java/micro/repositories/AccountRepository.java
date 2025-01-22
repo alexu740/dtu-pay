@@ -20,4 +20,8 @@ public class AccountRepository {
 		eventStore.addEvents(account.getAccountid().getUuid().toString(), account.getAppliedEvents());
 		account.clearAppliedEvents();
 	}
+
+	public void delete(String accountId,AccountDeregistered ev) {
+		eventStore.addEvent(accountId, ev);
+	}
 }
