@@ -52,20 +52,6 @@
 			<version>5.8.0-RC1</version>
 			<scope>test</scope>
 		</dependency>
-		<!--  These two dependencies allow to run JUnit 4 tests and Cucumber
-		tests. -->
-		<dependency>
-			<groupId>org.junit.vintage</groupId>
-			<artifactId>junit-vintage-engine</artifactId>
-			<version>5.8.0-RC1</version>
-			<scope>test</scope>
-		</dependency>
-		<dependency>
-			<groupId>org.junit.platform</groupId>
-			<artifactId>junit-platform-runner</artifactId>
-			<version>1.8.0-RC1</version>
-			<scope>test</scope>
-		</dependency>
 
 <!-- https://mvnrepository.com/artifact/com.rabbitmq/amqp-client -->
 		<dependency>
@@ -80,13 +66,6 @@
 			<version>2.11.0</version>
 		</dependency>
 
-		<!-- This is JUnit 5 aka Jupiter -->
-		<dependency>
-			<groupId>org.junit.jupiter</groupId>
-			<artifactId>junit-jupiter-engine</artifactId>
-			<version>5.7.0</version>
-			<scope>test</scope>
-		</dependency>
 		<!-- This is needed to provide the @Cucumber annotation needed for Cucumber 
 			scenarios to run with the JUnit 5 test runner. -->
 		<dependency>
