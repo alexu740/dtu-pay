@@ -18,8 +18,6 @@ import io.cucumber.java.en.When;
 import tokenservice.adapters.EventPublisher;
 import tokenservice.adapters.RabbitMqEventPublisher;
 import tokenservice.adapters.RabbitMqFacade;
-import tokenservice.impl.Repository;
-import tokenservice.lib.IRepository;
 import tokenservice.repositories.TokenRepository;
 import tokenservice.service.CorrelationId;
 import tokenservice.service.TokenService;

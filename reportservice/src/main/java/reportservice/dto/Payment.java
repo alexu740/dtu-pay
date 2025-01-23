@@ -17,7 +17,7 @@ public class Payment {
         return this.customerId;
     }
     public void setCustomerId(String customerId) {
-        this.token = customerId;
+        this.customerId = customerId;
     }
     public String getCustomerToken() {
         return this.token;
