@@ -5,6 +5,7 @@ import boilerplate.Event;
 
 import micro.commands.AccountCreationCommand;
 import micro.commands.AccountDeletionCommand;
+import micro.commands.AccountHasTokenQuery;
 import micro.commands.AccountTokenCreationCommand;
 
 import micro.commands.CommandFactory;
@@ -75,12 +76,10 @@ public class RabbitMqFacade {
   }
 
   public void handleCustomerHasTokenCheckRequested(Event e) {
-    var customerId = e.getArgument(0, String.class);
-    var token = e.getArgument(1, String.class);
     var correlationId = e.getArgument(2, CorrelationId.class);
-    var transactionId = e.getArgument(3, String.class);
     
-    service.handleCheckTokenPresent(customerId, token, correlationId, transactionId);
+    AccountHasTokenQuery query = QueryFactory.createAccountHasTokenQuery(e);
+    service.handleCheckTokenPresent(query, correlationId);
   }
 
   public void handlePaymentInformationResolutionRequested(Event e) {

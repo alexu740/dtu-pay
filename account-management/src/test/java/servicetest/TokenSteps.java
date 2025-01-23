@@ -5,6 +5,8 @@ import static org.mockito.ArgumentMatchers.argThat;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -24,8 +26,10 @@ import micro.aggregate.Account;
 import micro.aggregate.AccountId;
 import micro.aggregate.CustomerAccount;
 import micro.commands.AccountDeletionCommand;
+import micro.commands.AccountHasTokenQuery;
 import micro.commands.AccountTokenCreationCommand;
 import micro.commands.CommandFactory;
+import micro.commands.QueryFactory;
 import micro.events.AccountRegistered;
 import micro.events.TokenAdded;
 import micro.repositories.AccountReadModelRepository;
@@ -157,4 +161,167 @@ public class TokenSteps {
         verify(mockedQueue).publish(argThat(event -> event.getType().equals("TokensCreated")));
     }
 
+    @Given("a {string} lookup event is received")
+    public void tokenPresentEventEmitted(String eventName) {
+        event = new Event(eventName, new Object[] { "a494ac5e-7a34-4a1d-ae9b-68c25d4e189d", "a494ac5e-7a34-4a1d-ae9b-68c25d4e189d", correlationId, "a494ac5e-7a34-4a1d-ae9b-68c25d4e189d" });
+        queue.publish(event);
+    }
+
+    @Then("a {string} query is sent to the service")
+    public void tokenIsPresentCommand(String commandName) {
+        verify(mockedService).handleCheckTokenPresent(any(AccountHasTokenQuery.class), any(CorrelationId.class));
+    }
+
+    @And("if an account does not exist, a CustomerHasTokenChecked is emitted with value false")
+    public void tokenNotPresent() {
+        accountRepository = new AccountRepository(queue);
+        readModelRepository = new AccountReadModelRepository(queue);
+        eventPublisher = new RabbitMqEventPublisher(mockedQueue);
+        
+        service = new AccountManagementService(accountRepository, readModelRepository, eventPublisher);
+
+        service.handleCheckTokenPresent(QueryFactory.createAccountHasTokenQuery(event), correlationId);
+        verify(mockedQueue).publish(argThat(event -> event.getType().equals("CustomerHasTokenChecked") && event.getArgument(2, String.class).equals("false")));
+    }
+
+    @And("if an account has token, a CustomerHasTokenChecked is emitted with value true")
+    public void tokenPresent() {
+        accountRepository = new AccountRepository(queue);
+        readModelRepository = new AccountReadModelRepository(queue);
+        eventPublisher = new RabbitMqEventPublisher(mockedQueue);
+        
+        service = new AccountManagementService(accountRepository, readModelRepository, eventPublisher);
+
+        var acc = CustomerAccount.create("test", "test", "test", "test", correlationId);
+        acc.getAppliedEvents().add(new TokenAdded(acc.getAccountid(), "a494ac5e-7a34-4a1d-ae9b-68c25d4e189d"));
+        accountRepository.save(acc);
+
+        event = new Event("", new Object[] { acc.getAccountid().getUuid().toString(), "a494ac5e-7a34-4a1d-ae9b-68c25d4e189d", correlationId, "a494ac5e-7a34-4a1d-ae9b-68c25d4e189d" });
+        service.handleCheckTokenPresent(QueryFactory.createAccountHasTokenQuery(event), correlationId);
+        verify(mockedQueue).publish(argThat(event -> event.getType().equals("CustomerHasTokenChecked") && event.getArgument(2, String.class).equals("true")));
+    }
+
+
+
+
+    @Given("a PaymentInformationResolutionRequested event is received")
+    public void aResolutionRequested() {
+        event = new Event("PaymentInformationResolutionRequested", new Object[] { "a494ac5e-7a34-4a1d-ae9b-68c25d4e189d", "a494ac5e-7a34-4a1d-ae9b-68c25d4e189d", "a494ac5e-7a34-4a1d-ae9b-68c25d4e189d", correlationId });
+        queue.publish(event);
+    }
+
+    @Then("the handlePaymentInformationResolutionQuery is called on the service")
+    public void theResolutionQueryIsCalled() {
+        verify(mockedService).handlePaymentInformationResolutionQuery(any(String.class), any(String.class), any(String.class), any(CorrelationId.class));
+    }
+
+    @And("the payment information is resolved")
+    public void positiveResolution(){
+        accountRepository = new AccountRepository(queue);
+        readModelRepository = new AccountReadModelRepository(queue);
+        eventPublisher = new RabbitMqEventPublisher(mockedQueue);
+        
+        service = new AccountManagementService(accountRepository, readModelRepository, eventPublisher);
+
+        var customer = CustomerAccount.create("test", "test", "test", "customerAccount", correlationId);
+        var merchant = Account.create("test", "test", "test", "merchantAccount", false, correlationId);
+
+        accountRepository.save(customer);
+        accountRepository.save(merchant);
+        service.handlePaymentInformationResolutionQuery("transaction", customer.getAccountid().getUuid().toString(), merchant.getAccountid().getUuid().toString(), correlationId);
+
+        verify(mockedQueue).publish(argThat(event -> event.getType().equals("PaymentInformationResolved") 
+        && event.getArgument(1, String.class).equals("customerAccount")
+        && event.getArgument(2, String.class).equals("merchantAccount") ));
+    }
+
+    @And("the payment information is not resolved")
+    public void negativeResolution(){
+        accountRepository = new AccountRepository(queue);
+        readModelRepository = new AccountReadModelRepository(queue);
+        eventPublisher = new RabbitMqEventPublisher(mockedQueue);
+        
+        service = new AccountManagementService(accountRepository, readModelRepository, eventPublisher);
+
+        var customer = CustomerAccount.create("test", "test", "test", "customerAccount", correlationId);
+        var merchant = Account.create("test", "test", "test", "merchantAccount", false, correlationId);
+
+        service.handlePaymentInformationResolutionQuery("transaction", customer.getAccountid().getUuid().toString(), merchant.getAccountid().getUuid().toString(), correlationId);
+
+        verify(mockedQueue).publish(argThat(event -> event.getType().equals("PaymentInformationResolved") 
+        && event.getArgument(1, String.class) == null
+        && event.getArgument(2, String.class) == null ));
+    }
+
+
+
+
+
+    @Given("a TokenUsed event is received")
+    public void tokenUserEventIsReceived() {
+        event = new Event("TokenUsed", new Object[] { "a494ac5e-7a34-4a1d-ae9b-68c25d4e189d", "a494ac5e-7a34-4a1d-ae9b-68c25d4e189d" });
+        queue.publish(event);
+    }
+
+    @Then("an account update command is run")
+    public void updateTokenUsedCommand() {
+        verify(mockedService).handleTokenUserCommand(any(String.class), any(String.class));
+    }
+
+    @And("the used token is removed from the customer")
+    public void tokenRemovedFromList() {
+        accountRepository = new AccountRepository(queue);
+        readModelRepository = new AccountReadModelRepository(queue);
+        eventPublisher = new RabbitMqEventPublisher(mockedQueue);
+        
+        service = new AccountManagementService(accountRepository, readModelRepository, eventPublisher);
+
+        var customer = CustomerAccount.create("test", "test", "test", "customerAccount", correlationId);
+        customer.getAppliedEvents().add(new TokenAdded(customer.getAccountid(), "a494ac5e-7a34-4a1d-ae9b-68c25d4e189d"));
+
+        accountRepository.save(customer);
+        
+        service.handleTokenUserCommand(customer.getAccountid().getUuid().toString(),"a494ac5e-7a34-4a1d-ae9b-68c25d4e189d");
+
+        var updatedCustomer = accountRepository.getById(customer.getAccountid().getUuid().toString());
+
+        assertEquals(0, ((CustomerAccount) updatedCustomer).getTokens().size());
+    }
+
+    @And("a token that is not present cannot be deleted")
+    public void tokenNotExistingFromList() {
+        accountRepository = new AccountRepository(queue);
+        readModelRepository = new AccountReadModelRepository(queue);
+        eventPublisher = new RabbitMqEventPublisher(mockedQueue);
+        
+        service = new AccountManagementService(accountRepository, readModelRepository, eventPublisher);
+
+        var customer = CustomerAccount.create("test", "test", "test", "customerAccount", correlationId);
+        customer.getAppliedEvents().add(new TokenAdded(customer.getAccountid(), "a494ac5e-7a34-4a1d-ae9b-68c25d4e189d"));
+
+        accountRepository.save(customer);
+        
+        service.handleTokenUserCommand(customer.getAccountid().getUuid().toString(),"non-existing token");
+
+        var updatedCustomer = accountRepository.getById(customer.getAccountid().getUuid().toString());
+
+        assertEquals(1, ((CustomerAccount) updatedCustomer).getTokens().size());
+    }
+
+    @And("nothing happens when deleting a token on a merchant account")
+    public void cannotDeleteTokensOnMerchantAccount() {
+        accountRepository = new AccountRepository(queue);
+        readModelRepository = new AccountReadModelRepository(queue);
+        eventPublisher = new RabbitMqEventPublisher(mockedQueue);
+        
+        service = new AccountManagementService(accountRepository, readModelRepository, eventPublisher);
+
+        var merchant = Account.create("test", "test", "test", "customerAccount", false, correlationId);
+        
+        accountRepository.save(merchant);
+        
+        service.handleTokenUserCommand(merchant.getAccountid().getUuid().toString(),"non-existing token");
+
+        assertTrue(true);
+    }
 }

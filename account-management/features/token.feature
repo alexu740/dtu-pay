@@ -19,3 +19,33 @@ Scenario: Generation of 6 tokens
 Scenario: Successful generation
     Thentoken creation succeedes when adding between 1 and 5 tokens to a user with 0 or 1 existing tokens
     
+Scenario: Token present check fail
+    Given a "CustomerHasTokenCheckRequested" lookup event is received
+    Then a "handleCheckTokenPresent" query is sent to the service
+    And if an account does not exist, a CustomerHasTokenChecked is emitted with value false
+
+Scenario: Token present check succeeded
+    Given a "CustomerHasTokenCheckRequested" lookup event is received
+    Then a "handleCheckTokenPresent" query is sent to the service
+    And if an account has token, a CustomerHasTokenChecked is emitted with value true
+
+Scenario: Pay information resolved
+    Given a PaymentInformationResolutionRequested event is received
+    Then the handlePaymentInformationResolutionQuery is called on the service
+    And the payment information is resolved
+
+Scenario: Pay information not resolved
+    Given a PaymentInformationResolutionRequested event is received
+    Then the handlePaymentInformationResolutionQuery is called on the service
+    And the payment information is not resolved
+
+Scenario: A used token is removed from the customer
+    Given a TokenUsed event is received
+    Then an account update command is run
+    And the used token is removed from the customer
+
+Scenario: Removal of nonexisting token has no effect on token list
+    Given a TokenUsed event is received
+    Then an account update command is run
+    And a token that is not present cannot be deleted
+    And nothing happens when deleting a token on a merchant account

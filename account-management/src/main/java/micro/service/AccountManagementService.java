@@ -6,6 +6,7 @@ import micro.aggregate.CustomerAccount;
 import micro.commands.AccountCreationCommand;
 import micro.commands.AccountDeletionCommand;
 import micro.commands.AccountGetQuery;
+import micro.commands.AccountHasTokenQuery;
 import micro.commands.AccountTokenCreationCommand;
 import micro.exception.BusinessValidationException;
 import micro.repositories.AccountReadModelRepository;
@@ -59,8 +60,9 @@ public class AccountManagementService {
 		}
 	}
 
-	public void handleCheckTokenPresent(String accountId, String token, CorrelationId correlationId, String transactionId) {
-		publisher.emitCheckTokenPresent(accountId, token, readRepository.tokenIsPresent(accountId, token), correlationId, transactionId);
+	public void handleCheckTokenPresent(AccountHasTokenQuery query, CorrelationId correlationId) {
+		var tokenIsPresent = readRepository.tokenIsPresent(query.getCustomerId(), query.getToken());
+		publisher.emitCheckTokenPresent(query.getCustomerId(), query.getToken(), tokenIsPresent, correlationId, query.getTransactionId());
 	}
 
 	public void handlePaymentInformationResolutionQuery(String transactionId, String customerId, String merchantId, CorrelationId correlationId) {
