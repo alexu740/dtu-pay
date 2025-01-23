@@ -4,6 +4,7 @@ import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.argThat;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
 
 import java.util.UUID;
 
@@ -20,7 +21,11 @@ import io.cucumber.java.en.And;
 import micro.adapters.EventPublisher;
 import micro.adapters.RabbitMqEventPublisher;
 import micro.adapters.RabbitMqFacade;
+import micro.aggregate.Account;
+import micro.aggregate.AccountId;
+import micro.aggregate.CustomerAccount;
 import micro.commands.AccountCreationCommand;
+import micro.commands.AccountDeletionCommand;
 import micro.commands.AccountGetQuery;
 import micro.commands.CommandFactory;
 import micro.commands.QueryFactory;
@@ -46,6 +51,8 @@ public class AccountSteps {
     CorrelationId correlationId;
     Event event; 
 
+    AccountId accountId;
+    
     @Before
     public void setUp() {
         mockedQueue = mock(MessageQueue.class);
@@ -114,5 +121,44 @@ public class AccountSteps {
         service.handleGetAccount(query, correlationId);
         verify(readModelRepository).getCustomerTokens(query);
         verify(mockedQueue).publish(argThat(event -> event.getType().equals(eventName)));
+    }
+
+
+
+
+
+    @Given("a {string} deregistration event is received")
+    public void aDeregEventIsReceived(String eventName) {
+        event = new Event(eventName, new Object[] { "123", correlationId });
+        queue.publish(event);
+    }
+
+    @Then("a deletion command is sent for customer")
+    public void aDeletionCommandIsSent() {
+        verify(mockedService).handleDeleteAccount(any(AccountDeletionCommand.class), any(CorrelationId.class));
+
+        accountRepository = mock(AccountRepository.class);
+        when(accountRepository.getById("123")).thenReturn(CustomerAccount.create("test", "test", "test", "test", correlationId));
+        service = new AccountManagementService(accountRepository, readModelRepository, eventPublisher);
+
+        AccountDeletionCommand command = new AccountDeletionCommand("123");
+        service.handleDeleteAccount(command, correlationId);
+    }
+
+    @Then("a deletion command is sent for merchant")
+    public void aDeletionCommandIsSentForMerchant() {
+        verify(mockedService).handleDeleteAccount(any(AccountDeletionCommand.class), any(CorrelationId.class));
+
+        accountRepository = mock(AccountRepository.class);
+        when(accountRepository.getById("124")).thenReturn(Account.create("test", "test", "test", "test", false, correlationId));
+        service = new AccountManagementService(accountRepository, readModelRepository, eventPublisher);
+
+        AccountDeletionCommand command2 = new AccountDeletionCommand("124");
+        service.handleDeleteAccount(command2, correlationId);
+    }
+
+    @And("a {string} event has been emitted")
+    public void asd(String eventName) {
+        verify(accountRepository).save(argThat(user -> user.getAppliedEvents().get(1).getType().equals(eventName)));
     }
 }
