@@ -2,9 +2,6 @@ package service;
 
 import java.util.UUID;
 
-import lombok.Value;
-
-@Value
 public class CorrelationId {
 	private UUID id;
 	public CorrelationId(UUID id) {
