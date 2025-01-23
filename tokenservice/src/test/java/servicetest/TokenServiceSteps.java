@@ -1,22 +1,14 @@
 package servicetest;
-import static org.junit.Assert.assertTrue;
 import static org.mockito.Mockito.mock;
-import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.argThat;
-import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.when;
 
 import java.util.UUID;
 
-import org.mockito.internal.matchers.Null;
 
 import boilerplate.Event;
 import boilerplate.MessageQueue;
-import boilerplate.implementations.MessageQueueSync;
 import boilerplate.implementations.RabbitMqQueue;
-import io.cucumber.java.Before;
-import io.cucumber.java.en.Given;
 import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
 import tokenservice.adapters.EventPublisher;
