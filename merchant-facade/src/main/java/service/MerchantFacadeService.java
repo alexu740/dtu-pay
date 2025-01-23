@@ -4,6 +4,7 @@ import boilerplate.Event;
 
 import boilerplate.MessageQueue;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.UUID;
@@ -87,5 +88,14 @@ public class MerchantFacadeService {
         if(promise != null) {
             promise.complete(report);
         }
+    }
+
+    public List<String> getAllCorrelations() {
+        List<String> allKeys = new ArrayList<>();
+        
+        allKeys.addAll(correlations.keySet());
+        allKeys.addAll(reportCorrelations.keySet());
+
+        return allKeys;
     }
 }
