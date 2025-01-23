@@ -3,7 +3,6 @@ package micro.adapters;
 import boilerplate.MessageQueue;
 import micro.commands.CommandFactory;
 import micro.dto.PaymentDto;
-import micro.events.DomainEvent;
 import micro.events.PaymentResolved;
 import boilerplate.Event;
 import micro.commands.InitializePaymentCommand;
@@ -16,12 +15,13 @@ public class RabbitMqFacade {
   public RabbitMqFacade(MessageQueue queue, PaymentManagementService service) {
     System.out.println("Starting facade");
     queue.addHandler("PaymentRequested", this::handlePaymentRequested);
+
     queue.addHandler("TokenValidated", this::handleTokenValidated);
+    queue.addHandler("TokenValidationFailed", this::handleTokenValidationFailed);
+
     queue.addHandler("PaymentInformationResolved", this::handlePaymentInformationResolved);
     queue.addHandler("PaymentResolved", this::handlePaymentResolved);
-    queue.addHandler("TokenValidationFailed", this::handleTokenValidationFailed);
-    
-    
+
     this.service = service;
   }
 
@@ -43,6 +43,13 @@ public class RabbitMqFacade {
     service.handleTokenValidated(customerId, token, correlationId, transactionId);
   }
 
+  public void handleTokenValidationFailed(Event e) {
+    var transactionId = e.getArgument(0, String.class);
+    var correlationId =  e.getArgument(1, CorrelationId.class);
+
+    service.handlePaymentTokenValidationFailed(transactionId, correlationId);
+  }
+
   public void handlePaymentInformationResolved(Event e) {
     var transactionId = e.getArgument(0, String.class);
     var customerBankAccount = e.getArgument(1, String.class);
@@ -56,12 +63,5 @@ public class RabbitMqFacade {
     var correlationId = e.getArgument(0, CorrelationId.class);
     var transactionId = ((PaymentResolved)e).getTransactionId();
     service.handlePaymentTransaction(transactionId, correlationId);
-  }
-
-  public void handleTokenValidationFailed(Event e) {
-    var transactionId = e.getArgument(0, String.class);
-    var correlationId =  e.getArgument(1, CorrelationId.class);
-
-    service.handlePaymentTokenValidationFailed(transactionId, correlationId);
   }
 }

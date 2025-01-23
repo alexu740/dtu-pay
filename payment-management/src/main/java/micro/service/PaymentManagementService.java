@@ -35,6 +35,12 @@ public class PaymentManagementService {
 		this.publisher.emitPaymentInformationResolutionRequested(transactionId, payment.getCustomerId(), payment.getMerchantId(), correlationId);
 	}
 
+	public void handlePaymentTokenValidationFailed(String transactionId, CorrelationId correlationId) {
+		var payment = this.repository.getById(transactionId);
+		payment.updateTokenInvalid(correlationId);
+		this.repository.save(payment);
+	}
+
 	public void handlePaymentInformationResolved(String transactionId, String customerBank, String merchantBank, CorrelationId correlationId) {
 		var payment = this.repository.getById(transactionId);
 		payment.update(customerBank, merchantBank, correlationId);
@@ -44,14 +50,8 @@ public class PaymentManagementService {
 	public void handlePaymentTransaction(String transactionId, CorrelationId correlationId) {
 		var payment = this.repository.getById(transactionId);
 		var result = bank.pay(payment.getCustomerBankAccount(), payment.getMerchantBankAccount(), payment.getAmount(), payment.generatePaymentNote());
-
+		
 		payment.markAsCompleted(result, correlationId);
-		this.repository.save(payment);
-	}
-
-	public void handlePaymentTokenValidationFailed(String transactionId, CorrelationId correlationId) {
-		var payment = this.repository.getById(transactionId);
-		payment.updateTokenInvalid(correlationId);
 		this.repository.save(payment);
 	}
 }
