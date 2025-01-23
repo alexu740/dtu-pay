@@ -70,7 +70,8 @@ public class CustomerSteps {
     }
 
     @Then("the customer id is returned")
-    public void customerIdIsReturned() {
+    public void customerIdIsReturned() throws InterruptedException {
+        Thread.sleep(1000);
         assertEquals("customerId", resultOfCall);
     }
 
@@ -87,7 +88,8 @@ public class CustomerSteps {
     }
 
     @Then("the payload {string} is returned")
-    public void customerIdIsReturned(String expectedPayload) {
+    public void customerIdIsReturned(String expectedPayload) throws InterruptedException {
+        Thread.sleep(1000);
         assertEquals(expectedPayload, resultOfCall);
     }
 
@@ -148,7 +150,8 @@ public class CustomerSteps {
     }
 
     @Then("the customer tokens are returned")
-    public void the_customer_tokens_are_returned() {
+    public void the_customer_tokens_are_returned() throws InterruptedException {
+        Thread.sleep(1000);
         assertEquals("token1", resultOfCallTokens.getTokens().get(0));
     }
 
@@ -220,7 +223,8 @@ public class CustomerSteps {
     }
 
     @Then("a report is returned")
-    public void a_report_is_returned() {
+    public void a_report_is_returned() throws InterruptedException {
+        Thread.sleep(1000);
         assertEquals(1, resultOfCallReport.size());
     }
 }
