@@ -55,8 +55,4 @@ public class CustomerResource {
         var result = service.deregister(id);
         return Response.ok("customer deleted").build();
     }
-
-    public Response getTokens() {
-        return Response.ok("customer deleted").build();
-    }
 }
