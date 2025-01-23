@@ -74,7 +74,8 @@ public class ManagerSteps {
     }
 
     @Then("a report is returned")
-    public void a_report_is_returned() {
+    public void a_report_is_returned() throws InterruptedException {
+        Thread.sleep(1500);
         assertEquals(1, resultOfCallReport.size());
     }
 }

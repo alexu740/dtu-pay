@@ -1,5 +1,4 @@
 package servicetest;
-import static org.junit.Assert.assertTrue;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.ArgumentMatchers.argThat;
 import static org.mockito.Mockito.mock;
@@ -68,12 +67,14 @@ public class MerchantSteps {
     }
 
     @Then("the merchant id is returned")
-    public void merchantIdIsReturned() {
+    public void merchantIdIsReturned() throws InterruptedException {
+        Thread.sleep(1500);
         assertEquals("merchantId", resultOfCall);
     }
 
     @Then("the payload {string} is returned")
-    public void merchantIdIsReturned(String expectedPayload) {
+    public void merchantIdIsReturned(String expectedPayload) throws InterruptedException {
+        Thread.sleep(1500);
         assertEquals(expectedPayload, resultOfCall);
     }
 
@@ -138,7 +139,8 @@ public class MerchantSteps {
     }
 
     @Then("a report is returned")
-    public void a_report_is_returned() {
+    public void a_report_is_returned() throws InterruptedException {
+        Thread.sleep(1500);
         assertEquals(1, resultOfCallReport.size());
     }
 
@@ -180,12 +182,14 @@ public class MerchantSteps {
     }
 
     @Then("the payment is successful")
-    public void the_payment_is_successful() {
+    public void the_payment_is_successful() throws InterruptedException {
+        Thread.sleep(1500);
         assertEquals("successful", resultOfCall);
     }
 
     @Then("the payment is failed")
-    public void the_payment_is_failed() {
+    public void the_payment_is_failed() throws InterruptedException {
+        Thread.sleep(1500);
         assertEquals("failed", resultOfCall);
     }
 }
