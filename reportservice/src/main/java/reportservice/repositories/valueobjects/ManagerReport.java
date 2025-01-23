@@ -1,5 +1,7 @@
 package reportservice.repositories.valueobjects;
 
+import java.util.Objects;
+
 public class ManagerReport {
     private String merchantId;
     private String customerId;
@@ -29,4 +31,15 @@ public class ManagerReport {
     public void setAmount(int amount) {
         this.amount = amount;
     }
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj) return true;
+        if (obj == null || getClass() != obj.getClass()) return false; 
+        ManagerReport that = (ManagerReport) obj;
+        return amount == that.amount &&
+               Objects.equals(merchantId, that.merchantId) &&
+               Objects.equals(customerId, that.customerId) &&
+               Objects.equals(tokenUsed, that.tokenUsed); 
+    }
+
 }

@@ -1,5 +1,7 @@
 package reportservice.dto;
 
+import java.util.Objects;
+
 public class Payment {
     private String paymentId;
     private String customerId;
@@ -37,4 +39,16 @@ public class Payment {
     public void setAmount(int amount) {
         this.amount = amount;
     }
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj) return true;
+        if (obj == null || getClass() != obj.getClass()) return false;
+        Payment that = (Payment) obj;
+        return amount == that.amount &&
+            Objects.equals(paymentId, that.paymentId) &&
+            Objects.equals(customerId, that.customerId) &&
+            Objects.equals(token, that.token) &&
+            Objects.equals(merchantId, that.merchantId);
+}
+
 }
