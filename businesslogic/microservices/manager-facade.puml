@@ -1,0 +1,63 @@
+@startuml
+skinparam classAttributeIconSize 0
+skinparam monochrome true
+
+package "Manager Facade" {
+    ' 适配器层
+    package "adapters" {
+        interface EventPublisher
+        class ManagerRegistrationFactory {
+            + getService()
+            + if()
+        }
+        class PaymentResource {
+            + payment()
+        }
+        class RabbitMqEventPublisher implements EventPublisher {
+            + RabbitMqEventPublisher()
+            + emitManagerReportRequested()
+        }
+        class RabbitMqFacade {
+            + RabbitMqFacade()
+            + handleManagerReportSent()
+        }
+    }
+
+    ' DTO 层
+    package "dto" {
+        class Report {
+            + getMerchantId()
+            + setMerchantId()
+            + getCustomerId()
+            + setCustomerId()
+            + getUsedToken()
+            + setUsedToken()
+            + getAmount()
+            + setAmount()
+        }
+    }
+
+    ' 服务层
+    package "service" {
+        class CorrelationId {
+            + CorrelationId()
+            + randomId()
+            + get()
+        }
+        class ManagerFacadeService {
+            + ManagerFacadeService()
+            + completeReportRequest()
+        }
+    }
+}
+
+' 关系展示
+PaymentResource --> ManagerFacadeService : "Handles REST requests"
+ManagerFacadeService --> Report : "Generates reports"
+
+RabbitMqEventPublisher --> RabbitMqFacade : "Publishes events"
+RabbitMqFacade --> ManagerFacadeService : "Handles events"
+
+ManagerRegistrationFactory --> Report : "Creates"
+RabbitMqFacade --> EventPublisher : "Implements interface"
+@enduml

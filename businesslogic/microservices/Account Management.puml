@@ -1,0 +1,241 @@
+@startuml
+skinparam classAttributeIconSize 0
+skinparam monochrome true
+
+package "Account Management" {
+    ' 适配器层
+    package "adapters" {
+        interface EventPublisher
+        class RabbitMqEventPublisher implements EventPublisher {
+            + RabbitMqEventPublisher()
+            + emitAccountCustomerRetrievedEvent()
+            + emitAccountMerchantRetrievedEvent()
+            + emitTokensCreatedEvent()
+            + emitTokensCreateFailedEvent()
+            + emitCheckTokenPresent()
+            + emitPaymentInformationResolved()
+        }
+        class RabbitMqFacade {
+            + RabbitMqFacade()
+            + handleCustomerRegistration()
+            + handleGetCustomer()
+            + handleCustomerDeregistration()
+            + handleMerchantRegistration()
+            + handleMerchantDeregistration()
+            + handleCustomerTokensRequested()
+            + handleCustomerHasTokenCheckRequested()
+            + handlePaymentInformationResolutionRequested()
+            + handleTokenUsed()
+        }
+    }
+
+    ' 聚合层
+    package "aggregate" {
+        class Account {
+            + create()
+            + createFromEvents()
+            + apply()
+            + delete()
+            + clearAppliedEvents()
+            + setAccountid()
+            + getAccountid()
+            + getOwnerDetails()
+            + setOwnerDetails()
+            + getFinancialDetails()
+            + setFinancialDetails()
+        }
+        class CustomerAccount {
+            + create()
+            + CustomerAccount()
+            + setTokens()
+            + createTokens()
+            + removeToken()
+            + createFromEvents()
+            + apply()
+        }
+        class AccountId {
+            + AccountId()
+            + getUuid()
+        }
+        class AccountOwnerDetails {
+            + AccountOwnerDetails()
+        }
+        class AccountFinancialDetails {
+            + AccountFinancialDetails()
+        }
+    }
+
+    ' 命令层
+    package "commands" {
+        class AccountCreationCommand {
+            + AccountCreationCommand()
+        }
+        class AccountDeletionCommand {
+            + AccountDeletionCommand()
+            + getAccountId()
+        }
+        class AccountGetQuery {
+            + AccountGetQuery()
+        }
+        class AccountHasTokenQuery {
+            + AccountHasTokenQuery()
+            + getTransactionId()
+            + setTransactionId()
+            + getCustomerId()
+            + setCustomerId()
+            + getToken()
+            + setToken()
+        }
+        class AccountTokenCreationCommand {
+            + AccountTokenCreationCommand()
+            + getAccountId()
+            + setAccountId()
+            + getNumberOfTokens()
+            + setNumberOfTokens()
+        }
+        class CommandFactory {
+            + createAccountCreationCommand()
+            + createAccountTokenCreationCommand()
+        }
+    }
+
+    ' DTO 层
+    package "dto" {
+        class RegistrationDto
+    }
+
+    ' 事件层
+    package "events" {
+        class AccountRegistered {
+            + AccountRegistered()
+            + getSerialversionuid()
+            + getFirstName()
+            + setFirstName()
+            + getLastName()
+            + setLastName()
+            + getCpr()
+            + setCpr()
+            + getBankAccount()
+            + setBankAccount()
+            + isCustomerAccountType()
+            + setCustomerAccountType()
+        }
+        class AccountDeregistered {
+            + AccountDeregistered()
+        }
+        class TokenAdded {
+            + TokenAdded()
+            + getSerialversionuid()
+            + getNewToken()
+            + setNewToken()
+        }
+        class TokenRemoved {
+            + TokenRemoved()
+            + getSerialversionuid()
+            + getToken()
+            + setToken()
+        }
+        class DomainEvent {
+            + DomainEvent()
+            + getAccountId()
+            + getTimestamp()
+        }
+    }
+
+    ' 异常层
+    package "exception" {
+        class BusinessValidationException {
+            + BusinessValidationException()
+            + BusinessValidationException()
+        }
+    }
+
+    ' 仓库层
+    package "repositories" {
+        package "viewmodel" {
+            class PaymentInstrumentViewModel {
+                + getCustomerAccountId()
+                + setCustomerAccountId()
+                + getMerchantAccountId()
+                + setMerchantAccountId()
+                + getCustomerBankAccount()
+                + setCustomerBankAccount()
+                + getMerchantBankAccount()
+                + setMerchantBankAccount()
+            }
+            class TokenViewModel {
+                + getAccountId()
+                + setAccountId()
+                + setTokens()
+            }
+        }
+        class AccountRepository {
+            + AccountRepository()
+            + getById()
+            + save()
+        }
+        class AccountReadModelRepository {
+            + AccountReadModelRepository()
+            + getCustomerTokens()
+            + applyAccountRegistered()
+            + applyTokenAdded()
+            + applyTokenRemoved()
+            + tokenIsPresent()
+            + getPaymentInformation()
+        }
+        class EventStore {
+            + EventStore()
+            + addEvent()
+            + addEvents()
+        }
+    }
+
+    ' 服务层
+    package "service" {
+        class AccountManagementService {
+            + AccountManagementService()
+            + handleCreateAccount()
+            + handleCreateTokens()
+            + handleGetAccount()
+            + handleCheckTokenPresent()
+            + handlePaymentInformationResolutionQuery()
+            + handleTokenUserCommand()
+            + handleDeleteAccount()
+        }
+        class CorrelationId {
+            + CorrelationId()
+            + randomId()
+            + get()
+        }
+    }
+
+    ' 启动层
+    package "startup" {
+        class ApplicationFactory {
+            + createApplication()
+        }
+        class EnrichedRabbitMqQueue {
+            + EnrichedRabbitMqQueue()
+            + addHandler()
+        }
+    }
+
+    ' 启动主类
+    class StartUp
+}
+
+' 关系展示
+RabbitMqEventPublisher --> RabbitMqFacade : "Publishes events"
+RabbitMqFacade --> AccountManagementService : "Handles events"
+AccountManagementService --> AccountRepository : "Accesses"
+AccountManagementService --> EventStore : "Saves events"
+AccountRepository --> Account : "Manages"
+CustomerAccount --> Account : "Extends"
+Account --> AccountOwnerDetails : "Contains"
+Account --> AccountFinancialDetails : "Contains"
+CommandFactory --> AccountCreationCommand : "Creates"
+CommandFactory --> AccountDeletionCommand : "Creates"
+CommandFactory --> AccountTokenCreationCommand : "Creates"
+EventStore --> DomainEvent : "Stores"
+AccountManagementService --> CorrelationId : "Uses"
+@enduml

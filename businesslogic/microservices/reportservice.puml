@@ -1,0 +1,128 @@
+@startuml
+skinparam classAttributeIconSize 0
+skinparam monochrome true
+
+package "Report Service" {
+    ' 适配器层
+    package "adapters" {
+        interface EventPublisher
+        class RabbitMqEventPublisher implements EventPublisher {
+            + RabbitMqEventPublisher()
+            + emitManagerReportGenerated()
+            + emitMerchantReportGenerated()
+            + emitCustomerReportGenerated()
+        }
+        class RabbitMqFacade {
+            + RabbitMqFacade()
+            + handlePaymentCompleted()
+            + handlePaymentsReportRequested()
+            + handleMerchantReportRequested()
+            + handleCustomerReportRequested()
+        }
+    }
+
+    ' DTO 层
+    package "dto" {
+        class Payment {
+            + getPaymentId()
+            + setPaymentId()
+            + getCustomerId()
+            + setCustomerId()
+            + getCustomerToken()
+            + setCustomerToken()
+            + getMerchantId()
+            + setMerchantId()
+            + getAmount()
+            + setAmount()
+        }
+    }
+
+    ' 模型层
+    package "models" {
+        class MerchantPaymentViewModel {
+            + getCustomerToken()
+            + setCustomerToken()
+            + getAmount()
+            + setAmount()
+        }
+    }
+
+    ' 仓库层
+    package "repositories" {
+        package "valueobjects" {
+            class CustomerReport {
+                + getAmount()
+                + setAmount()
+                + getMerchantId()
+                + setMerchantId()
+                + getUsedToken()
+                + setUsedToken()
+            }
+            class ManagerReport {
+                + getMerchantId()
+                + setMerchantId()
+                + getCustomerId()
+                + setCustomerId()
+                + getTokenUsed()
+                + setTokenUsed()
+                + getAmount()
+                + setAmount()
+            }
+            class MerchantReport {
+                + getUsedToken()
+                + setUsedToken()
+                + getAmount()
+                + setAmount()
+            }
+        }
+        class ReadModelRepository {
+            + ReadModelRepository()
+            + applyReport()
+            + updateManagerReport()
+            + updateCustomerReports()
+            + updateMerchantReports()
+        }
+        class ReportRepository {
+            + ReportRepository()
+            + save()
+        }
+    }
+
+    ' 服务层
+    package "services" {
+        class CorrelationId {
+            + CorrelationId()
+            + randomId()
+            + get()
+        }
+        class Service {
+            + Service()
+            + handlePaymentReceived()
+            + handlePaymentReportRequested()
+            + handleMerchantReportRequested()
+            + handleCustomerReportRequested()
+        }
+    }
+
+    ' 启动层
+    package "startup" {
+        class ApplicationFactory {
+            + createApplication()
+        }
+    }
+
+    ' 主类
+    class StartUp
+}
+
+' 关系展示
+RabbitMqEventPublisher --> RabbitMqFacade : "Publishes events"
+RabbitMqFacade --> Service : "Handles events"
+Service --> ReportRepository : "Accesses"
+Service --> ReadModelRepository : "Accesses"
+ReportRepository --> CustomerReport : "Uses"
+ReportRepository --> ManagerReport : "Uses"
+ReportRepository --> MerchantReport : "Uses"
+MerchantPaymentViewModel --> Payment : "Transforms"
+RabbitMqFacade --> EventPublisher : "Implements"
+@enduml
