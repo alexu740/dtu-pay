@@ -18,6 +18,7 @@ public class PaymentResource {
 
     @GET
     @Produces(MediaType.APPLICATION_JSON)
+    @Operation(summary = "Gets manager report", description = "Returns the list of all payments")
     public Response payment() {
         var result = service.getReport();
         return Response.ok(result).build();
