@@ -1,5 +1,7 @@
 package com.rest.start.Model.valueobjects;
-
+/**
+ * @author: Xin Huang, s243442
+ */
 public class MerchantReport {
     private String tokenUsed;
     private int amount;

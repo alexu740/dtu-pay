@@ -8,7 +8,9 @@ import boilerplate.MessageQueue;
 import service.MerchantFacadeService;
 import service.CorrelationId;
 import dto.Report;
-
+/**
+ * @author: Lukas Åkefeldt, s242204
+ */
 public class RabbitMqFacade {
     MerchantFacadeService service;
 

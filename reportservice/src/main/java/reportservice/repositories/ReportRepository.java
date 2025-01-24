@@ -7,7 +7,9 @@ import java.util.Map;
 
 import boilerplate.Event;
 import boilerplate.MessageQueue;
-
+/**
+ * @author: Nicolas Venizelou, s232523
+ */
 public class ReportRepository {
     private MessageQueue queue;
     private final Map<String, Payment> payments = new HashMap<>();

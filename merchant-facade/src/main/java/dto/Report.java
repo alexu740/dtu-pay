@@ -1,5 +1,7 @@
 package dto;
-
+/**
+ * @author: Lukas Åkefeldt, s242204
+ */
 public class Report {
     private String usedToken;
     private int amount;

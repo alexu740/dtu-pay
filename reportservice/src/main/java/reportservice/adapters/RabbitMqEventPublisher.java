@@ -9,7 +9,9 @@ import java.util.List;
 
 import boilerplate.Event;
 import boilerplate.MessageQueue;
-
+/**
+ * @author: Nicolas Venizelou, s232523
+ */
 public class RabbitMqEventPublisher implements EventPublisher {
     private MessageQueue queue;
     public RabbitMqEventPublisher(MessageQueue queue) {

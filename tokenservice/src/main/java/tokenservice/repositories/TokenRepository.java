@@ -2,7 +2,9 @@ package tokenservice.repositories;
 
 import java.util.HashMap;
 import java.util.Map;
-
+/**
+ * @author: Senhao Zou, s242606
+ */
 public class TokenRepository {
     private Map<String, String> tokens;
 

@@ -15,7 +15,9 @@ import adapters.EventPublisher;
 import dto.PaymentDto;
 import dto.RegistrationDto;
 import dto.Report;
-
+/**
+ * @author: Lukas Åkefeldt, s242204
+ */
 public class MerchantFacadeService {
     private EventPublisher publisher;
     private Map<String, CompletableFuture<String>> correlations = new ConcurrentHashMap<>();

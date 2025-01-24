@@ -12,7 +12,9 @@ import jakarta.inject.Inject;
 
 import com.rest.start.Model.Dto.RegistrationDto;
 import com.rest.start.Adapters.CustomerFacade;
-
+/**
+ * @author: Xin Huang, s243442
+ */
 @Path("/customers")
 public class CustomerResource {
     CustomerFacade customerHandler;

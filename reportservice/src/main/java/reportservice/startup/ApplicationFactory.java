@@ -6,7 +6,9 @@ import reportservice.adapters.RabbitMqFacade;
 import reportservice.repositories.ReadModelRepository;
 import reportservice.repositories.ReportRepository;
 import reportservice.services.Service;
-
+/**
+ * @author: Nicolas Venizelou, s232523
+ */
 public class ApplicationFactory {
     public static RabbitMqFacade createApplication(String queueName) {
 		var mq = new RabbitMqQueue(queueName);

@@ -5,7 +5,9 @@ import java.util.Map;
 
 import tokenservice.adapters.EventPublisher;
 import tokenservice.repositories.TokenRepository;
-
+/**
+ * @author: Senhao Zou, s242606
+ */
 public class TokenService {
 	private EventPublisher publisher;
     private TokenRepository repo;

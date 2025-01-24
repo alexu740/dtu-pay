@@ -5,7 +5,9 @@ import boilerplate.MessageQueue;
 import reportservice.dto.Payment;
 import reportservice.services.CorrelationId;
 import reportservice.services.Service;
-
+/**
+ * @author: Nicolas Venizelou, s232523
+ */
 public class RabbitMqFacade {
     Service service;
 

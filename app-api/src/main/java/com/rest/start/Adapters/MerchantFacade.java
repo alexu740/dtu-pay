@@ -16,6 +16,10 @@ import jakarta.ws.rs.core.MediaType;
 
 import com.rest.start.Model.valueobjects.*;
 
+/**
+ * @author: Xin Huang, s243442
+ */
+
 @ApplicationScoped
 public class MerchantFacade {
     public MerchantFacade() {

@@ -1,5 +1,7 @@
 package reportservice.models;
-
+/**
+ * @author: Nicolas Venizelou, s232523
+ */
 public class MerchantPaymentViewModel {
     private String customerToken;
     private int amount;

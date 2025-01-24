@@ -13,6 +13,9 @@ import jakarta.ws.rs.client.Entity;
 import jakarta.ws.rs.client.WebTarget;
 import jakarta.ws.rs.core.MediaType;
 
+/**
+ * @author: Xin Huang, s243442
+ */
 
 @ApplicationScoped
 public class CustomerFacade {

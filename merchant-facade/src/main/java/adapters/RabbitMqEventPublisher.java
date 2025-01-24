@@ -6,7 +6,9 @@ import boilerplate.MessageQueue;
 import dto.PaymentDto;
 import dto.RegistrationDto;
 import service.CorrelationId;
-
+/**
+ * @author: Lukas Åkefeldt, s242204
+ */
 public class RabbitMqEventPublisher implements EventPublisher {
     private MessageQueue queue;
     public RabbitMqEventPublisher(MessageQueue queue) {

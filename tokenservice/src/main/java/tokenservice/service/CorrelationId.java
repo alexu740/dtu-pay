@@ -1,7 +1,9 @@
 package tokenservice.service;
 
 import java.util.UUID;
-
+/**
+ * @author: Senhao Zou, s242606
+ */
 public class CorrelationId {
 	private UUID id;
 	public CorrelationId(UUID id) {

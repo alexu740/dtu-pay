@@ -1,5 +1,7 @@
 package com.rest.start.Model.Dto;
-
+/**
+ * @author: Xin Huang, s243442
+ */
 public class RegistrationDto {
     private String firstName;
     private String lastName;

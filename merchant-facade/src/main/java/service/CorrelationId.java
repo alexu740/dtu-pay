@@ -1,7 +1,9 @@
 package service;
 
 import java.util.UUID;
-
+/**
+ * @author: Lukas Åkefeldt, s242204
+ */
 public class CorrelationId {
 	private UUID id;
 	public CorrelationId(UUID id) {

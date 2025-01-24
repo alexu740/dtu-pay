@@ -1,7 +1,9 @@
 package com.rest.start.Model.Dto;
 
 import java.util.List;
-
+/**
+ * @author: Xin Huang, s243442
+ */
 public class CustomerDto {
     private String accountId;
     private String firstName;

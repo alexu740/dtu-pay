@@ -1,5 +1,7 @@
 package dto;
-
+/**
+ * @author: Lukas Åkefeldt, s242204
+ */
 public class PaymentDto {
     private String customerId;
     private String merchantId;

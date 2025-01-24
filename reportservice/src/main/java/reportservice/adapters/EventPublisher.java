@@ -7,6 +7,10 @@ import reportservice.repositories.valueobjects.ManagerReport;
 import reportservice.repositories.valueobjects.MerchantReport;
 import reportservice.services.CorrelationId;
 
+/**
+ * @author: Nicolas Venizelou, s232523
+ */
+
 public interface EventPublisher {
     public void emitManagerReportGenerated(List<ManagerReport> report, CorrelationId correlationId);
     public void emitMerchantReportGenerated(List<MerchantReport> report, CorrelationId correlationId);

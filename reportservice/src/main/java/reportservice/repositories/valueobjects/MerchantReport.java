@@ -1,5 +1,7 @@
 package reportservice.repositories.valueobjects;
-
+/**
+ * @author: Nicolas Venizelou, s232523
+ */
 public class MerchantReport {
     private String usedToken;
     private int amount;

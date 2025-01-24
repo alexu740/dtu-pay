@@ -1,5 +1,7 @@
 package reportservice.dto;
-
+/**
+ * @author: Nicolas Venizelou, s232523
+ */
 public class Payment {
     private String paymentId;
     private String customerId;

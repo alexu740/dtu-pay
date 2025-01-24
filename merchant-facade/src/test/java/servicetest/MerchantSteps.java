@@ -24,7 +24,9 @@ import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
 import service.CorrelationId;
 import service.MerchantFacadeService;
-
+/**
+ * @author: Alex Ungureanu, s225525
+ */
 public class MerchantSteps {
    MessageQueue mockedQueue;
     MessageQueue queue;

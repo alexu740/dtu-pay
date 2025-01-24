@@ -4,7 +4,9 @@ import boilerplate.Event;
 import boilerplate.MessageQueue;
 import tokenservice.service.CorrelationId;
 import tokenservice.service.TokenService;
-
+/**
+ * @author: Senhao Zou, s242606
+ */
 public class RabbitMqFacade {
   TokenService service;
 

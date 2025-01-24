@@ -2,7 +2,9 @@ package reportservice;
 
 import reportservice.adapters.RabbitMqFacade;
 import reportservice.startup.ApplicationFactory;
-
+/**
+ * @author: Nicolas Venizelou, s232523
+ */
 public class StartUp {
 	private RabbitMqFacade facade;
 

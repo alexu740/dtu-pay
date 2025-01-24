@@ -13,7 +13,9 @@ import jakarta.inject.Inject;
 
 import com.rest.start.Model.Dto.RegistrationDto;
 import com.rest.start.Adapters.MerchantFacade;
-
+/**
+ * @author: Xin Huang, s243442
+ */
 @Path("/merchants")
 public class MerchantResource {
     MerchantFacade merchantHandler;

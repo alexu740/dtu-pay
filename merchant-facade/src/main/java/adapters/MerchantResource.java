@@ -17,6 +17,9 @@ import jakarta.inject.Inject;
 import dto.PaymentDto;
 import dto.RegistrationDto;
 
+/**
+ * @author: Lukas Åkefeldt, s242204
+ */
 @Path("/merchants")
 public class MerchantResource {
 	private MerchantFacadeService service = new MerchantRegistrationFactory().getService();

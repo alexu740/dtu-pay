@@ -21,7 +21,9 @@ import tokenservice.adapters.RabbitMqFacade;
 import tokenservice.repositories.TokenRepository;
 import tokenservice.service.CorrelationId;
 import tokenservice.service.TokenService;
-
+/**
+ * @author: Senhao Zou, s242606
+ */
 public class ServiceSteps {
     MessageQueue mockedQueue;
     MessageQueue queue;

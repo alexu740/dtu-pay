@@ -1,5 +1,7 @@
 package com.rest.start.Model.valueobjects;
-
+/**
+ * @author: Xin Huang, s243442
+ */
 public class ManagerReport {
     private String merchantId;
     private String customerId;

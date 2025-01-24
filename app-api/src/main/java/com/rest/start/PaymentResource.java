@@ -12,7 +12,9 @@ import jakarta.ws.rs.core.Response;
 import com.rest.start.Adapters.ManagerFacade;
 import com.rest.start.Adapters.MerchantFacade;
 import com.rest.start.Model.Dto.PaymentDto;
-
+/**
+ * @author: Xin Huang, s243442
+ */
 @Path("/payments")
 public class PaymentResource {
     MerchantFacade merchantFacade;

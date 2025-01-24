@@ -1,5 +1,7 @@
 package reportservice.repositories.valueobjects;
-
+/**
+ * @author: Nicolas Venizelou, s232523
+ */
 public class ManagerReport {
     private String merchantId;
     private String customerId;

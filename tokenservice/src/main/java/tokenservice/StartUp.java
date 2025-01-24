@@ -2,7 +2,9 @@ package tokenservice;
 
 import tokenservice.adapters.RabbitMqFacade;
 import tokenservice.startup.ApplicationFactory;
-
+/**
+ * @author: Senhao Zou, s242606
+ */
 public class StartUp {
 	RabbitMqFacade facade;
 	public static void main(String[] args) throws Exception {

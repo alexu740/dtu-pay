@@ -3,7 +3,9 @@ package tokenservice.adapters;
 import boilerplate.Event;
 import boilerplate.MessageQueue;
 import tokenservice.service.CorrelationId;
-
+/**
+ * @author: Senhao Zou, s242606
+ */
 public class RabbitMqEventPublisher implements EventPublisher {
     private MessageQueue queue;
 

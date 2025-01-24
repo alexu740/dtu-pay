@@ -1,5 +1,7 @@
 package com.rest.start.Model.Dto;
-
+/**
+ * @author: Xin Huang, s243442
+ */
 public class PaymentDto {
     private String customerId;
     private String merchantId;

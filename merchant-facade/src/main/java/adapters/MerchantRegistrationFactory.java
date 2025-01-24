@@ -2,7 +2,9 @@ package adapters;
 
 import boilerplate.implementations.RabbitMqQueue;
 import service.MerchantFacadeService;
-
+/**
+ * @author: Lukas Åkefeldt, s242204
+ */
 public class MerchantRegistrationFactory {
 	static MerchantFacadeService service = null;
 

@@ -11,7 +11,9 @@ import reportservice.dto.Payment;
 import reportservice.repositories.valueobjects.CustomerReport;
 import reportservice.repositories.valueobjects.ManagerReport;
 import reportservice.repositories.valueobjects.MerchantReport;
-
+/**
+ * @author: Nicolas Venizelou, s232523
+ */
 public class ReadModelRepository {
     private MessageQueue queue;
     private final List<ManagerReport> managerReport = new ArrayList<ManagerReport>();

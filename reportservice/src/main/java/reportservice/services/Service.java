@@ -4,7 +4,9 @@ import reportservice.adapters.EventPublisher;
 import reportservice.dto.Payment;
 import reportservice.repositories.ReadModelRepository;
 import reportservice.repositories.ReportRepository;
-
+/**
+ * @author: Nicolas Venizelou, s232523
+ */
 public class Service {
     private final EventPublisher publisher;
     private ReportRepository writeRepo;

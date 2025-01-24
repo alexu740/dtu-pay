@@ -5,7 +5,9 @@ import tokenservice.service.TokenService;
 import tokenservice.adapters.*;
 import boilerplate.MessageQueue;
 import boilerplate.implementations.RabbitMqQueue;
-
+/**
+ * @author: Senhao Zou, s242606
+ */
 public class ApplicationFactory {
     public static RabbitMqFacade createApplication() {
         MessageQueue mq = new RabbitMqQueue("rabbitMq");

@@ -21,7 +21,9 @@ import reportservice.repositories.ReadModelRepository;
 import reportservice.repositories.ReportRepository;
 import reportservice.services.CorrelationId;
 import reportservice.services.Service;
-
+/**
+ * @author: Nicolas Venizelou, s232523
+ */
 public class ServiceSteps {
     MessageQueue mockedQueue;
     MessageQueue queue;
