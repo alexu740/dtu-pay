@@ -1,12 +1,13 @@
-Feature: Payment
+Feature: Payment feature
+
 Scenario: Successful Payment
-    Given a customer with name "Susan", last name "Baldwin", and CPR "030154-4400"  
+    Given a customer with name "Susan", last name "Baldwin", and CPR "030154-9678"  
     And the customer is registered with the bank with an initial balance of 1000 kr
-    And the customer is registered with Simple DTU Pay using their bank account
+    And the customer is registered with DTU Pay using their bank account
     And the customer has a valid token
-    And a merchant with name "Daniel", last name "Oliver", and CPR "131161-3046"
+    And a merchant with name "Daniel", last name "Oliver", and CPR "131161-8272"
     And the merchant is registered with the bank with an initial balance of 1000 kr
-    And the merchant is registered with Simple DTU Pay using their bank account
+    And the merchant is registered with DTU Pay using their bank account
     When the merchant initiates a payment for 10 kr by the customer
     Then the payment is successful
     And the token is removed
@@ -14,47 +15,35 @@ Scenario: Successful Payment
     And the balance of the merchant at the bank is 1010 kr
 
 Scenario: Failed Payment
-    Given a customer with name "Susan", last name "Baldwin", and CPR "030154-4400"  
+    Given a customer with name "Caren", last name "Baldwin", and CPR "030215-6345"
     And the customer is registered with the bank with an initial balance of 1000 kr
-    And the customer is registered with Simple DTU Pay using their bank accounts
+    And the customer is registered with DTU Pay using their bank account
     And the customer has a valid token
-    And a merchant with name "Daniel", last name "Oliver", and CPR "131161-3046"
+    And a merchant with name "Danielo", last name "Oliver", and CPR "131161-5235"
     And the merchant is registered with the bank with an initial balance of 1000 kr
-    And the merchant is registered with Simple DTU Pay using their bank account
+    And the merchant is registered with DTU Pay using their bank account
     When the merchant initiates a payment for 1001 kr by the customer
     Then the payment is failed
-    #And the token is removed(?)
+    And the token is removed
 
 Scenario: Failed Payment due to token
-    Given a customer with name "Susan", last name "Baldwin", and CPR "030154-4400"  
+    Given a customer with name "Mary", last name "Baldwin", and CPR "041134-8567"  
     And the customer is registered with the bank with an initial balance of 1000 kr
-    And the customer is registered with Simple DTU Pay using their bank accounts
+    And the customer is registered with DTU Pay using their bank account
     And the customer has a invalid token
-    And a merchant with name "Daniel", last name "Oliver", and CPR "131161-3046"
+    And a merchant with name "John", last name "Oliver", and CPR "230576-3865"
     And the merchant is registered with the bank with an initial balance of 1000 kr
-    And the merchant is registered with Simple DTU Pay using their bank account
+    And the merchant is registered with DTU Pay using their bank account
     When the merchant initiates a payment for 10 kr by the customer
     Then the payment is failed
 
-# Create similar to this for merchant's and customer's lists
-# The merchant's list must not include any information about the customer other that the token
-Scenario: List of payments
-    Given a customer with name "Susan", who is registered with Simple DTU Pay
-    And a merchant with name "Daniel", who is registered with Simple DTU Pay
-    Given a successful payment of 10 kr from the customer to the merchant
-    When the manager asks for a list of payments
-    Then the list contains a payments where customer "Susan" paid 10 kr to merchant "Daniel"
-
-
-#Fix to not use customer id but token instead
 Scenario: Customer is not known
-    Given a merchant with name "Daniel", who is registered with Simple DTU Pay
+    Given a merchant with name "Danieli", who is registered with DTU Pay
     When the merchant initiates a payment for 10 kr using customer id "non-existent-id"
-    Then [cust]the payment is not successful
-    And [cust]an error message is returned saying "customer with id \"non-existent-id\" is unknow
+    Then the payment is failed
 
 Scenario: Merchant is not known
-    Given a customer with name "Susan", who is registered with Simple DTU Pay
-    When the customer initiates a payment for 10 kr using merchant id "non-existent-id"
-    Then the payment is not successful
-    And an error message is returned saying "customer with id \"non-existent-id\" is unknow
+    Given a customer with name "Line", who is registered with DTU Pay
+    When a payment for 10 kr is initiated by a corrupted merchant with id "non-existent-id"
+    Then the payment is failed
+    And the token is removed
