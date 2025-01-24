@@ -11,6 +11,7 @@ import jakarta.ws.rs.core.Response;
 import boilerplate.implementations.RabbitMqQueue;
 import service.ManagerFacadeService;
 import jakarta.inject.Inject;
+import org.eclipse.microprofile.openapi.annotations.Operation;
 
 @Path("/payments")
 public class PaymentResource {
