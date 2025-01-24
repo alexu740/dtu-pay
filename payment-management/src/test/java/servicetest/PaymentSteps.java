@@ -1,6 +1,5 @@
 package servicetest;
 import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertTrue;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.argThat;
 import static org.mockito.Mockito.mock;
@@ -14,9 +13,6 @@ import io.cucumber.java.Before;
 import io.cucumber.java.en.And;
 import io.cucumber.java.en.Given;
 import io.cucumber.java.en.Then;
-import io.cucumber.java.en.When;
-import io.cucumber.java.en_scouse.An;
-import micro.adapters.EventPublisher;
 import micro.adapters.ExternalBank;
 import micro.adapters.FastMoneyBank;
 import micro.adapters.RabbitMqEventPublisher;
@@ -30,6 +26,10 @@ import micro.repositories.PaymentReadModelRepository;
 import micro.repositories.PaymentRepository;
 import micro.service.CorrelationId;
 import micro.service.PaymentManagementService;
+
+/**
+ * @author: Alex Ungureanu (s225525)
+ */
 
 public class PaymentSteps {
     MessageQueue mockedQueue;

@@ -9,6 +9,10 @@ import micro.repositories.PaymentReadModelRepository;
 import micro.repositories.PaymentRepository;
 import micro.service.PaymentManagementService;
 
+/**
+ * @author: Alex Ungureanu (s225525)
+ */
+
 public class ApplicationFactory {
     public static RabbitMqFacade createApplication(String queueName) {
 		var mq = new EnrichedRabbitMqQueue(queueName);

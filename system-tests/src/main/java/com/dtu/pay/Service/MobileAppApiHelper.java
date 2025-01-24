@@ -20,6 +20,10 @@ import com.dtu.pay.Model.Dto.ManagerReport;
 import com.dtu.pay.Model.Dto.CustomerReport;
 import com.dtu.pay.Model.Dto.MerchantReport;
 
+/**
+ * @author: Alex Ungureanu (s225525)
+ */
+
 public class MobileAppApiHelper {
     public String register(User usr, String bankAccountNumber) {
         RegistrationDto dto = new RegistrationDto();

@@ -4,6 +4,10 @@ import boilerplate.MessageQueue;
 import micro.aggregate.Account;
 import micro.aggregate.CustomerAccount;
 
+/**
+ * @author: Alex Ungureanu (s225525)
+ */
+
 public class AccountRepository {
 	
 	private EventStore eventStore;

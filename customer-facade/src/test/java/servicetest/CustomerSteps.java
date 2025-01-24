@@ -1,6 +1,5 @@
 package servicetest;
 import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertTrue;
 import static org.mockito.ArgumentMatchers.argThat;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
@@ -9,7 +8,6 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
-import org.apiguardian.api.API;
 
 import adapters.EventPublisher;
 import adapters.RabbitMqEventPublisher;
@@ -24,9 +22,12 @@ import io.cucumber.java.Before;
 import io.cucumber.java.en.And;
 import io.cucumber.java.en.Given;
 import io.cucumber.java.en.Then;
-import io.cucumber.java.en.When;
 import service.CorrelationId;
 import service.CustomerFacadeService;
+
+/**
+ * @author: Alex Ungureanu (s225525)
+ */
 
 public class CustomerSteps {
     MessageQueue mockedQueue;

@@ -1,5 +1,7 @@
 package com.dtu.pay.Model;
-
+/**
+ * @author: Alex Ungureanu (s225525)
+ */
 public abstract class User {
     private String firstName;
     private String lastName;

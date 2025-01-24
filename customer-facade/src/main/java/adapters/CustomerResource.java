@@ -13,7 +13,9 @@ import service.CustomerFacadeService;
 import org.eclipse.microprofile.openapi.annotations.Operation;
 
 import dto.RegistrationDto;
-
+/**
+ * @author: Alex Ungureanu (s225525)
+ */
 @Path("/customers")
 public class CustomerResource {
 	private CustomerFacadeService service = new CustomerRegistrationFactory().getService();

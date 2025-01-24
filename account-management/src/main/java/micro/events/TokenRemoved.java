@@ -2,6 +2,10 @@ package micro.events;
 
 import micro.aggregate.AccountId;
 
+/**
+ * @author: Alex Ungureanu (s225525)
+ */
+
 public class TokenRemoved extends DomainEvent {
 	private static final long serialVersionUID = -1599019626118724483L;
 

@@ -10,6 +10,9 @@ import micro.events.PaymentInitialised;
 import micro.events.PaymentResolved;
 import micro.events.PaymentTokenValidated;
 
+/**
+ * @author: Alex Ungureanu (s225525)
+ */
 
 public class EnrichedRabbitMqQueue extends RabbitMqQueue {
     public EnrichedRabbitMqQueue(String hostname) {

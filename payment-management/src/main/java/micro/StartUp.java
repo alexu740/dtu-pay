@@ -3,6 +3,10 @@ package micro;
 import micro.adapters.RabbitMqFacade;
 import micro.startup.ApplicationFactory;
 
+/**
+ * @author: Alex Ungureanu (s225525)
+ */
+
 public class StartUp {
 	private static RabbitMqFacade facade;
 	public static void main(String[] args) throws Exception {

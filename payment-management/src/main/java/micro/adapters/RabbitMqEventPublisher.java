@@ -3,7 +3,9 @@ package micro.adapters;
 import boilerplate.Event;
 import boilerplate.MessageQueue;
 import micro.service.CorrelationId;
-
+/**
+ * @author: Alex Ungureanu (s225525)
+ */
 public class RabbitMqEventPublisher implements EventPublisher {
     private MessageQueue queue;
 

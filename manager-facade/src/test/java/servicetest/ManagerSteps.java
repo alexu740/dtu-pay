@@ -23,7 +23,9 @@ import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
 import service.CorrelationId;
 import service.ManagerFacadeService;
-
+/**
+ * @author: Alex Ungureanu (s225525)
+ */
 public class ManagerSteps {
     MessageQueue mockedQueue;
     MessageQueue queue;

@@ -12,7 +12,9 @@ import boilerplate.implementations.RabbitMqQueue;
 import service.ManagerFacadeService;
 import jakarta.inject.Inject;
 import org.eclipse.microprofile.openapi.annotations.Operation;
-
+/**
+ * @author: Alex Ungureanu (s225525)
+ */
 @Path("/payments")
 public class PaymentResource {
 	private ManagerFacadeService service = new ManagerRegistrationFactory().getService();

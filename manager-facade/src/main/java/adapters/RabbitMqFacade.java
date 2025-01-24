@@ -8,7 +8,9 @@ import boilerplate.MessageQueue;
 import service.ManagerFacadeService;
 import service.CorrelationId;
 import dto.Report;
-
+/**
+ * @author: Alex Ungureanu (s225525)
+ */
 public class RabbitMqFacade {
     ManagerFacadeService service;
 

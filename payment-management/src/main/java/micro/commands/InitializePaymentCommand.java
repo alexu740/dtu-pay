@@ -1,7 +1,9 @@
 package micro.commands;
 
 import micro.dto.PaymentDto;
-
+/**
+ * @author: Alex Ungureanu (s225525)
+ */
 public class InitializePaymentCommand {
     private String customerId;
     private String merchantId;

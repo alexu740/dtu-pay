@@ -4,6 +4,10 @@ import java.util.UUID;
 
 import lombok.Value;
 
+/**
+ * @author: Alex Ungureanu (s225525)
+ */
+
 @Value
 public class CorrelationId {
 	private UUID id;

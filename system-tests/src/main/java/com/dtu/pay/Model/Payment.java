@@ -1,5 +1,7 @@
 package com.dtu.pay.Model;
-
+/**
+ * @author: Alex Ungureanu (s225525)
+ */
 public class Payment {
     private String customer;
     private String merchant;

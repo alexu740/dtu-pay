@@ -8,7 +8,9 @@ import boilerplate.Event;
 import micro.commands.InitializePaymentCommand;
 import micro.service.PaymentManagementService;
 import micro.service.CorrelationId;
-
+/**
+ * @author: Alex Ungureanu (s225525)
+ */
 public class RabbitMqFacade {
   PaymentManagementService service;
 

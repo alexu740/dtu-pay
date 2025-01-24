@@ -7,7 +7,9 @@ import boilerplate.MessageQueue;
 import dto.AccountTokensDto;
 import service.CustomerFacadeService;
 import service.CorrelationId;
-
+/**
+ * @author: Alex Ungureanu (s225525)
+ */
 public class RabbitMqFacade {
     CustomerFacadeService service;
 

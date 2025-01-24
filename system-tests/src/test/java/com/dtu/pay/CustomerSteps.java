@@ -6,12 +6,10 @@ import io.cucumber.java.en.When;
 import io.cucumber.java.en.And;
 
 import static org.junit.Assert.assertTrue;
-import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertEquals;
 
 import java.math.BigDecimal;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 import java.util.UUID;
 
@@ -19,12 +17,13 @@ import com.dtu.pay.Model.Customer;
 import com.dtu.pay.Model.Dto.CustomerTokensResponseDto;
 import com.dtu.pay.Service.MobileAppApiHelper;
 
-import dtu.ws.fastmoney.Account;
 import dtu.ws.fastmoney.BankService;
 import dtu.ws.fastmoney.BankServiceService;
 import dtu.ws.fastmoney.BankServiceException_Exception;
 import dtu.ws.fastmoney.User;
-
+/**
+ * @author: Alex Ungureanu (s225525)
+ */
 public class CustomerSteps {
 	BankService bank = new BankServiceService().getBankServicePort();
     List<String> accounts = new ArrayList<>();

@@ -1,14 +1,8 @@
 package service;
 
-import boilerplate.Event;
-
-import boilerplate.MessageQueue;
-
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
-import java.util.UUID;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ConcurrentHashMap;
 
@@ -16,7 +10,9 @@ import adapters.EventPublisher;
 import dto.AccountTokensDto;
 import dto.RegistrationDto;
 import dto.Report;
-
+/**
+ * @author: Alex Ungureanu (s225525)
+ */
 public class CustomerFacadeService {
     private EventPublisher publisher;
     private Map<String, CompletableFuture<String>> correlationsWithStringReturn = new ConcurrentHashMap<>();

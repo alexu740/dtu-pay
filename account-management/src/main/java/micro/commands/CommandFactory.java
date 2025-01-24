@@ -1,5 +1,9 @@
 package micro.commands;
 
+/**
+ * @author: Alex Ungureanu (s225525)
+ */
+
 import boilerplate.Event;
 import micro.dto.RegistrationDto;
 

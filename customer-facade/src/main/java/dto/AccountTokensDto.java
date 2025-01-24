@@ -1,7 +1,9 @@
 package dto;
 
 import java.util.List;
-
+/**
+ * @author: Alex Ungureanu (s225525)
+ */
 public class AccountTokensDto {
     private String accountId;
     private List<String> tokens;

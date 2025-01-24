@@ -1,5 +1,9 @@
 package com.dtu.pay.Model.Dto;
 
+/**
+ * @author: Alex Ungureanu (s225525)
+ */
+
 public class CustomerReport {
     private int amount;
     private String merchantId;

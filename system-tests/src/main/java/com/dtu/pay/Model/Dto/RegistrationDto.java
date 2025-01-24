@@ -1,5 +1,7 @@
 package com.dtu.pay.Model.Dto;
-
+/**
+ * @author: Alex Ungureanu (s225525)
+ */
 public class RegistrationDto {
     private String firstName;
     private String lastName;

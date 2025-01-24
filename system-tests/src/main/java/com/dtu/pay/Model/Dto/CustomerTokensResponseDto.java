@@ -2,6 +2,10 @@ package com.dtu.pay.Model.Dto;
 
 import java.util.List;
 
+/**
+ * @author: Alex Ungureanu (s225525)
+ */
+
 public class CustomerTokensResponseDto {
         private String accountId;
     private List<String> tokens;

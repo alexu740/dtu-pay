@@ -8,6 +8,10 @@ import micro.repositories.AccountReadModelRepository;
 import micro.repositories.AccountRepository;
 import micro.service.AccountManagementService;
 
+/**
+ * @author: Alex Ungureanu (s225525)
+ */
+
 public class ApplicationFactory {
     public static RabbitMqFacade createApplication(String queueName) {
         MessageQueue mq = new EnrichedRabbitMqQueue(queueName);

@@ -1,7 +1,10 @@
 package micro.commands;
 
 import boilerplate.Event;
-import micro.service.CorrelationId;
+
+/**
+ * @author: Alex Ungureanu (s225525)
+ */
 
 public class QueryFactory {
     public static AccountGetQuery createAccountGetCommand(Event event, boolean isCustomer) {

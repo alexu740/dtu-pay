@@ -2,6 +2,10 @@ package micro.commands;
 
 import micro.dto.RegistrationDto;
 
+/**
+ * @author: Alex Ungureanu (s225525)
+ */
+
 public class AccountCreationCommand {
     public String firstName;
     public String lastName;

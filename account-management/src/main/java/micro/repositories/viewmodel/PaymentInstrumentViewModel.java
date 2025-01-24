@@ -1,5 +1,9 @@
 package micro.repositories.viewmodel;
 
+/**
+ * @author: Alex Ungureanu (s225525)
+ */
+
 public class PaymentInstrumentViewModel {
     private String customerAccountId;
     private String merchantAccountId;

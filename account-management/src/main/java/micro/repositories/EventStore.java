@@ -10,6 +10,10 @@ import lombok.NonNull;
 import boilerplate.MessageQueue;
 import micro.events.DomainEvent;
 
+/**
+ * @author: Alex Ungureanu (s225525)
+ */
+
 public class EventStore {
 	private Map<String, List<DomainEvent>> store = new ConcurrentHashMap<>();
 

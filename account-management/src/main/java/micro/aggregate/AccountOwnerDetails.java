@@ -1,10 +1,9 @@
 package micro.aggregate;
-
-import java.io.Serializable;
-import java.util.UUID;
-
-import lombok.AllArgsConstructor;
 import lombok.Value;
+
+/**
+ * @author: Alex Ungureanu (s225525)
+ */
 
 @Value
 public class AccountOwnerDetails {

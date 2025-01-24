@@ -2,7 +2,9 @@ package adapters;
 
 import dto.RegistrationDto;
 import service.CorrelationId;
-
+/**
+ * @author: Alex Ungureanu (s225525)
+ */
 public interface EventPublisher {
     public void emitRetrieveUserEvent(String id, CorrelationId correlationId);
     public void emitCreateUserEvent(RegistrationDto payload, CorrelationId correlationId);

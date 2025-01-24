@@ -1,5 +1,9 @@
 package micro.commands;
 
+/**
+ * @author: Alex Ungureanu (s225525)
+ */
+
 public class AccountGetQuery{
     public boolean isCustomerAccount;
     public String accountId;

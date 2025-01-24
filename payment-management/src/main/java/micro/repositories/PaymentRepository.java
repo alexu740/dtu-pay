@@ -3,6 +3,10 @@ package micro.repositories;
 import boilerplate.MessageQueue;
 import micro.aggregate.Payment;
 
+/**
+ * @author: Alex Ungureanu (s225525)
+ */
+
 public class PaymentRepository {
 	
 	private EventStore eventStore;

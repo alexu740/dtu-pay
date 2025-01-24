@@ -13,7 +13,9 @@ import java.util.concurrent.ConcurrentHashMap;
 
 import adapters.EventPublisher;
 import dto.Report;
-
+/**
+ * @author: Alex Ungureanu (s225525)
+ */
 public class ManagerFacadeService {
     private EventPublisher publisher;
     private Map<String, CompletableFuture<List<Report>>> reportCorrelations = new ConcurrentHashMap<>();

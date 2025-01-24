@@ -1,5 +1,7 @@
 package micro.dto;
-
+/**
+ * @author: Alex Ungureanu (s225525)
+ */
 public class PaymentDto {
     private String paymentId;
     private String customerId;

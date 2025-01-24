@@ -4,7 +4,9 @@ import adapters.EventPublisher;
 import boilerplate.Event;
 import boilerplate.MessageQueue;
 import service.CorrelationId;
-
+/**
+ * @author: Alex Ungureanu (s225525)
+ */
 public class RabbitMqEventPublisher implements EventPublisher {
     private MessageQueue queue;
     public RabbitMqEventPublisher(MessageQueue queue) {

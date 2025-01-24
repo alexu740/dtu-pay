@@ -11,7 +11,6 @@ import static org.junit.Assert.assertEquals;
 
 import java.math.BigDecimal;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -20,15 +19,17 @@ import java.util.stream.Collectors;
 
 import com.dtu.pay.Model.Customer;
 import com.dtu.pay.Model.Merchant;
-import com.dtu.pay.Model.Dto.CustomerReport;
 import com.dtu.pay.Model.Dto.CustomerTokensResponseDto;
 import com.dtu.pay.Service.MobileAppApiHelper;
 
-import dtu.ws.fastmoney.Account;
 import dtu.ws.fastmoney.BankService;
 import dtu.ws.fastmoney.BankServiceService;
 import dtu.ws.fastmoney.BankServiceException_Exception;
 import dtu.ws.fastmoney.User;
+
+/**
+ * @author: Alex Ungureanu (s225525)
+ */
 
 public class PaymentSteps {
 	BankService bank = new BankServiceService().getBankServicePort();

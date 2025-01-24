@@ -14,6 +14,10 @@ import micro.dto.RegistrationDto;
 import micro.service.AccountManagementService;
 import micro.service.CorrelationId;
 
+/**
+ * @author: Alex Ungureanu (s225525)
+ */
+
 public class RabbitMqFacade {
   AccountManagementService service;
 

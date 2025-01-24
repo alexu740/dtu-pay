@@ -10,6 +10,10 @@ import micro.events.AccountRegistered;
 import micro.events.TokenAdded;
 import micro.events.TokenRemoved;
 
+/**
+ * @author: Alex Ungureanu (s225525)
+ */
+
 public class EnrichedRabbitMqQueue extends RabbitMqQueue {
     public EnrichedRabbitMqQueue(String hostname) {
         super(hostname);

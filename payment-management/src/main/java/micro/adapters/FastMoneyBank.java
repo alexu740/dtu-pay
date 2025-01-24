@@ -5,7 +5,9 @@ import java.math.BigDecimal;
 import dtu.ws.fastmoney.BankService;
 import dtu.ws.fastmoney.BankServiceException_Exception;
 import dtu.ws.fastmoney.BankServiceService;
-
+/**
+ * @author: Alex Ungureanu (s225525)
+ */
 public class FastMoneyBank implements ExternalBank {
     @Override
     public boolean pay(String fromBankAccount, String toBankAccount, int amount, String paymentNote)  {

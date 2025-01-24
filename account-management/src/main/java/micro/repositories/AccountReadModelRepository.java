@@ -13,6 +13,10 @@ import micro.events.TokenRemoved;
 import micro.repositories.viewmodel.PaymentInstrumentViewModel;
 import micro.repositories.viewmodel.TokenViewModel;
 
+/**
+ * @author: Alex Ungureanu (s225525)
+ */
+
 public class AccountReadModelRepository {
 
 	private Map<String, TokenViewModel> tokens = new HashMap<>();

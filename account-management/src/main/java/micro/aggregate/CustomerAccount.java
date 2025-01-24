@@ -13,6 +13,10 @@ import micro.events.TokenRemoved;
 import micro.exception.BusinessValidationException;
 import micro.service.CorrelationId;
 
+/**
+ * @author: Alex Ungureanu (s225525)
+ */
+
 public class CustomerAccount extends Account {
 	private List<String> tokens;
 	

@@ -2,6 +2,10 @@ package micro.repositories.viewmodel;
 
 import java.util.List;
 
+/**
+ * @author: Alex Ungureanu (s225525)
+ */
+
 public class TokenViewModel {
     private String accountId;
     private List<String> tokens;

@@ -1,22 +1,18 @@
 package micro.aggregate;
 
-import java.io.Serializable;
 import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.HashSet;
 import java.util.List;
-import java.util.Map;
-import java.util.Set;
 import java.util.UUID;
-import java.util.function.Consumer;
-import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 import micro.events.AccountRegistered;
 import micro.events.AccountDeregistered;
 import micro.events.DomainEvent;
 import micro.service.CorrelationId;
-import micro.aggregate.AccountId;
+
+/**
+ * @author: Alex Ungureanu (s225525)
+ */
 
 public class Account {
 	private AccountId accountid;

@@ -1,5 +1,7 @@
 package dto;
-
+/**
+ * @author: Alex Ungureanu (s225525)
+ */
 public class RegistrationDto {
     public String firstName;
     public String lastName;

@@ -6,6 +6,10 @@ import micro.repositories.viewmodel.PaymentInstrumentViewModel;
 import micro.repositories.viewmodel.TokenViewModel;
 import micro.service.CorrelationId;
 
+/**
+ * @author: Alex Ungureanu (s225525)
+ */
+
 public class RabbitMqEventPublisher implements EventPublisher {
     private MessageQueue queue;
 

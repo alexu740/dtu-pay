@@ -5,6 +5,10 @@ import boilerplate.Event;
 
 import micro.aggregate.AccountId;
 
+/**
+ * @author: Alex Ungureanu (s225525)
+ */
+
 public class DomainEvent extends Event {
 	private static final long serialVersionUID = -8571080289905090781L;
 	

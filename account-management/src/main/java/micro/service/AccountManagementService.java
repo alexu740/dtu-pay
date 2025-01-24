@@ -11,7 +11,10 @@ import micro.commands.AccountTokenCreationCommand;
 import micro.exception.BusinessValidationException;
 import micro.repositories.AccountReadModelRepository;
 import micro.repositories.AccountRepository;
-import micro.events.AccountDeregistered;
+
+/**
+ * @author: Alex Ungureanu (s225525)
+ */
 
 public class AccountManagementService {
 	private AccountRepository repository;

@@ -1,5 +1,7 @@
 package dto;
-
+/**
+ * @author: Alex Ungureanu (s225525)
+ */
 public class Report {
     private String merchantId;
     private String customerId;

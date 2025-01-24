@@ -25,7 +25,6 @@ import micro.adapters.RabbitMqFacade;
 import micro.aggregate.Account;
 import micro.aggregate.AccountId;
 import micro.aggregate.CustomerAccount;
-import micro.commands.AccountDeletionCommand;
 import micro.commands.AccountHasTokenQuery;
 import micro.commands.AccountTokenCreationCommand;
 import micro.commands.CommandFactory;
@@ -36,6 +35,10 @@ import micro.repositories.AccountReadModelRepository;
 import micro.repositories.AccountRepository;
 import micro.service.AccountManagementService;
 import micro.service.CorrelationId;
+
+/**
+ * @author: Alex Ungureanu (s225525)
+ */
 
 public class TokenSteps {
     MessageQueue mockedQueue;

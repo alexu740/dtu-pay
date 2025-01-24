@@ -13,7 +13,9 @@ import micro.dto.PaymentDto;
 import micro.events.DomainEvent;
 import micro.events.PaymentFailed;
 import micro.service.CorrelationId;
-
+/**
+ * @author: Alex Ungureanu (s225525)
+ */
 public class Payment {
 	private String transactionId;
 	private String customerId;

@@ -8,6 +8,10 @@ import micro.commands.InitializePaymentCommand;
 import micro.repositories.PaymentReadModelRepository;
 import micro.repositories.PaymentRepository;
 
+/**
+ * @author: Alex Ungureanu (s225525)
+ */
+
 public class PaymentManagementService {
 
 	private PaymentRepository repository;

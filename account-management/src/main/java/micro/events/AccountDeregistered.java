@@ -2,7 +2,11 @@ package micro.events;
 
 import micro.aggregate.AccountId;
 import micro.service.CorrelationId;
-import java.util.UUID;
+
+/**
+ * @author: Alex Ungureanu (s225525)
+ */
+
 
 public class AccountDeregistered extends DomainEvent {
 	private static final long serialVersionUID = -1599019626118724482L;
