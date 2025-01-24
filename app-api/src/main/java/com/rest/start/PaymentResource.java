@@ -9,6 +9,8 @@ import jakarta.ws.rs.Consumes;
 import jakarta.ws.rs.core.MediaType;
 import jakarta.ws.rs.core.Response;
 
+import org.eclipse.microprofile.openapi.annotations.Operation;
+
 import com.rest.start.Adapters.ManagerFacade;
 import com.rest.start.Adapters.MerchantFacade;
 import com.rest.start.Model.Dto.PaymentDto;
@@ -28,6 +30,7 @@ public class PaymentResource {
 
     @GET
     @Produces(MediaType.APPLICATION_JSON)
+    @Operation(summary = "Get all payments", description = "Get manager report of all payments")
     public Response listPayments(String paymentString) {
         return Response.status(Response.Status.OK).entity(managerFacade.getManagerReport()).build();
     } 
@@ -35,6 +38,7 @@ public class PaymentResource {
     @POST
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
+    @Operation(summary = "Start payment", description = "Start the payment process")
     public Response processPayment(PaymentDto payment) {
         return Response.status(Response.Status.OK).entity(merchantFacade.initializePayment(payment)).build();
     }

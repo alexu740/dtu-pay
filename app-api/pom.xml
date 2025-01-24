@@ -76,6 +76,14 @@
 			<version>4.0.3</version>
 			<type>pom</type>
 		</dependency>
+		<dependency>
+			<groupId>io.quarkus</groupId>
+			<artifactId>quarkus-smallrye-openapi</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>io.quarkus</groupId>
+			<artifactId>quarkus-swagger-ui</artifactId>
+		</dependency>
     </dependencies>
 
     <build>
