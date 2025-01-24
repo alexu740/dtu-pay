@@ -15,7 +15,7 @@ import micro.service.AccountManagementService;
 import micro.service.CorrelationId;
 
 /**
- * @author: Alex Ungureanu (s225525)
+ * @author: Senhao Zou, s242606
  */
 
 public class RabbitMqFacade {

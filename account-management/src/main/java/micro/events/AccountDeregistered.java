@@ -4,9 +4,8 @@ import micro.aggregate.AccountId;
 import micro.service.CorrelationId;
 
 /**
- * @author: Alex Ungureanu (s225525)
+ * @author: Senhao Zou, s242606
  */
-
 
 public class AccountDeregistered extends DomainEvent {
 	private static final long serialVersionUID = -1599019626118724482L;
