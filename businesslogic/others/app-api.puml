@@ -1,0 +1,46 @@
+@startuml
+skinparam classAttributeIconSize 0
+skinparam monochrome true
+
+package "App API" {
+    ' 适配器层
+    package "Adapters" {
+        class CustomerFacade
+        class ManagerFacade
+        class MerchantFacade
+    }
+
+    ' 模型层
+    package "Model" {
+        package "Dto" {
+            class CustomerDto
+            class PaymentDto
+            class RegistrationDto
+        }
+        package "valueobjects" {
+            class CustomerReport
+            class ManagerReport
+            class MerchantReport
+        }
+    }
+
+    ' 资源层
+    class CustomerResource
+    class MerchantResource
+    class PaymentResource
+}
+
+' 关系展示
+CustomerResource --> CustomerFacade : "Handles REST requests"
+CustomerFacade --> RegistrationDto : "Processes"
+CustomerFacade --> CustomerReport : "Requests reports"
+
+MerchantResource --> MerchantFacade : "Handles REST requests"
+MerchantFacade --> PaymentDto : "Processes"
+MerchantFacade --> MerchantReport : "Requests reports"
+
+PaymentResource --> ManagerFacade : "Handles REST requests"
+ManagerFacade --> ManagerReport : "Requests reports"
+
+CustomerFacade --> CustomerDto : "Processes"
+MerchantFacade --> PaymentDto : "Processes"

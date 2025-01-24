@@ -1,0 +1,65 @@
+@startuml
+skinparam classAttributeIconSize 0
+skinparam monochrome true
+
+package "Token Service" {
+    ' 适配器层
+    package "adapters" {
+        interface EventPublisher
+        class RabbitMqEventPublisher implements EventPublisher {
+            + RabbitMqEventPublisher()
+            + emitCustomerHasTokenCheckRequested()
+            + emitTokenValidated()
+            + emitTokenValidationFailed()
+            + emitTokenUsed()
+        }
+        class RabbitMqFacade {
+            + RabbitMqFacade()
+            + handlePaymentInitialised()
+            + handleCustomerHasTokenChecked()
+        }
+    }
+
+    ' 仓库层
+    package "repositories" {
+        class TokenRepository {
+            + TokenRepository()
+            + setTokens()
+            + put()
+            + get()
+            + remove()
+        }
+    }
+
+    ' 服务层
+    package "service" {
+        class CorrelationId {
+            + CorrelationId()
+            + randomId()
+            + get()
+        }
+        class TokenService {
+            + TokenService()
+            + handlePaymentInitialised()
+            + handleCustomerHasTokenChecked()
+        }
+    }
+
+    ' 启动层
+    package "startup" {
+        class ApplicationFactory {
+            + createApplication()
+        }
+    }
+
+    ' 主类
+    class StartUp
+}
+
+' 关系展示
+RabbitMqEventPublisher --> RabbitMqFacade : "Publishes events"
+RabbitMqFacade --> TokenService : "Handles token-related events"
+TokenService --> TokenRepository : "Accesses repository"
+RabbitMqFacade --> EventPublisher : "Implements interface"
+StartUp --> ApplicationFactory : "Initializes components"
+@enduml

@@ -1,0 +1,71 @@
+@startuml
+skinparam classAttributeIconSize 0
+skinparam monochrome true
+
+package "System Tests" {
+    ' Model 层
+    package "Model" {
+        package "Dto" {
+            class CustomerReport
+            class CustomerTokensResponseDto
+            class ManagerReport
+            class MerchantReport
+            class PaymentDto
+            class RegistrationDto
+            class TokenRequestDto
+        }
+        class Customer
+        class Merchant
+        class Payment
+        class User
+    }
+
+    ' Service 层
+    package "Service" {
+        class MobileAppApiHelper
+        class SimpleDtuPay
+    }
+
+    ' Main 类
+    class Main
+
+    ' FastMoney 子包
+    package "fastmoney" {
+        class Account
+        class BankService
+        class BankServiceException
+        class BankServiceException_Exception
+        class BankServiceService
+        class CreateAccountWithBalance
+        class CreateAccountWithBalanceResponse
+        class GetAccount
+        class GetAccountByCprNumber
+        class GetAccountByCprNumberResponse
+        class GetAccountResponse
+        class ObjectFactory
+        class RetireAccount
+        class RetireAccountResponse
+        class Transaction
+        class TransferMoneyFromTo
+        class TransferMoneyFromToResponse
+        class User
+        class package-info
+    }
+}
+
+' 关系展示
+MobileAppApiHelper --> SimpleDtuPay : "Provides utility"
+SimpleDtuPay --> Customer : "Handles"
+SimpleDtuPay --> Merchant : "Handles"
+SimpleDtuPay --> Payment : "Processes"
+SimpleDtuPay --> User : "Manages"
+SimpleDtuPay --> PaymentDto : "Transforms"
+
+Customer --> CustomerReport : "Generates"
+Merchant --> MerchantReport : "Generates"
+Payment --> Transaction : "Contains"
+Payment --> PaymentDto : "Transforms"
+BankService --> Account : "Manages"
+BankService --> Transaction : "Handles"
+BankService --> BankServiceService : "Accesses"
+@enduml

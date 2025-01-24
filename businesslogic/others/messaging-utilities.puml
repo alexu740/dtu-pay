@@ -1,0 +1,26 @@
+@startuml
+skinparam classAttributeIconSize 0
+skinparam monochrome true
+
+package "Messaging Utilities" {
+    ' 核心类
+    class Event
+    class Message
+
+    ' 队列接口和实现
+    class MessageQueue
+    package "implementations" {
+        class MessageQueueAsync
+        class MessageQueueSync
+        class RabbitMqQueue
+    }
+}
+
+' 关系展示
+MessageQueueAsync --> MessageQueue : "Implements"
+MessageQueueSync --> MessageQueue : "Implements"
+RabbitMqQueue --> MessageQueue : "Implements"
+
+Event --> Message : "Wraps"
+RabbitMqQueue --> Event : "Handles"
+RabbitMqQueue --> Message : "Processes"

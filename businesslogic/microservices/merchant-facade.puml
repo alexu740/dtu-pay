@@ -1,0 +1,85 @@
+@startuml
+skinparam classAttributeIconSize 0
+skinparam monochrome true
+
+package "Merchant Facade" {
+    ' 适配器层
+    package "adapters" {
+        interface EventPublisher
+        class MerchantRegistrationFactory {
+            + getService()
+            + if()
+        }
+        class MerchantResource {
+            + register()
+        }
+        class RabbitMqEventPublisher implements EventPublisher {
+            + RabbitMqEventPublisher()
+            + emitCreateUserEvent()
+            + emitUnregisterUserEvent()
+            + emitInitialisePayment()
+            + emitMerchantReportRequested()
+        }
+        class RabbitMqFacade {
+            + RabbitMqFacade()
+            + handleMerchantRegistration()
+            + handleAccountDeregistred()
+            + handlePaymentSucceeded()
+            + handlePaymentFailed()
+            + handleMerchantReportSent()
+        }
+    }
+
+    ' DTO 层
+    package "dto" {
+        class PaymentDto {
+            + getCustomerId()
+            + setCustomerId()
+            + getMerchantId()
+            + setMerchantId()
+            + getToken()
+            + setToken()
+            + getAmount()
+            + setAmount()
+        }
+        class RegistrationDto
+        class Report {
+            + getUsedToken()
+            + setUsedToken()
+            + getAmount()
+            + setAmount()
+        }
+    }
+
+    ' 服务层
+    package "service" {
+        class CorrelationId {
+            + CorrelationId()
+            + randomId()
+            + get()
+        }
+        class MerchantFacadeService {
+            + MerchantFacadeService()
+            + create()
+            + completeRegistration()
+            + initialisePayment()
+            + completePaymentTransaction()
+            + deregister()
+            + completeDeregisteration()
+            + completeReportRequest()
+        }
+    }
+}
+
+' 关系展示
+MerchantResource --> MerchantFacadeService : "Handles REST requests"
+MerchantFacadeService --> PaymentDto : "Processes payments"
+MerchantFacadeService --> RegistrationDto : "Handles registration"
+MerchantFacadeService --> Report : "Generates reports"
+
+RabbitMqEventPublisher --> RabbitMqFacade : "Publishes events"
+RabbitMqFacade --> MerchantFacadeService : "Handles events"
+
+MerchantRegistrationFactory --> RegistrationDto : "Creates"
+RabbitMqFacade --> EventPublisher : "Implements interface"
+@enduml

@@ -1,0 +1,86 @@
+@startuml
+skinparam classAttributeIconSize 0
+skinparam monochrome true
+
+package "Customer Facade" {
+    ' 适配器层
+    package "adapters" {
+        class CustomerRegistrationFactory {
+            + getService()
+            + if()
+        }
+        class CustomerResource {
+            + register()
+        }
+        interface EventPublisher
+        class RabbitMqEventPublisher implements EventPublisher {
+            + RabbitMqEventPublisher()
+            + emitRetrieveUserEvent()
+            + emitCreateUserEvent()
+            + emitUnregisterUserEvent()
+            + emitCreateTokensEvent()
+            + emitCustomerReportRequested()
+        }
+        class RabbitMqFacade {
+            + RabbitMqFacade()
+            + handleAccountRegistred()
+            + handleAccountRegistrationFailed()
+            + handleAccountDeregistred()
+            + handleCustomerRetrieved()
+            + handleTokensCreated()
+            + handleCustomerReportSent()
+        }
+    }
+
+    ' DTO 层
+    package "dto" {
+        class AccountTokensDto {
+            + getAccountId()
+            + setAccountId()
+            + setTokens()
+        }
+        class RegistrationDto
+        class Report {
+            + getAmount()
+            + setAmount()
+            + getMerchantId()
+            + setMerchantId()
+            + getUsedToken()
+            + setUsedToken()
+        }
+    }
+
+    ' 服务层
+    package "service" {
+        class CorrelationId {
+            + CorrelationId()
+            + randomId()
+            + get()
+        }
+        class CustomerFacadeService {
+            + CustomerFacadeService()
+            + get()
+            + create()
+            + createTokens()
+            + completeRegistration()
+            + completeAccountRetrievalRequest()
+            + completeTokenCreationRequest()
+            + deregister()
+            + completeDeregisteration()
+            + completeReportRequest()
+        }
+    }
+}
+
+' 关系展示
+CustomerResource --> CustomerFacadeService : "Handles REST requests"
+CustomerFacadeService --> RegistrationDto : "Processes registration"
+CustomerFacadeService --> AccountTokensDto : "Generates tokens"
+CustomerFacadeService --> Report : "Generates reports"
+
+RabbitMqEventPublisher --> RabbitMqFacade : "Publishes events"
+RabbitMqFacade --> CustomerFacadeService : "Handles events"
+
+CustomerRegistrationFactory --> RegistrationDto : "Creates"
+RabbitMqFacade --> EventPublisher : "Uses interface"
+@enduml

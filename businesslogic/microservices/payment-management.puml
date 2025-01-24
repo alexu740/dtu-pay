@@ -1,0 +1,288 @@
+@startuml
+skinparam classAttributeIconSize 0
+skinparam monochrome true
+
+package "Payment Management" {
+    ' FastMoney 子包
+    package "fastmoney" {
+        class Account {
+            + getBalance()
+            + setBalance()
+            + getId()
+            + setId()
+            + getTransactions()
+            + getUser()
+            + setUser()
+        }
+        class BankService
+        class BankServiceException {
+            + getErrorMessage()
+            + setErrorMessage()
+            + getMessage()
+            + setMessage()
+        }
+        class BankServiceException_Exception {
+            + getFaultInfo()
+        }
+        class BankServiceService {
+            + getBankServicePort()
+            + getBankServicePort()
+        }
+        class CreateAccountWithBalance {
+            + getUser()
+            + setUser()
+            + getBalance()
+            + setBalance()
+        }
+        class CreateAccountWithBalanceResponse {
+            + getReturn()
+            + setReturn()
+        }
+        class GetAccount {
+            + getAccountId()
+            + setAccountId()
+        }
+        class GetAccountByCprNumber {
+            + getCpr()
+            + setCpr()
+        }
+        class GetAccountByCprNumberResponse {
+            + getReturn()
+            + setReturn()
+        }
+        class GetAccountResponse {
+            + getReturn()
+            + setReturn()
+        }
+        class ObjectFactory {
+            + createCreateAccountWithBalance()
+            + createCreateAccountWithBalanceResponse()
+            + createGetAccount()
+            + createGetAccountByCprNumber()
+            + createGetAccountByCprNumberResponse()
+            + createGetAccountResponse()
+            + createRetireAccount()
+            + createRetireAccountResponse()
+            + createTransferMoneyFromTo()
+            + createTransferMoneyFromToResponse()
+            + createBankServiceException()
+            + createAccount()
+            + createTransaction()
+            + createUser()
+        }
+        class RetireAccount {
+            + getAccountId()
+            + setAccountId()
+        }
+        class RetireAccountResponse
+        class Transaction {
+            + getAmount()
+            + setAmount()
+            + getBalance()
+            + setBalance()
+            + getCreditor()
+            + setCreditor()
+            + getDebtor()
+            + setDebtor()
+            + getDescription()
+            + setDescription()
+            + getTime()
+            + setTime()
+        }
+        class TransferMoneyFromTo {
+            + getDebtor()
+            + setDebtor()
+            + getCreditor()
+            + setCreditor()
+            + getAmount()
+            + setAmount()
+            + getDescription()
+            + setDescription()
+        }
+        class TransferMoneyFromToResponse
+        class User {
+            + getCprNumber()
+            + setCprNumber()
+            + getFirstName()
+            + setFirstName()
+            + getLastName()
+            + setLastName()
+        }
+        class package-info
+    }
+
+    ' 适配器层
+    package "micro.adapters" {
+        interface EventPublisher
+        class ExternalBank
+        class FastMoneyBank {
+            + pay()
+        }
+        class RabbitMqEventPublisher implements EventPublisher {
+            + emitPaymentInformationResolutionRequested()
+        }
+        class RabbitMqFacade {
+            + handlePaymentRequested()
+            + handleTokenValidated()
+            + handleTokenValidationFailed()
+            + handlePaymentInformationResolved()
+            + handlePaymentResolved()
+        }
+    }
+
+    ' 聚合层
+    package "micro.aggregate" {
+        class Payment {
+            + apply()
+            + updatePaymentTokenValidated()
+            + updateTokenInvalid()
+            + update()
+            + markAsCompleted()
+            + clearAppliedEvents()
+            + getAppliedEvents()
+            + getTransactionId()
+            + setTransactionId()
+            + getCustomerId()
+            + setCustomerId()
+            + getCustomerBankAccount()
+            + setCustomerBankAccount()
+            + getMerchantId()
+            + setMerchantId()
+            + getMerchantBankAccount()
+            + setMerchantBankAccount()
+            + getAmount()
+            + setAmount()
+            + getToken()
+            + setToken()
+            + isTokenValidated()
+            + setTokenValidated()
+            + isAllPaymentInformationResolved()
+            + setAllPaymentInformationResolved()
+            + setAppliedEvents()
+            + isPaymentSuccessful()
+            + setPaymentSuccessful()
+            + getPaymentNote()
+            + setPaymentNote()
+            + generatePaymentNote()
+        }
+    }
+
+    ' 命令层
+    package "micro.commands" {
+        class CommandFactory
+        class InitializePaymentCommand {
+            + getCustomerId()
+            + setCustomerId()
+            + getMerchantId()
+            + setMerchantId()
+            + getToken()
+            + setToken()
+            + getAmount()
+            + setAmount()
+        }
+        class QueryFactory
+    }
+
+    ' DTO 层
+    package "micro.dto" {
+        class PaymentDto {
+            + getPaymentId()
+            + setPaymentId()
+            + getCustomerId()
+            + setCustomerId()
+            + getMerchantId()
+            + setMerchantId()
+            + getToken()
+            + setToken()
+            + getAmount()
+            + setAmount()
+        }
+    }
+
+    ' 事件层
+    package "micro.events" {
+        class DomainEvent {
+            + getTransactionId()
+            + getTimestamp()
+        }
+        class PaymentFailed
+        class PaymentInitialised {
+            + getCustomerId()
+            + setCustomerId()
+            + getMerchantId()
+            + setMerchantId()
+            + getAmount()
+            + setAmount()
+            + getToken()
+            + setToken()
+        }
+        class PaymentResolved {
+            + getCustomerBankAccount()
+            + setCustomerBankAccount()
+            + getMerchantBankAccount()
+            + setMerchantBankAccount()
+        }
+        class PaymentSucceeded
+        class PaymentTokenValidated
+    }
+
+    ' 异常层
+    package "micro.exception" {
+        class BusinessValidationException
+    }
+
+    ' 仓库层
+    package "micro.repositories" {
+        class EventStore {
+            + addEvent()
+            + getEventsFor()
+            + addEvents()
+        }
+        class PaymentReadModelRepository {
+            + applyPaymentInitialised()
+        }
+        class PaymentRepository {
+            + getById()
+            + save()
+        }
+    }
+
+    ' 服务层
+    package "micro.service" {
+        class CorrelationId {
+            + get()
+        }
+        class PaymentManagementService {
+            + handlePaymentInitializationCommand()
+            + handleTokenValidated()
+            + handlePaymentTokenValidationFailed()
+            + handlePaymentInformationResolved()
+            + handlePaymentTransaction()
+        }
+    }
+
+    ' 启动层
+    package "micro.startup" {
+        class ApplicationFactory
+        class EnrichedRabbitMqQueue {
+            + addHandler()
+        }
+    }
+
+    ' 主类
+    class StartUp
+}
+
+' 关系展示
+RabbitMqEventPublisher --> RabbitMqFacade : "Publishes events"
+RabbitMqFacade --> PaymentManagementService : "Handles events"
+PaymentManagementService --> PaymentRepository : "Accesses"
+PaymentManagementService --> EventStore : "Stores events"
+CommandFactory --> InitializePaymentCommand : "Creates"
+CommandFactory --> QueryFactory : "Creates"
+Payment --> PaymentDto : "Transforms"
+Payment --> Transaction : "Contains"
+EventStore --> DomainEvent : "Saves"
+FastMoneyBank --> ExternalBank : "Implements ExternalBank"
+RabbitMqFacade --> EventPublisher : "Implements"
+@enduml
